@@ -1,4 +1,4 @@
-WORKSHOP_TITLE
+Introduction to machine learning in Python with Scikit-learn
 ================
 
 ### posit::conf(2024)
