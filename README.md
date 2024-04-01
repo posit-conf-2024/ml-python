@@ -3,7 +3,7 @@ Introduction to machine learning in Python with Scikit-learn
 
 ### posit::conf(2024)
 
-by INSTRUCTOR_NAME
+by Tiffany Timbers, Trevor Campbell
 
 -----
 
