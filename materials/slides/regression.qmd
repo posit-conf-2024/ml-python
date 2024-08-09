@@ -1,0 +1,1451 @@
+---
+title: "Regression"
+subtitle: "K-NN and Linear Regression"
+format:
+  revealjs:
+    slide-number: true
+    slide-level: 4
+    smaller: true
+    theme: simple
+jupyter: python3
+
+execute:
+  echo: true
+  warning: false
+
+editor:
+  render-on-save: true
+---
+
+```{python}
+#| include: false
+import pandas as pd
+pd.set_option('display.max_rows', 5)
+```
+
+## Session learning objectives: KNN
+
+- Recognize situations where a regression analysis would be appropriate for making predictions.
+- Explain the K-nearest neighbors (K-NN) regression algorithm and describe how it differs from K-NN classification.
+- Interpret the output of a K-NN regression.
+- In a data set with two or more variables, perform K-nearest neighbors regression in Python.
+- Evaluate K-NN regression prediction quality in Python using the root mean squared prediction error (RMSPE).
+- Estimate the RMSPE in Python using cross-validation or a test set.
+- Choose the number of neighbors in K-nearest neighbors regression by minimizing estimated cross-validation RMSPE.
+- Describe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors regression.
+- Describe the advantages and disadvantages of K-nearest neighbors regression.
+
+
+## Session learning objective: Linear Regression
+
+- Use Python to fit simple and multivariable linear regression models on training data.
+- Evaluate the linear regression model on test data.
+- Compare and contrast predictions obtained from K-nearest neighbors regression to those obtained using linear regression from the same data set.
+- Describe how linear regression is affected by outliers and multicollinearity.
+
+## The regression problem
+
+- Predictive problem
+- Use past information to predict future observations
+- Predict *numerical* values instead of *categorical* values
+
+Examples:
+
+- Race time in the Boston marathon
+- size of a house to predict its sale price
+
+### Regression Methods
+
+In this workshop:
+
+- K-nearest neighbors
+- Linear regression
+
+### Classification similarities to regression
+
+Concepts from classification map over to the setting of regression
+
+- Predict a new observation's response variable based on past observations
+- Split the data into training and test sets
+- Use cross-validation to evaluate different choices of model parameters
+
+### Difference
+
+Predicting numerical variables instead of categorical variables
+
+## Explore a data set
+
+[932 real estate transactions in Sacramento, California](https://support.spatialkey.com/spatialkey-sample-csv-data/)
+
+> Can we use the size of a house in the Sacramento, CA area to predict its sale price?
+
+### Data and package setup
+
+```{python}
+import altair as alt
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.compose import make_column_transformer
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn import set_config
+
+# Output dataframes instead of arrays
+set_config(transform_output='pandas')
+
+sacramento = pd.read_csv('data/sacramento.csv')
+print(sacramento)
+
+```
+
+### Price vs Sq.Ft
+
+```{python}
+#| echo: false
+
+scatter = alt.Chart(sacramento).mark_circle().encode(
+    x=alt.X("sqft")
+        .scale(zero=False)
+        .title("House size (square feet)"),
+    y=alt.Y("price")
+        .axis(format="$,.0f")
+        .title("Price (USD)")
+)
+
+scatter
+
+```
+
+## K-nearest neighbors regression
+
+```{python}
+# look at a small sample of data
+np.random.seed(10)
+
+small_sacramento = sacramento.sample(n=30)
+print(small_sacramento)
+```
+
+### Sample: Example
+
+::: {.columns}
+::: {.column}
+
+House price of 2000
+
+```{python}
+# | echo: false
+
+small_plot = (
+	alt.Chart(small_sacramento)
+	.mark_circle(opacity=1)
+	.encode(
+		x=alt.X('sqft').scale(zero=False).title('House size (square feet)'),
+		y=alt.Y('price').axis(format='$,.0f').title('Price (USD)'),
+	)
+)
+
+# add an overlay to the base plot
+line_df = pd.DataFrame({'x': [2000]})
+rule = (
+	alt.Chart(line_df)
+	.mark_rule(strokeDash=[6], size=1.5, color='black')
+	.encode(x='x')
+)
+
+(small_plot + rule)
+```
+
+:::
+::: {.column}
+
+5 closest neighbors
+
+```{python}
+# | echo: false
+
+small_sacramento['dist'] = (2000 - small_sacramento['sqft']).abs()
+nearest_neighbors = small_sacramento.nsmallest(5, 'dist')
+nearest_neighbors
+
+nn_plot = small_plot + rule
+
+# plot horizontal lines which is perpendicular to x=2000
+h_lines = []
+for i in range(5):
+	h_line_df = pd.DataFrame(
+		{
+			'sqft': [nearest_neighbors.iloc[i, 4], 2000],
+			'price': [nearest_neighbors.iloc[i, 6]] * 2,
+		}
+	)
+	h_lines.append(
+		alt.Chart(h_line_df)
+		.mark_line(color='black')
+		.encode(x='sqft', y='price')
+	)
+
+# highlight the nearest neighbors in orange
+orange_neighbrs = (
+	alt.Chart(nearest_neighbors)
+	.mark_circle(opacity=1, color='#ff7f0e')
+	.encode(
+		x=alt.X('sqft').scale(zero=False).title('House size (square feet)'),
+		y=alt.Y('price').axis(format='$,.0f').title('Price (USD)'),
+	)
+)
+
+nn_plot = alt.layer(*h_lines, small_plot, orange_neighbrs, rule)
+
+nn_plot
+```
+
+:::
+:::
+
+### Sample: Predict
+
+5 closest points
+
+```{python}
+small_sacramento['dist'] = (2000 - small_sacramento['sqft']).abs()
+nearest_neighbors = small_sacramento.nsmallest(5, 'dist')
+print(nearest_neighbors)
+```
+
+Average of nearest points
+
+```{python}
+prediction = nearest_neighbors['price'].mean()
+print(prediction)
+```
+
+### Sample: Visualize new prediction
+
+
+::: {.columns}
+::: {.column}
+
+```{python}
+#| echo: false
+
+nn_plot_pred = nn_plot + alt.Chart(
+    pd.DataFrame({"sqft": [2000], "price": [prediction]})
+).mark_circle(size=80, opacity=1, color="#d62728").encode(x="sqft", y="price")
+
+nn_plot_pred
+```
+
+:::
+
+::: {.column}
+
+```{python}
+print(prediction)
+```
+
+:::
+:::
+
+## Training, evaluating, and tuning the model
+
+```{python}
+np.random.seed(1)
+
+sacramento_train, sacramento_test = train_test_split(
+    sacramento, train_size=0.75
+)
+```
+
+:::{.callout-note}
+We are not specifying the stratify argument.
+The `train_test_split()` function cannot stratify on a quantitative variable
+:::
+
+### Metric: RMS(P)E
+
+Root Mean Square (Prediction) Error
+
+$$\text{RMSPE} = \sqrt{\frac{1}{n}\sum\limits_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
+
+where:
+
+- $n$ is the number of observations,
+- $y_i$ is the observed value for the $i^\text{th}$ observation, and
+- $\hat{y}_i$ is the forecasted/predicted value for the $i^\text{th}$ observation.
+
+### Metric: Visualize
+
+```{python}
+# | echo: false
+
+
+from sklearn.neighbors import KNeighborsRegressor
+
+# (synthetic) new prediction points
+pts = pd.DataFrame(
+	{'sqft': [1200, 1850, 2250], 'price': [300000, 200000, 500000]}
+)
+finegrid = pd.DataFrame({'sqft': np.arange(600, 3901, 10)})
+
+# preprocess the data, make the pipeline
+sacr_preprocessor = make_column_transformer((StandardScaler(), ['sqft']))
+sacr_pipeline = make_pipeline(
+	sacr_preprocessor, KNeighborsRegressor(n_neighbors=4)
+)
+
+# fit the model
+X = small_sacramento[['sqft']]
+y = small_sacramento[['price']]
+sacr_pipeline.fit(X, y)
+
+# predict on the full grid and new data pts
+sacr_full_preds_hid = pd.concat(
+	(
+		finegrid,
+		pd.DataFrame(sacr_pipeline.predict(finegrid), columns=['predicted']),
+	),
+	axis=1,
+)
+
+sacr_new_preds_hid = pd.concat(
+	(
+		small_sacramento[['sqft', 'price']].reset_index(),
+		pd.DataFrame(
+			sacr_pipeline.predict(small_sacramento[['sqft', 'price']]),
+			columns=['predicted'],
+		),
+	),
+	axis=1,
+).drop(columns=['index'])
+
+# to make altair mark_line works, need to create separate dataframes for each vertical error line
+errors_plot = (
+	small_plot
+	+ alt.Chart(sacr_full_preds_hid)
+	.mark_line(color='#ff7f0e')
+	.encode(x='sqft', y='predicted')
+	+ alt.Chart(sacr_new_preds_hid)
+	.mark_circle(opacity=1)
+	.encode(x='sqft', y='price')
+)
+sacr_new_preds_melted_df = sacr_new_preds_hid.melt(id_vars=['sqft'])
+v_lines = []
+for i in sacr_new_preds_hid['sqft']:
+	line_df = sacr_new_preds_melted_df.query(f'sqft == {i}')
+	v_lines.append(
+		alt.Chart(line_df).mark_line(color='black').encode(x='sqft', y='value')
+	)
+
+errors_plot = alt.layer(*v_lines, errors_plot)
+errors_plot
+```
+
+### RMSPE vs RMSE
+
+Root Mean Square (Prediction) Error
+
+- RMSPE: the error calculated on the non-training dataset
+- RMSE: the error calcualted on the training dataset
+
+This notation is a statistics distinction,
+you will most likely see RMSPE written as RMSE.
+
+### Pick the best k: `GridSearchCV()`
+
+We'll use cross validation to try out many different values of `k`
+
+```{python}
+# import the K-NN regression model
+from sklearn.neighbors import KNeighborsRegressor
+
+# preprocess the data, make the pipeline
+sacr_preprocessor = make_column_transformer((StandardScaler(), ['sqft']))
+sacr_pipeline = make_pipeline(sacr_preprocessor, KNeighborsRegressor())
+
+# create the 5-fold GridSearchCV object
+param_grid = {
+	'kneighborsregressor__n_neighbors': range(1, 201, 3),
+}
+sacr_gridsearch = GridSearchCV(
+	estimator=sacr_pipeline,
+	param_grid=param_grid,
+	cv=5,
+	scoring='neg_root_mean_squared_error',  # we will deal with this later
+)
+
+```
+
+### Pick the best k: fit the CV models
+
+```{python}
+# fit the GridSearchCV object
+sacr_gridsearch.fit(
+	sacramento_train[['sqft']],  # A single-column data frame
+	sacramento_train['price'],  # A series
+)
+
+# Retrieve the CV scores
+sacr_results = pd.DataFrame(sacr_gridsearch.cv_results_)
+sacr_results['sem_test_score'] = sacr_results['std_test_score'] / 5 ** (1 / 2)
+sacr_results = sacr_results[
+	[
+		'param_kneighborsregressor__n_neighbors',
+		'mean_test_score',
+		'sem_test_score',
+	]
+].rename(columns={'param_kneighborsregressor__n_neighbors': 'n_neighbors'})
+print(sacr_results)
+```
+
+### Look at the CV Results
+
+```{python}
+print(sacr_results)
+```
+
+- `n_neighbors`: values of $K$
+- `mean_test_score`: RMSPE estimated via cross-validation (it's negative!)
+- `sem_test_score`: standard error of our cross-validation RMSPE estimate
+  (how uncertain we are in the mean value)
+
+```{python}
+sacr_results['mean_test_score'] = -sacr_results['mean_test_score']
+print(sacr_results)
+```
+
+### Best k
+
+take the *minimum* RMSPE to find the best setting for the number of neighbors
+
+```{python}
+best_k_sacr = sacr_results["n_neighbors"][sacr_results["mean_test_score"].idxmin()]
+best_cv_RMSPE = min(sacr_results["mean_test_score"])
+```
+
+Best k:
+
+::: {.columns}
+::: {.column}
+
+```{python}
+best_k_sacr
+```
+:::
+
+::: {.column}
+
+```{python}
+best_cv_RMSPE
+```
+
+:::
+:::
+
+### Best k: Visualize
+
+```{python}
+# | echo: false
+
+sacr_tunek_plot = (
+	alt.Chart(sacr_results)
+	.mark_line(point=True)
+	.encode(
+		x=alt.X('n_neighbors:Q', title='Neighbors'),
+		y=alt.Y(
+			'mean_test_score',
+			scale=alt.Scale(zero=False),
+			title='Cross-Validation RMSPE Estimate',
+		),
+	)
+)
+
+sacr_tunek_plot
+
+```
+
+```{python}
+sacr_gridsearch.best_params_
+
+```
+
+## Underfitting and overfitting
+
+::: {.columns}
+::: {.column}
+
+```{python}
+sacr_tunek_plot
+```
+:::
+
+::: {.column}
+The RMSPE values start to get higher after a certain k value
+:::
+:::
+
+### Visualizing different values of k
+
+```{python}
+# | echo: false
+
+gridvals = [
+	1,
+	3,
+	25,
+	best_k_sacr,
+	250,
+	len(sacramento_train),
+]
+
+plots = list()
+
+sacr_preprocessor = make_column_transformer((StandardScaler(), ['sqft']))
+X = sacramento_train[['sqft']]
+y = sacramento_train[['price']]
+
+base_plot = (
+	alt.Chart(sacramento_train)
+	.mark_circle()
+	.encode(
+		x=alt.X(
+			'sqft',
+			title='House size (square feet)',
+			scale=alt.Scale(zero=False),
+		),
+		y=alt.Y('price', title='Price (USD)', axis=alt.Axis(format='$,.0f')),
+	)
+)
+for i in range(len(gridvals)):
+	# make the pipeline based on n_neighbors
+	sacr_pipeline = make_pipeline(
+		sacr_preprocessor, KNeighborsRegressor(n_neighbors=gridvals[i])
+	)
+	sacr_pipeline.fit(X, y)
+	# predictions
+	sacr_preds = sacramento_train
+	sacr_preds = sacr_preds.assign(
+		predicted=sacr_pipeline.predict(sacramento_train)
+	)
+	# overlay the plots
+	plots.append(
+		base_plot
+		+ alt.Chart(sacr_preds, title=f'K = {gridvals[i]}')
+		.mark_line(color='#ff7f0e')
+		.encode(x='sqft', y='predicted')
+	)
+
+(plots[0] | plots[1] | plots[2]) & (plots[3] | plots[4] | plots[5])
+```
+
+## Evaluating on the test set
+
+RMSPE on the test data
+
+- Retrain the K-NN regression model on the entire training data set using best k
+
+```{python}
+from sklearn.metrics import mean_squared_error
+
+sacramento_test['predicted'] = sacr_gridsearch.predict(sacramento_test)
+RMSPE = mean_squared_error(
+	y_true=sacramento_test['price'], y_pred=sacramento_test['predicted']
+) ** (1 / 2)
+
+RMSPE
+```
+
+### Final best K model
+
+Predicted values of house price (orange line) for the final K-NN regression model.
+
+```{python}
+# | echo: false
+
+# Create a grid of evenly spaced values along the range of the sqft data
+sqft_prediction_grid = pd.DataFrame(
+	{'sqft': np.arange(sacramento['sqft'].min(), sacramento['sqft'].max(), 10)}
+)
+# Predict the price for each of the sqft values in the grid
+sqft_prediction_grid['predicted'] = sacr_gridsearch.predict(
+	sqft_prediction_grid
+)
+
+# Plot all the houses
+base_plot = (
+	alt.Chart(sacramento)
+	.mark_circle(opacity=0.4)
+	.encode(
+		x=alt.X('sqft').scale(zero=False).title('House size (square feet)'),
+		y=alt.Y('price').axis(format='$,.0f').title('Price (USD)'),
+	)
+)
+
+# Add the predictions as a line
+sacr_preds_plot = base_plot + alt.Chart(
+	sqft_prediction_grid, title=f'K = {best_k_sacr}'
+).mark_line(color='#ff7f0e').encode(x='sqft', y='predicted')
+
+sacr_preds_plot
+```
+
+## Multivariable K-NN regression
+
+We can use multiple predictors in K-NN regression
+
+### Multivariable K-NN regression: Preprocessor
+
+```{python}
+sacr_preprocessor = make_column_transformer(
+	(StandardScaler(), ['sqft', 'beds'])
+)
+sacr_pipeline = make_pipeline(sacr_preprocessor, KNeighborsRegressor())
+```
+
+### Multivariable K-NN regression: CV
+
+```{python}
+# create the 5-fold GridSearchCV object
+param_grid = {
+	'kneighborsregressor__n_neighbors': range(1, 50),
+}
+
+sacr_gridsearch = GridSearchCV(
+	estimator=sacr_pipeline,
+	param_grid=param_grid,
+	cv=5,
+	scoring='neg_root_mean_squared_error',
+)
+
+sacr_gridsearch.fit(
+	sacramento_train[['sqft', 'beds']], sacramento_train['price']
+)
+```
+
+### Multivariable K-NN regression: Best K
+
+```{python}
+# retrieve the CV scores
+sacr_results = pd.DataFrame(sacr_gridsearch.cv_results_)
+sacr_results['sem_test_score'] = sacr_results['std_test_score'] / 5 ** (1 / 2)
+sacr_results['mean_test_score'] = -sacr_results['mean_test_score']
+sacr_results = sacr_results[
+	[
+		'param_kneighborsregressor__n_neighbors',
+		'mean_test_score',
+		'sem_test_score',
+	]
+].rename(columns={'param_kneighborsregressor__n_neighbors': 'n_neighbors'})
+
+# show only the row of minimum RMSPE
+sacr_results.nsmallest(1, 'mean_test_score')
+```
+
+### Multivariable K-NN regression: Best model
+
+```{python}
+best_k_sacr_multi = sacr_results["n_neighbors"][sacr_results["mean_test_score"].idxmin()]
+min_rmspe_sacr_multi = min(sacr_results["mean_test_score"])
+```
+
+Best K
+
+```{python}
+best_k_sacr_multi
+```
+
+Best RMSPE
+
+```{python}
+min_rmspe_sacr_multi
+```
+
+### Multivariable K-NN regression: Test data
+
+```{python}
+sacramento_test["predicted"] = sacr_gridsearch.predict(sacramento_test)
+RMSPE_mult = mean_squared_error(
+    y_true=sacramento_test["price"],
+    y_pred=sacramento_test["predicted"]
+)**(1/2)
+
+RMSPE_mult
+```
+
+### Multivariable K-NN regression: Visualize
+
+```{python}
+# | echo: false
+
+# create a prediction pt grid
+xvals = np.linspace(
+	sacramento_train['sqft'].min(), sacramento_train['sqft'].max(), 50
+)
+yvals = np.linspace(
+	sacramento_train['beds'].min(), sacramento_train['beds'].max(), 50
+)
+xygrid = np.array(np.meshgrid(xvals, yvals)).reshape(2, -1).T
+xygrid = pd.DataFrame(xygrid, columns=['sqft', 'beds'])
+
+# add prediction
+knnPredGrid = sacr_gridsearch.predict(xygrid)
+
+fig = px.scatter_3d(
+	sacramento_train,
+	x='sqft',
+	y='beds',
+	z='price',
+	opacity=0.4,
+	labels={
+		'sqft': 'Size (sq ft)',
+		'beds': 'Bedrooms',
+		'price': 'Price (USD)',
+	},
+)
+
+fig.update_traces(marker={'size': 2, 'color': 'red'})
+
+fig.add_trace(
+	go.Surface(
+		x=xvals,
+		y=yvals,
+		z=knnPredGrid.reshape(50, -1),
+		name='Predictions',
+		colorscale='viridis',
+		colorbar={'title': 'Price (USD)'},
+	)
+)
+
+fig.update_layout(
+	margin=dict(l=0, r=0, b=0, t=1),
+	template='plotly_white',
+)
+
+fig
+```
+
+## Strengths and limitations of K-NN regression
+
+
+Strengths:
+
+- simple, intuitive algorithm
+- requires few assumptions about what the data must look like
+- works well with non-linear relationships (i.e., if the relationship is not a straight line)
+
+Weaknesses:
+
+- very slow as the training data gets larger
+- may not perform well with a large number of predictors
+- may not predict well beyond the range of values input in your training data
+
+## Linear Regression
+
+- Addresses the limitations from KNN regression
+- provides an interpretable mathematical equation that describes
+the relationship between the predictor and response variables
+
+- Create a straight line of best fit through the training data
+
+:::{.callout-note}
+Logistic regression is the linear model we can use for binary classification
+:::
+
+### Sacramento real estate
+
+```{python}
+import pandas as pd
+
+sacramento = pd.read_csv('data/sacramento.csv')
+
+np.random.seed(42)
+small_sacramento = sacramento.sample(n=30)
+
+print(small_sacramento)
+```
+
+### Sacramento real estate: best fit line
+
+::: {.columns}
+::: {.column}
+
+```{python}
+# | echo: false
+
+small_plot = (
+	alt.Chart(small_sacramento)
+	.mark_circle(opacity=1)
+	.encode(
+		x=alt.X('sqft').scale(zero=False).title('House size (square feet)'),
+		y=alt.Y('price')
+		.axis(format='$,.0f')
+		.scale(zero=False)
+		.title('Price (USD)'),
+	)
+)
+
+
+# create df_lines with one fake/empty line (for starting at 2nd color later)
+df_lines = {'x': [500, 500], 'y': [100000, 100000], 'number': ['-1', '-1']}
+
+# set the domains (range of x values) of lines
+min_x = small_sacramento['sqft'].min()
+max_x = small_sacramento['sqft'].max()
+
+# add the line of best fit
+from sklearn.linear_model import LinearRegression
+
+lm = LinearRegression()
+lm.fit(small_sacramento[['sqft']], small_sacramento[['price']])
+pred_min = float(lm.predict(pd.DataFrame({'sqft': [min_x]})))
+pred_max = float(lm.predict(pd.DataFrame({'sqft': [max_x]})))
+
+df_lines['x'].extend([min_x, max_x])
+df_lines['y'].extend([pred_min, pred_max])
+df_lines['number'].extend(['0', '0'])
+
+# add other similar looking lines
+intercept_l = [-64542.23, -6900, -64542.23]
+slope_l = [190, 175, 160]
+for i in range(len(slope_l)):
+	df_lines['x'].extend([min_x, max_x])
+	df_lines['y'].extend(
+		[
+			intercept_l[i] + slope_l[i] * min_x,
+			intercept_l[i] + slope_l[i] * max_x,
+		]
+	)
+	df_lines['number'].extend([f'{i+1}', f'{i+1}'])
+
+df_lines = pd.DataFrame(df_lines)
+
+# plot the bogus line to skip the same color as the scatter
+small_plot += (
+	alt.Chart(df_lines[df_lines['number'] == '-1'])
+	.mark_line()
+	.encode(x='x', y='y', color=alt.Color('number', legend=None))
+)
+# plot the real line with 2nd color
+small_plot += (
+	alt.Chart(df_lines[df_lines['number'] == '0'])
+	.mark_line()
+	.encode(x='x', y='y', color=alt.Color('number', legend=None))
+)
+
+small_plot
+```
+
+:::
+::: {.column}
+
+The equation for the straight line is:
+
+$$\text{house sale price} = \beta_0 + \beta_1 \cdot (\text{house size}),$$
+where
+
+- $\beta_0$ is the *vertical intercept* of the line (the price when house size is 0)
+- $\beta_1$ is the *slope* of the line (how quickly the price increases as you increase house size)
+
+
+:::
+:::
+
+### Sacramento real estate: Prediction
+
+```{python}
+# | echo: false
+
+from sklearn.linear_model import LinearRegression
+
+lm = LinearRegression()
+lm.fit(small_sacramento[['sqft']], small_sacramento[['price']])
+prediction = float(lm.predict(pd.DataFrame({'sqft': [2000]})))
+
+# the vertical dotted line
+line_df = pd.DataFrame({'x': [2000]})
+rule = alt.Chart(line_df).mark_rule(strokeDash=[6], size=1.5).encode(x='x')
+
+# the red point
+point_df = pd.DataFrame({'x': [2000], 'y': [prediction]})
+point = (
+	alt.Chart(point_df)
+	.mark_circle(color='red', size=80, opacity=1)
+	.encode(x='x', y='y')
+)
+
+# overlay all plots
+small_plot_2000_pred = (
+	small_plot
+	+ rule
+	+ point
+	# add the text
+	+ alt.Chart(
+		pd.DataFrame(
+			{
+				'x': [2450],
+				'y': [prediction - 41000],
+				'prediction': ['$' + '{0:,.0f}'.format(prediction)],
+			}
+		)
+	)
+	.mark_text(dy=-5, size=15)
+	.encode(x='x', y='y', text='prediction')
+)
+
+small_plot_2000_pred
+
+```
+
+### What makes the best line?
+
+::: {.columns}
+::: {.column}
+
+```{python}
+#| echo: false
+
+
+several_lines_plot = small_plot.copy()
+
+several_lines_plot += alt.Chart(
+    df_lines[df_lines["number"] != "0"]
+).mark_line().encode(x="x", y="y", color=alt.Color("number",legend=None))
+
+several_lines_plot
+
+```
+
+:::
+::: {.column}
+
+```{python}
+# | echo: false
+
+
+small_sacramento_pred = small_sacramento
+# get prediction
+small_sacramento_pred = small_sacramento_pred.assign(
+	predicted=lm.predict(small_sacramento[['sqft']])
+)
+# melt the dataframe to create separate df to create lines
+small_sacramento_pred = small_sacramento_pred[
+	['sqft', 'price', 'predicted']
+].melt(id_vars=['sqft'])
+
+v_lines = []
+for i in range(len(small_sacramento)):
+	sqft_val = small_sacramento.iloc[i]['sqft']
+	line_df = small_sacramento_pred.query('sqft == @sqft_val')
+	v_lines.append(
+		alt.Chart(line_df).mark_line(color='black').encode(x='sqft', y='value')
+	)
+
+error_plot = alt.layer(*v_lines, small_plot).configure_circle(opacity=1)
+error_plot
+
+```
+
+:::
+:::
+
+## Linear regression in Python
+
+The `scikit-learn` pattern still applies:
+
+- Create a training and test set
+- Instantiate a model
+- Fit the model on training
+- Use model on testing set
+
+### Linear regression: Train test split
+
+```{python}
+import numpy as np
+import altair as alt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn import set_config
+
+# Output dataframes instead of arrays
+set_config(transform_output='pandas')
+
+np.random.seed(1)
+
+sacramento = pd.read_csv('data/sacramento.csv')
+
+sacramento_train, sacramento_test = train_test_split(
+	sacramento, train_size=0.75
+)
+
+```
+
+### Linear regression: Fit the model
+
+```{python}
+# fit the linear regression model
+lm = LinearRegression()
+lm.fit(
+	sacramento_train[['sqft']],  # A single-column data frame
+	sacramento_train['price'],  # A series
+)
+
+# make a dataframe containing slope and intercept coefficients
+results_df = pd.DataFrame({'slope': [lm.coef_[0]], 'intercept': [lm.intercept_]})
+print(results_df)
+```
+<!--TODO: numbers here are hard-coded -->
+$\text{house sale price} =$ 137.29 $+$ 15642.31 $\cdot (\text{house size}).$
+
+### Linear regression: Predictions
+
+```{python}
+# make predictions
+sacramento_test["predicted"] = lm.predict(sacramento_test[["sqft"]])
+
+# calculate RMSPE
+RMSPE = mean_squared_error(
+    y_true=sacramento_test["price"],
+    y_pred=sacramento_test["predicted"]
+)**(1/2)
+
+RMSPE
+```
+
+### Linear regression: Plot
+
+```{python}
+# | echo: false
+
+sqft_prediction_grid = sacramento[['sqft']].agg(['min', 'max'])
+sqft_prediction_grid['predicted'] = lm.predict(sqft_prediction_grid)
+
+all_points = (
+	alt.Chart(sacramento)
+	.mark_circle()
+	.encode(
+		x=alt.X('sqft').scale(zero=False).title('House size (square feet)'),
+		y=alt.Y('price')
+		.axis(format='$,.0f')
+		.scale(zero=False)
+		.title('Price (USD)'),
+	)
+)
+
+sacr_preds_plot = all_points + alt.Chart(sqft_prediction_grid).mark_line(
+	color='#ff7f0e'
+).encode(x='sqft', y='predicted')
+
+sacr_preds_plot
+
+```
+
+### Standarization
+
+- We did not need to standarize like we did for KNN.
+
+- In KNN standarization is mandatory,
+- In linear regression, if we standarize, we convert all the units to unit-less standard deviations
+
+- Standarization in linear regression does not change the fit of the model
+    - It will change the coefficients
+
+## Comparing simple linear and K-NN regression
+
+```{python}
+# | echo: false
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.compose import make_column_transformer
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+# preprocess the data, make the pipeline
+sacr_preprocessor = make_column_transformer((StandardScaler(), ['sqft']))
+sacr_pipeline_knn = make_pipeline(
+	sacr_preprocessor, KNeighborsRegressor(n_neighbors=55)
+)  # 55 is the best parameter obtained through cross validation in regression1 chapter
+
+sacr_pipeline_knn.fit(sacramento_train[['sqft']], sacramento_train[['price']])
+
+# knn in-sample predictions (on training split)
+sacr_preds_knn = sacramento_train
+sacr_preds_knn = sacr_preds_knn.assign(
+	knn_predicted=sacr_pipeline_knn.predict(sacramento_train)
+)
+
+# knn out-of-sample predictions (on test split)
+sacr_preds_knn_test = sacramento_test
+sacr_preds_knn_test = sacr_preds_knn_test.assign(
+	knn_predicted=sacr_pipeline_knn.predict(sacramento_test)
+)
+
+sacr_rmspe_knn = np.sqrt(
+	mean_squared_error(
+		y_true=sacr_preds_knn_test['price'],
+		y_pred=sacr_preds_knn_test['knn_predicted'],
+	)
+)
+
+# plot knn in-sample predictions overlaid on scatter plot
+knn_plot_final = (
+	alt.Chart(sacr_preds_knn, title='K-NN regression')
+	.mark_circle()
+	.encode(
+		x=alt.X(
+			'sqft',
+			title='House size (square feet)',
+			scale=alt.Scale(zero=False),
+		),
+		y=alt.Y(
+			'price',
+			title='Price (USD)',
+			axis=alt.Axis(format='$,.0f'),
+			scale=alt.Scale(zero=False),
+		),
+	)
+)
+
+knn_plot_final = (
+	knn_plot_final
+	+ knn_plot_final.mark_line(color='#ff7f0e').encode(
+		x='sqft', y='knn_predicted'
+	)
+	+ alt.Chart(  # add the text
+		pd.DataFrame(
+			{
+				'x': [3500],
+				'y': [100000],
+				'rmspe': [f'RMSPE = {round(sacr_rmspe_knn)}'],
+			}
+		)
+	)
+	.mark_text(dy=-5, size=15)
+	.encode(x='x', y='y', text='rmspe')
+)
+
+
+# add more components to lm_plot_final
+lm_plot_final = (
+	alt.Chart(sacramento_train, title='linear regression')
+	.mark_circle()
+	.encode(
+		x=alt.X(
+			'sqft',
+			title='House size (square feet)',
+			scale=alt.Scale(zero=False),
+		),
+		y=alt.Y(
+			'price',
+			title='Price (USD)',
+			axis=alt.Axis(format='$,.0f'),
+			scale=alt.Scale(zero=False),
+		),
+	)
+)
+
+lm_plot_final = (
+	lm_plot_final
+	+ lm_plot_final.transform_regression('sqft', 'price').mark_line(
+		color='#ff7f0e'
+	)
+	+ alt.Chart(  # add the text
+		pd.DataFrame(
+			{
+				'x': [3500],
+				'y': [100000],
+				'rmspe': [f'RMSPE = {round(RMSPE)}'],
+			}
+		)
+	)
+	.mark_text(dy=-5, size=15)
+	.encode(x='x', y='y', text='rmspe')
+)
+
+(lm_plot_final | knn_plot_final)
+```
+
+## Multivariable linear regression
+
+More predictor variables!
+
+- More does not always mean better
+- We will not cover variable selection in this workshop
+- Will talk about categorical predictors later in the workshop
+
+### Sacramento real estate: 2 predictors
+
+```{python}
+mlm = LinearRegression()
+mlm.fit(sacramento_train[['sqft', 'beds']], sacramento_train['price'])
+
+sacramento_test['predicted'] = mlm.predict(sacramento_test[['sqft', 'beds']])
+```
+
+### Sacramento real estate: Coefficients
+
+Coefficients
+
+```{python}
+mlm.coef_
+```
+
+Intercept
+
+```{python}
+mlm.intercept_
+```
+
+$$\text{house sale price} = \beta_0 + \beta_1\cdot(\text{house size}) + \beta_2\cdot(\text{number of bedrooms}),$$
+where:
+
+- $\beta_0$ is the *vertical intercept* of the hyperplane (the price when both house size and number of bedrooms are 0)
+- $\beta_1$ is the *slope* for the first predictor (how quickly the price increases as you increase house size)
+- $\beta_2$ is the *slope* for the second predictor (how quickly the price increases as you increase the number of bedrooms)
+
+### More variables make it harder to visualize
+
+```{python}
+# | echo: false
+
+# create a prediction pt grid
+xvals = np.linspace(
+	sacramento_train['sqft'].min(), sacramento_train['sqft'].max(), 50
+)
+yvals = np.linspace(
+	sacramento_train['beds'].min(), sacramento_train['beds'].max(), 50
+)
+xygrid = np.array(np.meshgrid(xvals, yvals)).reshape(2, -1).T
+xygrid = pd.DataFrame(xygrid, columns=['sqft', 'beds'])
+
+# add prediction
+mlmPredGrid = mlm.predict(xygrid)
+
+fig = px.scatter_3d(
+	sacramento_train,
+	x='sqft',
+	y='beds',
+	z='price',
+	opacity=0.4,
+	labels={
+		'sqft': 'Size (sq ft)',
+		'beds': 'Bedrooms',
+		'price': 'Price (USD)',
+	},
+)
+
+fig.update_traces(marker={'size': 2, 'color': 'red'})
+
+fig.add_trace(
+	go.Surface(
+		x=xvals,
+		y=yvals,
+		z=mlmPredGrid.reshape(50, -1),
+		name='Predictions',
+		colorscale='viridis',
+		colorbar={'title': 'Price (USD)'},
+	)
+)
+
+fig.update_layout(
+	margin=dict(l=0, r=0, b=0, t=1),
+	template='plotly_white',
+)
+
+fig
+```
+
+### Sacramento real estate: mlm rmspe
+
+```{python}
+lm_mult_test_RMSPE = mean_squared_error(
+	y_true=sacramento_test['price'], y_pred=sacramento_test['predicted']
+) ** (1 / 2)
+
+lm_mult_test_RMSPE
+
+```
+
+## Outliers and Multicollinearity
+
+- Outliers: extreme values that can move the best fit line
+- Multicollinearity: variables that are highly correlated to one another
+
+### Outliers
+
+::: {.columns}
+::: {.column}
+Subset
+
+```{python}
+# | echo: false
+
+sacramento_train_small = sacramento_train.sample(100, random_state=2)
+sacramento_outlier = pd.DataFrame({'sqft': [5000], 'price': [50000]})
+sacramento_concat_df = pd.concat((sacramento_train_small, sacramento_outlier))
+
+lm_plot_outlier = (
+	alt.Chart(sacramento_train_small)
+	.mark_circle()
+	.encode(
+		x=alt.X(
+			'sqft',
+			title='House size (square feet)',
+			scale=alt.Scale(zero=False),
+		),
+		y=alt.Y(
+			'price',
+			title='Price (USD)',
+			axis=alt.Axis(format='$,.0f'),
+			scale=alt.Scale(zero=False),
+		),
+	)
+)
+lm_plot_outlier += lm_plot_outlier.transform_regression(
+	'sqft', 'price'
+).mark_line(color='#ff7f0e')
+
+outlier_pt = (
+	alt.Chart(sacramento_outlier)
+	.mark_circle(color='#d62728', size=100)
+	.encode(x='sqft', y='price')
+)
+
+outlier_line = (
+	(
+		alt.Chart(sacramento_concat_df)
+		.mark_circle()
+		.encode(
+			x=alt.X(
+				'sqft',
+				title='House size (square feet)',
+				scale=alt.Scale(zero=False),
+			),
+			y=alt.Y(
+				'price',
+				title='Price (USD)',
+				axis=alt.Axis(format='$,.0f'),
+				scale=alt.Scale(zero=False),
+			),
+		)
+	)
+	.transform_regression('sqft', 'price')
+	.mark_line(color='#d62728')
+)
+
+lm_plot_outlier += outlier_pt + outlier_line
+
+lm_plot_outlier
+```
+
+
+:::
+::: {.column}
+Full data
+
+```{python}
+#| echo: false
+
+sacramento_concat_df = pd.concat((sacramento_train, sacramento_outlier))
+
+lm_plot_outlier_large = (
+    alt.Chart(sacramento_train)
+    .mark_circle()
+    .encode(
+        x=alt.X("sqft", title="House size (square feet)", scale=alt.Scale(zero=False)),
+        y=alt.Y(
+            "price",
+            title="Price (USD)",
+            axis=alt.Axis(format="$,.0f"),
+            scale=alt.Scale(zero=False),
+        ),
+    )
+)
+lm_plot_outlier_large += lm_plot_outlier_large.transform_regression(
+    "sqft", "price"
+).mark_line(color="#ff7f0e")
+
+outlier_line = (
+    (
+        alt.Chart(sacramento_concat_df)
+        .mark_circle()
+        .encode(
+            x=alt.X(
+                "sqft", title="House size (square feet)", scale=alt.Scale(zero=False)
+            ),
+            y=alt.Y(
+                "price",
+                title="Price (USD)",
+                axis=alt.Axis(format="$,.0f"),
+                scale=alt.Scale(zero=False),
+            ),
+        )
+    )
+    .transform_regression("sqft", "price")
+    .mark_line(color="#d62728")
+)
+
+lm_plot_outlier_large += outlier_pt + outlier_line
+
+lm_plot_outlier_large
+```
+
+:::
+:::
+
+### Multicollinearity
+
+plane of best fit has regression coefficients that are very sensitive to the exact values in the data
+
+```{python}
+# | echo: false
+
+np.random.seed(1)
+sacramento_train = sacramento_train.assign(
+	sqft1=sacramento_train['sqft']
+	+ 100
+	* np.random.choice(
+		range(1000000), size=len(sacramento_train), replace=True
+	)
+	/ 1000000
+)
+sacramento_train = sacramento_train.assign(
+	sqft2=sacramento_train['sqft']
+	+ 100
+	* np.random.choice(
+		range(1000000), size=len(sacramento_train), replace=True
+	)
+	/ 1000000
+)
+sacramento_train = sacramento_train.assign(
+	sqft3=sacramento_train['sqft']
+	+ 100
+	* np.random.choice(
+		range(1000000), size=len(sacramento_train), replace=True
+	)
+	/ 1000000
+)
+sacramento_train
+
+lm_plot_multicol_1 = (
+	alt.Chart(sacramento_train)
+	.mark_circle()
+	.encode(
+		x=alt.X('sqft', title='House size measurement 1 (square feet)'),
+		y=alt.Y('sqft1', title='House size measurement 2 (square feet)'),
+	)
+)
+
+lm_plot_multicol_1
+```
+
+## References
+
+Thomas Cover and Peter Hart. Nearest neighbor pattern classification. IEEE Transactions on Information Theory, 13(1):21–27, 1967.
+
+Evelyn Fix and Joseph Hodges. Discriminatory analysis. nonparametric discrimination: consistency properties. Technical Report, USAF School of Aviation Medicine, Randolph Field, Texas, 1951.
