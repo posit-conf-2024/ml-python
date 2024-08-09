@@ -1,0 +1,440 @@
+---
+title: "Tree-based and ensemble models"
+format: 
+  revealjs:
+    slide-number: true
+    slide-level: 4
+    smaller: true
+    theme: simple
+jupyter: python3
+execute:
+  echo: true
+  warning: false
+---
+
+```{python}
+#| include: false
+import pandas as pd
+pd.set_option('display.max_rows', 5)
+```
+
+## Tree-based methods
+
+- Algorithms that stratifying or segmenting the predictor space
+  into a number of simple regions.
+
+- We call these algorithms decision-tree methods 
+ because the decisions used to segment the predictor space 
+ can be summarized in a tree.
+ 
+- Decision trees on their own, are very explainable and intuitive,
+  but not very powerful at predicting. 
+  
+- However, there are extensions of decision trees, 
+  such as random forest and boosted trees,
+  which are very powerful at predicting. 
+  We will demonstrate two of these in this session.
+
+## Decision trees
+
+- [Decision Trees](https://mlu-explain.github.io/decision-tree/)  
+  by Jared Wilber & Lucía Santamaría
+
+## Example: the heart data set
+
+:::: {.columns}
+::: {.column width="50%"}
+- Let's consider a situation where we'd like to be able to predict 
+  the presence of heart disease (`AHD`) in patients, 
+  based off 13 measured characteristics.
+
+- The [heart data set](https://www.statlearning.com/s/Heart.csv) 
+  contains a binary outcome for heart disease 
+  for patients who presented with chest pain.
+:::
+
+::: {.column width="50%"}
+```{python}
+heart = pd.read_csv("data/Heart.csv", index_col=0)
+heart.info()
+```
+:::
+::::
+
+## Example: the heart data set
+
+- An angiographic test was performed and a label for `AHD` of Yes
+  was labelled to indicate the presence of heart disease,
+  otherwise the label was No.
+  
+```{python}
+heart.head()
+```
+
+## Do we have a class imbalance?
+
+It's always important to check this, as it may impact your splitting 
+and/or modeling decisions.
+
+```{python}
+heart['AHD'].value_counts(normalize=True)
+```
+
+This looks pretty good! 
+We can move forward this time without doing much more about this.
+
+## Categorical variables
+
+:::: {.columns}
+::: {.column width="35%"}
+- This is our first case of seeing categorical predictor variables, 
+can we treat them the same as numerical ones? **No!** 
+
+- In `scikit-learn` we must perform **one-hot encoding**
+:::
+
+::: {.column width="65%"}
+![](https://scales.arabpsychology.com/wp-content/uploads/2024/05/onehot1-1-1.png)
+
+*Source: <https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/>*
+:::
+::::
+
+## Data splitting
+
+Let's split the data into training and test sets:
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+heart_train, heart_test = train_test_split(
+    heart, train_size=0.75, stratify=heart["AHD"]
+)
+
+X_train = heart_train.drop(columns=['AHD'])
+y_train = heart_train['AHD']
+X_test = heart_test.drop(columns=['AHD'])
+y_test = heart_test['AHD']
+```
+
+## One hot encoding & pre-processing
+
+```{python}
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import make_column_transformer, make_column_selector
+
+numeric_feats = ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak','Slope', 'Ca']
+passthrough_feats = ['Sex', 'Fbs', 'ExAng']
+categorical_feats = ['ChestPain', 'Thal']
+
+heart_preprocessor = make_column_transformer(
+    (StandardScaler(), numeric_feats), 
+    ("passthrough", passthrough_feats),     
+    (OneHotEncoder(handle_unknown = "ignore"), categorical_feats),     
+)
+```
+
+
+## Fitting a dummy classifier
+
+```{python}
+from sklearn.dummy import DummyClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import cross_validate
+
+dummy = DummyClassifier()
+dummy_pipeline = make_pipeline(heart_preprocessor, dummy)
+cv_10_dummy = pd.DataFrame(
+    cross_validate(
+        estimator=dummy_pipeline,
+        cv=10,
+        X=X_train,
+        y=y_train
+    )
+)
+cv_10_dummy_metrics = cv_10_dummy.agg(["mean", "sem"])
+results = pd.DataFrame({'mean' : [cv_10_dummy_metrics.test_score.iloc[0]],
+  'sem' : [cv_10_dummy_metrics.test_score.iloc[1]]},
+  index = ['Dummy classifier']
+)
+results
+```
+
+
+## Fitting a decision tree
+
+```{python}
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.pipeline import make_pipeline
+
+decision_tree = DecisionTreeClassifier()
+
+dt_pipeline = make_pipeline(heart_preprocessor, decision_tree)
+cv_10_dt = pd.DataFrame(
+    cross_validate(
+        estimator=dt_pipeline,
+        cv=10,
+        X=X_train,
+        y=y_train
+    )
+)
+cv_10_dt_metrics = cv_10_dt.agg(["mean", "sem"])
+results_dt = pd.DataFrame({'mean' : [cv_10_dt_metrics.test_score.iloc[0]],
+  'sem' : [cv_10_dt_metrics.test_score.iloc[1]]},
+  index = ['Decision tree']
+)
+results = pd.concat([results, results_dt])
+results
+```
+
+## Can we do better?
+
+- We could tune some decision tree parameters 
+  (e.g., Gini impurity, maximum tree depth, etc)...
+
+- We could also try a different tree-based method!
+
+- [The Random Forest Algorithm](https://mlu-explain.github.io/random-forest/) 
+  by Jenny Yeon & Jared Wilber
+  
+## Random forest in `scikit-learn` & missing values
+
+:::: {.columns}
+::: {.column width="35%"}
+- Does not accept missing values, we need to deal with these somehow...
+
+- We can either drop the observations with missing values, 
+  or we can somehow impute them.
+
+- For the purposes of this demo we will drop them, 
+  but if you are interested in imputation, 
+  see the imputation tutorial in 
+  [`scikit-learn`](https://scikit-learn.org/stable/modules/impute.html)
+:::
+
+::: {.column width="50%"}
+How many rows have missing observations:
+
+```{python}
+heart.isna().any(axis=1).sum()
+```
+
+Drop rows with missing observations:
+
+```{python}
+heart_train_drop_na = heart_train.dropna()
+
+X_train_drop_na = heart_train_drop_na.drop(columns=['AHD'])
+y_train_drop_na = heart_train_drop_na['AHD']
+```
+:::
+::::
+
+## Random forest in `scikit-learn`
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+
+random_forest = RandomForestClassifier()
+rf_pipeline = make_pipeline(heart_preprocessor, random_forest)
+cv_10_rf = pd.DataFrame(
+    cross_validate(
+        estimator=rf_pipeline,
+        cv=10,
+        X=X_train_drop_na,
+        y=y_train_drop_na
+    )
+)
+
+cv_10_rf_metrics = cv_10_rf.agg(["mean", "sem"])
+results_rf = pd.DataFrame({'mean' : [cv_10_rf_metrics.test_score.iloc[0]],
+  'sem' : [cv_10_rf_metrics.test_score.iloc[1]]},
+  index = ['Random forest']
+)
+results = pd.concat([results, results_rf])
+results
+```
+
+## Can we do better?
+
+- Random forest can be tuned a several important parameters, including:
+
+  - `n_estimators`: number of decision trees (higher = more complexity)
+
+  - `max_depth`: max depth of each decision tree (higher = more complexity)
+
+  - `max_features`: the number of features you get to look at each split 
+  (higher = more complexity)
+  
+- We can use `GridSearchCV` to search for the optimal parameters for these,
+  as we did for $K$ in $K$-nearest neighbors.
+
+## Tuning random forest in `scikit-learn`
+
+```{python}
+from sklearn.model_selection import GridSearchCV
+
+rf_param_grid = {'randomforestclassifier__n_estimators': [100, 150, 200, 250],
+              'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],
+              'randomforestclassifier__max_features': [1, 2, 3, 4, 5, 6, 7]}
+
+rf_tune_grid = GridSearchCV(
+    estimator=rf_pipeline,
+    param_grid=rf_param_grid,
+    cv=10,
+    n_jobs=-1 # tells computer to use all available CPUs
+)
+rf_tune_grid.fit(
+    X_train_drop_na,
+    y_train_drop_na
+)
+
+cv_10_rf_tuned_metrics = pd.DataFrame(rf_tune_grid.cv_results_)
+results_rf_tuned = pd.DataFrame({'mean' : rf_tune_grid.best_score_,
+  'sem' : pd.DataFrame(rf_tune_grid.cv_results_)['std_test_score'][6] / 10**(1/2)},
+  index = ['Random forest tuned']
+)
+results = pd.concat([results, results_rf_tuned])
+```
+
+## Random Forest results
+
+How did the Random Forest compare 
+against the other models we tried?
+
+```{python}
+results
+```
+
+## Boosting
+
+- No randomization.
+
+- The key idea is combining many simple models called weak learners, 
+  to create a strong learner.
+
+- They combine multiple shallow (depth 1 to 5) decision trees.
+
+- They build trees in a serial manner, 
+  where each tree tries to correct the mistakes of the previous one.
+
+## Tuning `GradientBoostingClassifier` with `scikit-learn`
+
+- `GradientBoostingClassifier` can be tuned a several important parameters, including:
+
+  - `n_estimators`: number of decision trees (higher = more complexity)
+
+  - `max_depth`: max depth of each decision tree (higher = more complexity)
+
+  - `learning_rate`: the shrinkage parameter which controls the rate 
+  at which boosting learns. Values between 0.01 or 0.001 are typical. 
+  
+- We can use `GridSearchCV` to search for the optimal parameters for these,
+  as we did for the parameters in Random Forest.
+
+## Tuning `GradientBoostingClassifier` with `scikit-learn`
+
+```{python}
+from sklearn.ensemble import GradientBoostingClassifier
+
+gradient_boosted_classifier = GradientBoostingClassifier()
+gb_pipeline = make_pipeline(heart_preprocessor, gradient_boosted_classifier)
+
+gb_param_grid = {'gradientboostingclassifier__n_estimators': [200, 400, 600, 800],
+              'gradientboostingclassifier__max_depth': [1, 3, 5, 7, 9],
+              'gradientboostingclassifier__learning_rate': [0.001, 0.005, 0.01]}
+
+gb_tune_grid = GridSearchCV(
+    estimator=gb_pipeline,
+    param_grid=gb_param_grid,
+    cv=10,
+    n_jobs=-1 # tells computer to use all available CPUs
+)
+
+gb_tune_grid.fit(
+    X_train_drop_na,
+    y_train_drop_na
+)
+
+cv_10_gb_tuned_metrics = pd.DataFrame(gb_tune_grid.cv_results_)
+results_gb_tuned = pd.DataFrame({'mean' : gb_tune_grid.best_score_,
+  'sem' : pd.DataFrame(gb_tune_grid.cv_results_)['std_test_score'][6] / 10**(1/2)},
+  index = ['Gradient boosted classifier tuned']
+)
+results = pd.concat([results, results_gb_tuned])
+```
+
+## `GradientBoostingClassifier` results
+
+How did the `GradientBoostingClassifier` compare 
+against the other models we tried?
+
+```{python}
+results
+```
+
+## How do we choose the final model?
+
+- Remember, what is your question or application? 
+
+- A good rule when models are not very different (considering SEM),
+  what is the simplest model that does well?
+  
+- Look at other metrics that are important to you 
+  (not just the metric you used for tuning your model), 
+  remember precision & recall, for example.
+  
+- Remember - no peaking at the test set until you choose! 
+  And then, you should only look at the test set for one model!
+
+## Other boosting models:
+
+:::: {.columns}
+::: {.column width="50%"}
+[XGBoost](https://lightgbm.readthedocs.io/)
+
+- Not part of `sklearn` but has similar interface.
+- Supports missing values
+- GPU training, networked parallel training
+- Supports sparse data
+- Typically better scores than random forests
+
+[LightGBM](https://lightgbm.readthedocs.io/)
+
+- Not part of sklearn but has similar interface.
+- Small model size
+- Faster
+- Typically better scores than random forests
+:::
+
+::: {.column width="50%"}
+[CatBoost](https://catboost.ai/)
+- Not part of sklearn but has similar interface.
+- Usually better scores but slower compared to XGBoost and LightGBM
+:::
+::::
+
+## Additional resources
+
+- The [UBC DSCI 573 (Feature and Model Selection notes)](https://ubc-mds.github.io/DSCI_573_feat-model-select)
+  chapter of Data Science: A First Introduction (Python Edition) by 
+  Varada Kolhatkar and Joel Ostblom. These notes cover classification and regression metrics,
+  advanced variable selection and more on ensembles.
+- The [`scikit-learn` website](https://scikit-learn.org/stable/) is an excellent
+  reference for more details on, and advanced usage of, the functions and
+  packages in the past two chapters. Aside from that, it also offers many
+  useful [tutorials](https://scikit-learn.org/stable/tutorial/index.html)
+  to get you started. 
+- [*An Introduction to Statistical Learning*](https://www.statlearning.com/) {cite:p}`james2013introduction` provides
+  a great next stop in the process of
+  learning about classification. Chapter 4 discusses additional basic techniques
+  for classification that we do not cover, such as logistic regression, linear
+  discriminant analysis, and naive Bayes.
+
+## References
+
+Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani and Jonathan Taylor. An Introduction to Statistical Learning with Applications in Python. Springer, 1st edition, 2023. URL: https://www.statlearning.com/.
+
+Kolhatkar, V., and Ostblom, J. (2024). UBC DSCI 573: Feature and Model Selection course notes. URL: https://ubc-mds.github.io/DSCI_573_feat-model-select
+
+Pedregosa, F. et al., 2011. Scikit-learn: Machine learning in Python. Journal of machine learning research, 12(Oct), pp.2825–2830.

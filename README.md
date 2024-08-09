@@ -24,4 +24,4 @@ by Tiffany Timbers, Daniel Chen
 | 12:30 - 13:30 | *Lunch break*                                                                           |
 | 13:30 - 15:00 | Session 3 - Regression I & II                                                           |
 | 15:00 - 15:30 | *Coffee break*                                                                          |
-| 15:30 - 17:00 | Session 4 - Introduction to ensemble models (e.g., random forest and lightGBM)          |
+| 15:30 - 17:00 | Session 4 - Introduction to ensemble models (e.g., random forest and gradient boosted classifiers)          |
