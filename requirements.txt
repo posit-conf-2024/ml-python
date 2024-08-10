@@ -6,3 +6,4 @@ plotnine
 plotly
 seaborn
 scikit-learn
+jupyter-cache
