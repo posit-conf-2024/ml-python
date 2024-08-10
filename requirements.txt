@@ -7,3 +7,4 @@ plotly
 seaborn
 scikit-learn
 jupyter-cache
+ipykernel
