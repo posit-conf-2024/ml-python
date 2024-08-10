@@ -32,7 +32,8 @@ publish:
 	quarto publish gh-pages
 
 clean:
-	rm -rf docs/ _site/
+	rm -rf docs/ _site/ _freeze
+	rm -rf materials/slides/.jupyter_cache
 
 	rm -rf materials/slides/*_files
 	rm -rf materials/slides/*.html
