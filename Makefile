@@ -20,6 +20,9 @@ preview:
 	quarto preview index.qmd --port 8888
 
 publish:
+	# run the below once before runing this target
+	# you only need to run this target once if ci is setup
+
 	# git checkout --orphan gh-pages
 	# git reset --hard # make sure all changes are committed before running this!
 	# git commit --allow-empty -m "Initialising gh-pages branch"
