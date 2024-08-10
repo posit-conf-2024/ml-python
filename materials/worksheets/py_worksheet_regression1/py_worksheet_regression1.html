@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.55">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Worksheet 8 - Regression – Introduction to machine learning in Python with Scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Introduction to machine learning in Python with Scikit-learn</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Worksheet 8 - Regression</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/classification1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification I: training &amp; predicting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/classification2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification II: evaluation &amp; tuning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tree-based and ensemble models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lecture-and-tutorial-learning-goals" id="toc-lecture-and-tutorial-learning-goals" class="nav-link active" data-scroll-target="#lecture-and-tutorial-learning-goals">Lecture and Tutorial Learning Goals:</a></li>
+  <li><a href="#marathon-training" id="toc-marathon-training" class="nav-link" data-scroll-target="#marathon-training">Marathon Training</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Worksheet 8 - Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="lecture-and-tutorial-learning-goals" class="level3">
+<h3 class="anchored" data-anchor-id="lecture-and-tutorial-learning-goals">Lecture and Tutorial Learning Goals:</h3>
+<p>After completing this week’s lecture and tutorial work, you will be able to: - Recognize situations where a simple regression analysis would be appropriate for making predictions. - Explain the k-nearest neighbour (<span class="math inline">\(k\)</span>-nn) regression algorithm and describe how it differs from <span class="math inline">\(k\)</span>-nn classification. - Interpret the output of a <span class="math inline">\(k\)</span>-nn regression. - In a dataset with two variables, perform k-nearest neighbour regression in Python using <code>scikit-learn</code> to predict the values for a test dataset. - Using Python, execute hyperparameter tuning in Python to choose the number of neighbours. - Using Python, evaluate <span class="math inline">\(k\)</span>-nn regression prediction accuracy using a test data set and an appropriate metric (root mean squared error). - In the context of <span class="math inline">\(k\)</span>-nn regression, compare and contrast goodness of fit and prediction properties (RMSE versus RMSPE). - Describe advantages and disadvantages of the <span class="math inline">\(k\)</span>-nearest neighbour regression approach.</p>
+<p>This tutorial covers parts of <a href="https://python.datasciencebook.ca/regression1">Chapter 7</a> of the online textbook. You should read this chapter before attempting this assignment. Any place you see <code>___</code>, you must fill in the function, variable, or data to complete the code. Substitute the <code>raise NotImplementedError</code> with your completed code and answers then proceed to run the cell.</p>
+<div id="cell-2" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;557f03fa20fc0ebcf8983518d3f404b1&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-53085d5554f9dcc8&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Run this cell before continuing.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> set_config</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV, cross_validate, train_test_split</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsRegressor</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify working with large datasets in Altair</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>alt.data_transformers.disable_max_rows()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Output dataframes instead of arrays</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>set_config(transform_output<span class="op">=</span><span class="st">"pandas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 0.0</strong> <br> {points: 1}</p>
+<p>To predict a value of <span class="math inline">\(Y\)</span> for a new observation using <span class="math inline">\(k\)</span>-nn <strong>regression</strong>, we identify the <span class="math inline">\(k\)</span>-nearest neighbours and then:</p>
+<p>A. Assign it the median of the <span class="math inline">\(k\)</span>-nearest neighbours as the predicted value</p>
+<p>B. Assign it the mean of the <span class="math inline">\(k\)</span>-nearest neighbours as the predicted value</p>
+<p>C. Assign it the mode of the <span class="math inline">\(k\)</span>-nearest neighbours as the predicted value</p>
+<p>D. Assign it the majority vote of the <span class="math inline">\(k\)</span>-nearest neighbours as the predicted value</p>
+<p><em>Save the letter of the answer you think is correct to a variable named <code>answer0_0</code>. Make sure your answer is an uppercase letter and is surrounded by quotation marks (e.g.&nbsp;<code>"F"</code>).</em></p>
+<div id="cell-4" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;be09c84e9423c2fde7de7f9a7ff062d0&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-108236d99368cc44&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-5" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;196f9498c8e1fa3993dc7cd3bef7bdfa&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-7d5938e33a38edeb&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer0_0)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"dcefd"</span>).hexdigest() <span class="op">==</span> <span class="st">"3e545b3f6befc9fb348e77db7f2040e82e9bcbb7"</span>, <span class="st">"type of answer0_0 is not str. answer0_0 should be an str"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer0_0)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"dcefd"</span>).hexdigest() <span class="op">==</span> <span class="st">"107f1edd22c2860f5c219827900a4ddae78b3686"</span>, <span class="st">"length of answer0_0 is not correct"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer0_0.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"dcefd"</span>).hexdigest() <span class="op">==</span> <span class="st">"d18bedfe24fae0dd4438932704ba3bd5d6bd4f7d"</span>, <span class="st">"value of answer0_0 is not correct"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer0_0).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"dcefd"</span>).hexdigest() <span class="op">==</span> <span class="st">"0216e5aab479cd7c4e52506d6e7a964513305bd0"</span>, <span class="st">"correct string value of answer0_0 but incorrect case of letters"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="marathon-training" class="level2">
+<h2 class="anchored" data-anchor-id="marathon-training">Marathon Training</h2>
+<p><img src="https://media.giphy.com/media/nUN6InE2CodRm/giphy.gif" width="400"></p>
+<p>Source: https://media.giphy.com/media/nUN6InE2CodRm/giphy.gif</p>
+<p>What predicts which athletes will perform better than others? Specifically, we are interested in marathon runners, and looking at how the maximum distance ran per week (in miles) during race training predicts the time it takes a runner to finish the race. For this, we will be looking at the <code>marathon.csv</code> file in the <code>data/</code> folder.</p>
+<p><strong>Question 1.0</strong> <br> {points: 1}</p>
+<p>Load the data and assign it to an object called <code>marathon</code>.</p>
+<div id="cell-8" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;75aa40b2dc5eadc254c56f3ec9d4a9b5&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-5376dc2c39983258&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>marathon</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-9" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;5d849a3973cfdae9723e4e7acf4a5df9&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-60554f6f6a56a16c&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30457"</span>).hexdigest() <span class="op">==</span> <span class="st">"26d5aef6e71dd1f2188f7132ba3c7c26c732d4db"</span>, <span class="st">"type of marathon is None is not bool. marathon is None should be a bool"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30457"</span>).hexdigest() <span class="op">==</span> <span class="st">"598dc6a0d372aa6b4fab47451f4061e3c8d8d3ee"</span>, <span class="st">"boolean value of marathon is None is not correct"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30458"</span>).hexdigest() <span class="op">==</span> <span class="st">"81b9d38b9594935ea28437a78a119c664b8e271a"</span>, <span class="st">"type of type(marathon) is not correct"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30459"</span>).hexdigest() <span class="op">==</span> <span class="st">"fc9069c39d96d09c086a2b82cb34971a576bcec5"</span>, <span class="st">"type of marathon.shape is not tuple. marathon.shape should be a tuple"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30459"</span>).hexdigest() <span class="op">==</span> <span class="st">"619cbada2e7f2f961d90ed765b5d118334e79c30"</span>, <span class="st">"length of marathon.shape is not correct"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30459"</span>).hexdigest() <span class="op">==</span> <span class="st">"efe8921e7ce06759f11980cddc7ae55db277e49c"</span>, <span class="st">"values of marathon.shape are not correct"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"30459"</span>).hexdigest() <span class="op">==</span> <span class="st">"e3f7896715d8c8a8f7ada1fd2c5213c678367660"</span>, <span class="st">"order of elements of marathon.shape is not correct"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="st">"time_hrs"</span> <span class="kw">in</span> marathon.columns)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"3045a"</span>).hexdigest() <span class="op">==</span> <span class="st">"3a3de902ed3e89879d57fc4eff706e656659352b"</span>, <span class="st">"type of </span><span class="ch">\"</span><span class="st">time_hrs</span><span class="ch">\"</span><span class="st"> in marathon.columns is not bool. </span><span class="ch">\"</span><span class="st">time_hrs</span><span class="ch">\"</span><span class="st"> in marathon.columns should be a bool"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="st">"time_hrs"</span> <span class="kw">in</span> marathon.columns).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"3045a"</span>).hexdigest() <span class="op">==</span> <span class="st">"f7e1f0c320e623dd359e1bd60d7a2017c4aef608"</span>, <span class="st">"boolean value of </span><span class="ch">\"</span><span class="st">time_hrs</span><span class="ch">\"</span><span class="st"> in marathon.columns is not correct"</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="st">"max"</span> <span class="kw">in</span> marathon.columns)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"3045b"</span>).hexdigest() <span class="op">==</span> <span class="st">"dcbf21f70e6bbc9a4f84d3f0c06f12d13aafa0ac"</span>, <span class="st">"type of </span><span class="ch">\"</span><span class="st">max</span><span class="ch">\"</span><span class="st"> in marathon.columns is not bool. </span><span class="ch">\"</span><span class="st">max</span><span class="ch">\"</span><span class="st"> in marathon.columns should be a bool"</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="st">"max"</span> <span class="kw">in</span> marathon.columns).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"3045b"</span>).hexdigest() <span class="op">==</span> <span class="st">"24b9f6b32bda0c76fd2aab9ff718c8c441f6a57b"</span>, <span class="st">"boolean value of </span><span class="ch">\"</span><span class="st">max</span><span class="ch">\"</span><span class="st"> in marathon.columns is not correct"</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.0</strong> <br> {points: 1}</p>
+<p>We want to predict race time (in hours) (<code>time_hrs</code>) given a particular value of maximum distance ran per week (in miles) during race training (<code>max</code>). Let’s take a subset of size 50 individuals of our marathon data and assign it to an object called <code>marathon_50</code>. With this subset, plot a scatterplot (using <code>mark_circle</code>) to assess the relationship between these two variables. Put <code>time_hrs</code> on the y-axis and <code>max</code> on the x-axis. Discuss, with a classmate, the relationship between race time and maximum distance ran per week during training based on the scatterplot you create below.</p>
+<p><em>Hint: To take a subset of your data you can use the <code>sample</code> function</em></p>
+<p><em>Assign your plot to an object called <code>answer2</code>.</em></p>
+<div id="cell-11" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;f6927f52ae154d8e6ea639d7893551b5&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-6fcfc6ca32883f4d&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___.sample(___, random_state=300) # Do not change the random_state</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>answer2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-12" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;70170a1a854e9230c3209422d010edd9&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-78ac50fb41cd9a86&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2 <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9767"</span>).hexdigest() <span class="op">==</span> <span class="st">"c9f213a0f76bf1899a7c7ab41bd64020e00a5d8a"</span>, <span class="st">"type of answer2 is None is not bool. answer2 is None should be a bool"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2 <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9767"</span>).hexdigest() <span class="op">==</span> <span class="st">"07c6d302a12aea10f94ce4ac438ed8846da04ee4"</span>, <span class="st">"boolean value of answer2 is None is not correct"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_50.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9768"</span>).hexdigest() <span class="op">==</span> <span class="st">"1dc6a7e0dc1faf456fc0a56183f1a383ab13ea95"</span>, <span class="st">"type of marathon_50.shape is not tuple. marathon_50.shape should be a tuple"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_50.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9768"</span>).hexdigest() <span class="op">==</span> <span class="st">"2211b0a1f1461259f232290064bd4f32d781712d"</span>, <span class="st">"length of marathon_50.shape is not correct"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_50.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9768"</span>).hexdigest() <span class="op">==</span> <span class="st">"2102806f043d7c36dcd6b39270f2bc3bf06645c2"</span>, <span class="st">"values of marathon_50.shape are not correct"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_50.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9768"</span>).hexdigest() <span class="op">==</span> <span class="st">"38fe5c44247a3db3a62933578c3250c807ac8a1c"</span>, <span class="st">"order of elements of marathon_50.shape is not correct"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2.data.equals(marathon_50))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9769"</span>).hexdigest() <span class="op">==</span> <span class="st">"4cf4607212e9a4c28c631904ff116572eab419e5"</span>, <span class="st">"type of answer2.data.equals(marathon_50) is not bool. answer2.data.equals(marathon_50) should be a bool"</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.data.equals(marathon_50)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9769"</span>).hexdigest() <span class="op">==</span> <span class="st">"bbab45c34d4ff267cf8e57a05d36d09aa94cc953"</span>, <span class="st">"boolean value of answer2.data.equals(marathon_50) is not correct"</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2.encoding.x[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976a"</span>).hexdigest() <span class="op">==</span> <span class="st">"839b1f6e497ebbed31fb8df0322b128a7b581e7b"</span>, <span class="st">"type of answer2.encoding.x['shorthand'] is not str. answer2.encoding.x['shorthand'] should be an str"</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer2.encoding.x[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976a"</span>).hexdigest() <span class="op">==</span> <span class="st">"bbd3ee6c2cefcc8f64a4b15489f070e4e7360127"</span>, <span class="st">"length of answer2.encoding.x['shorthand'] is not correct"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.encoding.x[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976a"</span>).hexdigest() <span class="op">==</span> <span class="st">"5488fa8c72460ec31da324fd60582d6a75e894ac"</span>, <span class="st">"value of answer2.encoding.x['shorthand'] is not correct"</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.encoding.x[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976a"</span>).hexdigest() <span class="op">==</span> <span class="st">"5488fa8c72460ec31da324fd60582d6a75e894ac"</span>, <span class="st">"correct string value of answer2.encoding.x['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2.encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976b"</span>).hexdigest() <span class="op">==</span> <span class="st">"ad11bd6cff76d9856350485bf290e058bf89f9e0"</span>, <span class="st">"type of answer2.encoding.y['shorthand'] is not str. answer2.encoding.y['shorthand'] should be an str"</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer2.encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976b"</span>).hexdigest() <span class="op">==</span> <span class="st">"7e31068cc71027470db684645a245618ecc12f0b"</span>, <span class="st">"length of answer2.encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.encoding.y[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976b"</span>).hexdigest() <span class="op">==</span> <span class="st">"afd8e5f4040c0e6a927a56dd3222c5cb14c29b23"</span>, <span class="st">"value of answer2.encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.encoding.y[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976b"</span>).hexdigest() <span class="op">==</span> <span class="st">"afd8e5f4040c0e6a927a56dd3222c5cb14c29b23"</span>, <span class="st">"correct string value of answer2.encoding.y['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2.mark)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976c"</span>).hexdigest() <span class="op">==</span> <span class="st">"3623b4c339e9c6ee9fdc6fad96976a7d1a2d9557"</span>, <span class="st">"type of answer2.mark is not str. answer2.mark should be an str"</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer2.mark)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976c"</span>).hexdigest() <span class="op">==</span> <span class="st">"77446053854ce07f9a468e3c4253ee227343be8c"</span>, <span class="st">"length of answer2.mark is not correct"</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.mark.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976c"</span>).hexdigest() <span class="op">==</span> <span class="st">"5b87400edb7ee707ab95967718e9b221d24e92e2"</span>, <span class="st">"value of answer2.mark is not correct"</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2.mark).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976c"</span>).hexdigest() <span class="op">==</span> <span class="st">"5b87400edb7ee707ab95967718e9b221d24e92e2"</span>, <span class="st">"correct string value of answer2.mark but incorrect case of letters"</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">isinstance</span>(answer2.encoding.x[<span class="st">'title'</span>], <span class="bu">str</span>))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976d"</span>).hexdigest() <span class="op">==</span> <span class="st">"851319552403a87bee34ca83d924c7a895eb0db0"</span>, <span class="st">"type of isinstance(answer2.encoding.x['title'], str) is not bool. isinstance(answer2.encoding.x['title'], str) should be a bool"</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">isinstance</span>(answer2.encoding.x[<span class="st">'title'</span>], <span class="bu">str</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976d"</span>).hexdigest() <span class="op">==</span> <span class="st">"e82182bc48c146515fd8a30abc08ff860fa54ee5"</span>, <span class="st">"boolean value of isinstance(answer2.encoding.x['title'], str) is not correct"</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">isinstance</span>(answer2.encoding.y[<span class="st">'title'</span>], <span class="bu">str</span>))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976e"</span>).hexdigest() <span class="op">==</span> <span class="st">"265762b7f33189b160c25ee74148700738439490"</span>, <span class="st">"type of isinstance(answer2.encoding.y['title'], str) is not bool. isinstance(answer2.encoding.y['title'], str) should be a bool"</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">isinstance</span>(answer2.encoding.y[<span class="st">'title'</span>], <span class="bu">str</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"976e"</span>).hexdigest() <span class="op">==</span> <span class="st">"8bb5960c415644b45508b0818b1eda7297426e4f"</span>, <span class="st">"boolean value of isinstance(answer2.encoding.y['title'], str) is not correct"</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 3.0</strong> <br> {points: 1}</p>
+<p>Suppose we want to predict the race time for someone who ran a maximum distance of 100 miles per week during training. In the chart we created in the previous question, we can see that no one has run a maximum distance of exactly 100 miles per week. How can we predict with this data? We can use <span class="math inline">\(k\)</span>-nn regression! To do this we get the <span class="math inline">\(Y\)</span> values (target/response variable) of the nearest <span class="math inline">\(k\)</span> values and then take their average and use that as the prediction.</p>
+<p>For this question perform <span class="math inline">\(k\)</span>-nn regression manually to predict the race time based on the average value of the 4 runners (“neighbors”) closest to running 100 miles per week during training.</p>
+<p><em>Fill in the scaffolding below and assign your answer to an object named <code>answer3</code>.</em></p>
+<div id="cell-14" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;1b7ba4c5feb2b757a6defcb9e3d57969&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-51d4b16bee915d31&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run this cell to see a visualization of the 4 nearest neighbours to 100 miles / week</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rule <span class="op">=</span> alt.Chart().mark_rule().encode(x<span class="op">=</span>alt.datum(<span class="dv">100</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> alt.Chart(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    pd.DataFrame({</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>: [<span class="dv">110</span>, <span class="dv">104</span>, <span class="dv">90</span>, <span class="dv">86</span>],</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"y"</span>: [<span class="fl">2.63</span>, <span class="fl">2.8</span>, <span class="fl">3.27</span>, <span class="fl">2.44</span>]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>).mark_line(color<span class="op">=</span><span class="st">"orange"</span>, size<span class="op">=</span><span class="dv">2</span>).encode(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    x2<span class="op">=</span>alt.datum(<span class="dv">100</span>),  <span class="co"># we use `x2` to set a constant second x-coordinate at 100 for all the lines</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>lines <span class="op">+</span> rule <span class="op">+</span> answer2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-15" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;86d5852fe651b81170219fd15540a341&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-a8d1b15c312d9c3d&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = (</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     marathon_50</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     .___(diff=(100 - ___).abs())  # Compute the absolute distance to 100 miles for each runner</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     .___(4, ___)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     [___]</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     .mean()</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>answer3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-16" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;c4e027aac973e1db926ccf3ad0d4c320&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-af7afd4794001c7b&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer3)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7bdb3"</span>).hexdigest() <span class="op">==</span> <span class="st">"3a71bdfd3d857a0c621cb9c0eca46cd2d17f7a25"</span>, <span class="st">"type of answer3 is not correct"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer3).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7bdb3"</span>).hexdigest() <span class="op">==</span> <span class="st">"37f5342ce74ffaa4f9a707df207bb80d2cfefc4f"</span>, <span class="st">"value of answer3 is not correct"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 4.0</strong> <br> {points: 1}</p>
+<p>For this question, let’s instead predict the race time based on the 2 closest neighbors to the 100 miles per week during training.</p>
+<p><em>Assign your answer to an object named <code>answer4</code>.</em></p>
+<div id="cell-18" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;ddca56a9ac218b2e4309e74065c8a0f6&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-44994bbd299ff0d0&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>answer4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-19" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;5fe34271a3a9489dc5c7e440986c1ba0&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-690e322810064165&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer4)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"91a96"</span>).hexdigest() <span class="op">==</span> <span class="st">"56be2360e19074080ea1ee864973930e01b1feb8"</span>, <span class="st">"type of answer4 is not correct"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer4).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"91a96"</span>).hexdigest() <span class="op">==</span> <span class="st">"d87f739886a2763fa87919ecfd5616a4cc832881"</span>, <span class="st">"value of answer4 is not correct"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 5.0</strong> <br> {points: 1}</p>
+<p>So far you have calculated the <span class="math inline">\(k\)</span> nearest neighbors predictions manually based on values of <span class="math inline">\(k\)</span> we have told you to use. However, last week we learned how to use a better method to choose the best <span class="math inline">\(k\)</span> for classification.</p>
+<p>Based on what you learned last week and what you have learned about <span class="math inline">\(k\)</span>-nn regression so far this week, which method would you use to choose the <span class="math inline">\(k\)</span> (in the situation where we don’t tell you which <span class="math inline">\(k\)</span> to use)?</p>
+<ul>
+<li><ol type="A">
+<li>Choose the <span class="math inline">\(k\)</span> that excludes most outliers</li>
+</ol></li>
+<li><ol start="2" type="A">
+<li>Choose the <span class="math inline">\(k\)</span> with the lowest training error</li>
+</ol></li>
+<li><ol start="3" type="A">
+<li>Choose the <span class="math inline">\(k\)</span> with the lowest cross-validation error</li>
+</ol></li>
+<li><ol start="4" type="A">
+<li>Choose the <span class="math inline">\(k\)</span> that includes the most data points</li>
+</ol></li>
+<li><ol start="5" type="A">
+<li>Choose the <span class="math inline">\(k\)</span> with the lowest testing error</li>
+</ol></li>
+</ul>
+<p><em>Assign your answer to an object called <code>answer5</code>. Make sure your answer is an uppercase letter and is surrounded by quotation marks (e.g.&nbsp;<code>"F"</code>).</em></p>
+<div id="cell-21" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;a11647b32fa9749c8e9821e17be507a0&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-01b498d6b1415bf5&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>answer5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-22" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;87c6d5b0c1a5d0ae1dfce9b0563d26bc&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-7cbe965dbdb7228d&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer5)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"37693"</span>).hexdigest() <span class="op">==</span> <span class="st">"90111e24734de91c15169da5902a3788de0a8444"</span>, <span class="st">"type of answer5 is not str. answer5 should be an str"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer5)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"37693"</span>).hexdigest() <span class="op">==</span> <span class="st">"fd218df3c1aeccee91b16c5edb3164742b012b62"</span>, <span class="st">"length of answer5 is not correct"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer5.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"37693"</span>).hexdigest() <span class="op">==</span> <span class="st">"4f99d9a8de2f5a0e124277c1be1e248dce2816c2"</span>, <span class="st">"value of answer5 is not correct"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer5).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"37693"</span>).hexdigest() <span class="op">==</span> <span class="st">"57eb3673a1f7ddb554643fa32e78e43ee5424edb"</span>, <span class="st">"correct string value of answer5 but incorrect case of letters"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 6.0</strong> <br> {points: 1}</p>
+<p>We have just seen how to perform k-nn regression manually, now we will apply it to the whole dataset using the <code>scikit-learn</code> package. To do so, we will first need to create the training and test datasets. Split the data to use <em>75%</em> as your training set. Store the training data as <code>marathon_training</code> and the test set as <code>marathon_testing</code>. Remember we won’t touch the test dataset until the end.</p>
+<p>Next, set the <code>time_hrs</code> column as the target (y) and <code>max</code> column as the input feature (X). Store the features as <code>X_train</code> and <code>X_test</code> and targets as <code>y_train</code> and <code>y_test</code> respectively for the <code>marathon_training</code> and <code>marathon_testing</code>. Remember that it is easier to work with input features as a data frame rather than a series, so make sure to extract the single input feature as a data frame by passing the column name inside a list.</p>
+<p><em>Assign your answers to objects named <code>marathon_training</code>, <code>marathon_testing</code>, <code>X_train</code>, <code>y_train</code>, <code>X_test</code>, and <code>y_test</code>.</em></p>
+<div id="cell-24" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;a8490ade5d5c9723dbb01fbd6c3d9114&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-8257a9338314019e&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___, ___ = train_test_split(</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     ___,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     test_size=___,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     random_state=2000,  # Do not change the random_state</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># X_train = ___[___]  # A single column data frame</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># y_train = ___[___]  # A series</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># X_test = ___[___]  # A single column data frame</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># y_test = ___[___]  # A series</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-25" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;3bfa3815e246669d44cd2b93f8f24f85&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-381c8aeacf15fd35&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_training <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ecd"</span>).hexdigest() <span class="op">==</span> <span class="st">"23389e9a6137f9af868ed3d5dcb5563fa02cf9ee"</span>, <span class="st">"type of marathon_training is None is not bool. marathon_training is None should be a bool"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_training <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ecd"</span>).hexdigest() <span class="op">==</span> <span class="st">"a85ea51e13d13be27411312c98c5d8d08427748f"</span>, <span class="st">"boolean value of marathon_training is None is not correct"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_training.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ece"</span>).hexdigest() <span class="op">==</span> <span class="st">"5c9a6007e66cd4aeb4e09f7e1fbad9430720c874"</span>, <span class="st">"type of marathon_training.shape is not tuple. marathon_training.shape should be a tuple"</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_training.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ece"</span>).hexdigest() <span class="op">==</span> <span class="st">"4371251b32814c5ec901659b3f7243b8f06201eb"</span>, <span class="st">"length of marathon_training.shape is not correct"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_training.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ece"</span>).hexdigest() <span class="op">==</span> <span class="st">"8c5dccfad110d40e6e2dd0939e314507b72c82ba"</span>, <span class="st">"values of marathon_training.shape are not correct"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_training.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ece"</span>).hexdigest() <span class="op">==</span> <span class="st">"79b9d73983831ec1ad4b9a030e13f40e5e631303"</span>, <span class="st">"order of elements of marathon_training.shape is not correct"</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_training.age))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ecf"</span>).hexdigest() <span class="op">==</span> <span class="st">"6dd9106e51faadb152c13f46748de9b7631041f4"</span>, <span class="st">"type of sum(marathon_training.age) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(marathon_training.age)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ecf"</span>).hexdigest() <span class="op">==</span> <span class="st">"2e875c992a00e64a049679c247546552107e4806"</span>, <span class="st">"value of sum(marathon_training.age) is not correct"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_testing <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed0"</span>).hexdigest() <span class="op">==</span> <span class="st">"eeab11eee8b5ac43daead049c08370a1d6bd29e1"</span>, <span class="st">"type of marathon_testing is None is not bool. marathon_testing is None should be a bool"</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_testing <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed0"</span>).hexdigest() <span class="op">==</span> <span class="st">"45fc996440f56862fa729a598efb3e94ad2cbcba"</span>, <span class="st">"boolean value of marathon_testing is None is not correct"</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_testing.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed1"</span>).hexdigest() <span class="op">==</span> <span class="st">"580e794a2ad10c9c374bc994cb416f4825c1abc2"</span>, <span class="st">"type of marathon_testing.shape is not tuple. marathon_testing.shape should be a tuple"</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_testing.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed1"</span>).hexdigest() <span class="op">==</span> <span class="st">"0cfe48ec1593a68181d07cf5f9f1868014b33c5f"</span>, <span class="st">"length of marathon_testing.shape is not correct"</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_testing.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed1"</span>).hexdigest() <span class="op">==</span> <span class="st">"cce555187808a48e1408af0bb536e79e8a2225a5"</span>, <span class="st">"values of marathon_testing.shape are not correct"</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_testing.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed1"</span>).hexdigest() <span class="op">==</span> <span class="st">"fbf8329576ea0be968fbabcd4c5dd25a6d17c93a"</span>, <span class="st">"order of elements of marathon_testing.shape is not correct"</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_testing.age))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed2"</span>).hexdigest() <span class="op">==</span> <span class="st">"3d8e616c9608ebb5fa199e74614b680d59572017"</span>, <span class="st">"type of sum(marathon_testing.age) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(marathon_testing.age)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed2"</span>).hexdigest() <span class="op">==</span> <span class="st">"a666611338ec9b1d7c1df5146282bf710f1d54f6"</span>, <span class="st">"value of sum(marathon_testing.age) is not correct"</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(X_train.columns.values)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed3"</span>).hexdigest() <span class="op">==</span> <span class="st">"d2af8b1f3ac36ff6af2a760a8b5cfa0388a5a272"</span>, <span class="st">"type of X_train.columns.values is not correct"</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(X_train.columns.values).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed3"</span>).hexdigest() <span class="op">==</span> <span class="st">"17be56c6e47e3d10712619e99b61a6d767fd5666"</span>, <span class="st">"value of X_train.columns.values is not correct"</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(X_train.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed4"</span>).hexdigest() <span class="op">==</span> <span class="st">"414b7eb138475c852d35f49fc6d280cb0f9a2a9f"</span>, <span class="st">"type of X_train.shape is not tuple. X_train.shape should be a tuple"</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(X_train.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed4"</span>).hexdigest() <span class="op">==</span> <span class="st">"73a0b26b8110b3197945c70b0650286285cec8d3"</span>, <span class="st">"length of X_train.shape is not correct"</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, X_train.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed4"</span>).hexdigest() <span class="op">==</span> <span class="st">"d74001495311d9550e27e96f7c560f5ed899dc2a"</span>, <span class="st">"values of X_train.shape are not correct"</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(X_train.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed4"</span>).hexdigest() <span class="op">==</span> <span class="st">"f434b7539cfe664a9765b7bbb07e4709fc2491da"</span>, <span class="st">"order of elements of X_train.shape is not correct"</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(y_train.name)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed5"</span>).hexdigest() <span class="op">==</span> <span class="st">"07fb7ee407cccab8c19809282e20aecb7bb62185"</span>, <span class="st">"type of y_train.name is not str. y_train.name should be an str"</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(y_train.name)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed5"</span>).hexdigest() <span class="op">==</span> <span class="st">"c159bd913e413006f4be6da2dfb303dd974e4bbb"</span>, <span class="st">"length of y_train.name is not correct"</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y_train.name.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed5"</span>).hexdigest() <span class="op">==</span> <span class="st">"a622136689ba01beab477abec3b4b37aa5e2f515"</span>, <span class="st">"value of y_train.name is not correct"</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y_train.name).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed5"</span>).hexdigest() <span class="op">==</span> <span class="st">"a622136689ba01beab477abec3b4b37aa5e2f515"</span>, <span class="st">"correct string value of y_train.name but incorrect case of letters"</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(y_train.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed6"</span>).hexdigest() <span class="op">==</span> <span class="st">"22627a8f279315114f3a5f91de95da0d83389d79"</span>, <span class="st">"type of y_train.shape is not tuple. y_train.shape should be a tuple"</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(y_train.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed6"</span>).hexdigest() <span class="op">==</span> <span class="st">"c61d6dd0518678d74f5f69117e206324490517c6"</span>, <span class="st">"length of y_train.shape is not correct"</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, y_train.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed6"</span>).hexdigest() <span class="op">==</span> <span class="st">"775174c861c6ab54c4c08abf24b2bfebdb30af3f"</span>, <span class="st">"values of y_train.shape are not correct"</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y_train.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed6"</span>).hexdigest() <span class="op">==</span> <span class="st">"cead78c49de35c73a190c737d2bb46ff4e2fec23"</span>, <span class="st">"order of elements of y_train.shape is not correct"</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(X_test.columns.values)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed7"</span>).hexdigest() <span class="op">==</span> <span class="st">"22fe9ec90a423d6060f49aa6d7a76ce3d3974080"</span>, <span class="st">"type of X_test.columns.values is not correct"</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(X_test.columns.values).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed7"</span>).hexdigest() <span class="op">==</span> <span class="st">"7754708b959b4274773a259f79fd376b28310eac"</span>, <span class="st">"value of X_test.columns.values is not correct"</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(X_test.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed8"</span>).hexdigest() <span class="op">==</span> <span class="st">"f0858d2513b6eee63f326fcebe57b013cd31df36"</span>, <span class="st">"type of X_test.shape is not tuple. X_test.shape should be a tuple"</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(X_test.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed8"</span>).hexdigest() <span class="op">==</span> <span class="st">"bd7fc6f3096017ac86fb06841d97ddd854492ed0"</span>, <span class="st">"length of X_test.shape is not correct"</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, X_test.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed8"</span>).hexdigest() <span class="op">==</span> <span class="st">"ef154c5dedbd48b6b6a3232c68a2fea5c9f7be4b"</span>, <span class="st">"values of X_test.shape are not correct"</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(X_test.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed8"</span>).hexdigest() <span class="op">==</span> <span class="st">"3a6cfb0fce7e27384ffd615b58fb5cbd20a3d82b"</span>, <span class="st">"order of elements of X_test.shape is not correct"</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(y_test.name)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed9"</span>).hexdigest() <span class="op">==</span> <span class="st">"72df4c655d030df71555b431f22397a7e42c0e38"</span>, <span class="st">"type of y_test.name is not str. y_test.name should be an str"</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(y_test.name)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed9"</span>).hexdigest() <span class="op">==</span> <span class="st">"f164546779f465e2b62365d3ab3737c47eebf4d6"</span>, <span class="st">"length of y_test.name is not correct"</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y_test.name.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed9"</span>).hexdigest() <span class="op">==</span> <span class="st">"3327e8ccb2ac8ed8cf1dad70018d6f95c820d712"</span>, <span class="st">"value of y_test.name is not correct"</span></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y_test.name).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7ed9"</span>).hexdigest() <span class="op">==</span> <span class="st">"3327e8ccb2ac8ed8cf1dad70018d6f95c820d712"</span>, <span class="st">"correct string value of y_test.name but incorrect case of letters"</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(y_test.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7eda"</span>).hexdigest() <span class="op">==</span> <span class="st">"3caf58a1ec02a722090ad103cb12c17948c05ea8"</span>, <span class="st">"type of y_test.shape is not tuple. y_test.shape should be a tuple"</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(y_test.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7eda"</span>).hexdigest() <span class="op">==</span> <span class="st">"6bee5d9b7be7422e0080aec785993d4b1645979b"</span>, <span class="st">"length of y_test.shape is not correct"</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, y_test.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7eda"</span>).hexdigest() <span class="op">==</span> <span class="st">"b4518ece20f13e8647767347afffe9dbd285baf1"</span>, <span class="st">"values of y_test.shape are not correct"</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y_test.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"e7eda"</span>).hexdigest() <span class="op">==</span> <span class="st">"5ff9b39d3ce50b07b91aa77be609c2ec942f2dc3"</span>, <span class="st">"order of elements of y_test.shape is not correct"</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 7.0</strong> <br> {points: 1}</p>
+<p>Next, we’ll use cross-validation on our <strong>training data</strong> to choose <span class="math inline">\(k\)</span>. In <span class="math inline">\(k\)</span>-nn classification, we used accuracy to see how well our predictions matched the true labels. In the context of <span class="math inline">\(k\)</span>-nn <em>regression</em>, we will use RMSPE as the scoring instead. Interpreting the RMSPE value can be tricky but generally speaking, if the prediction values are very close to the true values, the RMSPE will be small. Conversely, if the prediction values are <em>not</em> very close to the true values, the RMSPE will be quite large.</p>
+<p>Let’s perform a cross-validation and choose the optimal <span class="math inline">\(k\)</span>!</p>
+<p>First, create a pipeline for <span class="math inline">\(k\)</span>-nn.&nbsp;We are still using the <span class="math inline">\(k\)</span>-nearest neighbours algorithm, and we will also use the <code>StandardScaler</code> to standardize the numerical values. Store your pipeline in an object called <code>marathon_pipe</code>. Finally, perform a cross-validation with 5 folds using the <code>cross_validate</code> function. Remember that since the <code>cross_validate</code> function always maximizes its “score”, and here we’re using RMSPE (lower is better!), we need to specify that we’re using the <em>negative</em> RMSPE (<code>"neg_root_mean_squared_error"</code>).</p>
+<p><em>Store the output of the cross validation as a data frame in an object called <code>marathon_cv</code>.</em></p>
+<div id="cell-27" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;19be30edec8b71b3601d0b24ada2cbb2&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-766f1e094dd32efc&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = make_pipeline(</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     ___,</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     ___,</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># marathon_cv = pd.___(</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     cross_validate(</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         ___,</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         ___,</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         ___,</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         scoring=___,</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         return_train_score=True,</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>marathon_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-28" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;26b793b9cc51d7c22794a39e849f68fc&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-289bc7a299c4f482&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_pipe <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864c"</span>).hexdigest() <span class="op">==</span> <span class="st">"25299b052f7ab2931046737631887a8cc568dbdc"</span>, <span class="st">"type of marathon_pipe is None is not bool. marathon_pipe is None should be a bool"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_pipe <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864c"</span>).hexdigest() <span class="op">==</span> <span class="st">"e30f3e578a40c11694672cc29b9e8ed48e9b5b0a"</span>, <span class="st">"boolean value of marathon_pipe is None is not correct"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_pipe.steps[<span class="dv">1</span>][<span class="dv">1</span>].n_neighbors)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864d"</span>).hexdigest() <span class="op">==</span> <span class="st">"d547f76ed04d14a405bffd75b858fcadc01626b2"</span>, <span class="st">"type of marathon_pipe.steps[1][1].n_neighbors is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_pipe.steps[<span class="dv">1</span>][<span class="dv">1</span>].n_neighbors).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864d"</span>).hexdigest() <span class="op">==</span> <span class="st">"06ffe53eaaff553f1311c56f2367fab086ff823e"</span>, <span class="st">"value of marathon_pipe.steps[1][1].n_neighbors is not correct"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_pipe.steps[<span class="dv">1</span>][<span class="dv">1</span>].weights)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864e"</span>).hexdigest() <span class="op">==</span> <span class="st">"58751697270ec924b2f324e1b5544996472be14f"</span>, <span class="st">"type of marathon_pipe.steps[1][1].weights is not str. marathon_pipe.steps[1][1].weights should be an str"</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_pipe.steps[<span class="dv">1</span>][<span class="dv">1</span>].weights)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864e"</span>).hexdigest() <span class="op">==</span> <span class="st">"6cd5d1937d5b4571f3f6a7a4880af49e992de8a5"</span>, <span class="st">"length of marathon_pipe.steps[1][1].weights is not correct"</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_pipe.steps[<span class="dv">1</span>][<span class="dv">1</span>].weights.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864e"</span>).hexdigest() <span class="op">==</span> <span class="st">"ab385b8efd1b981d6c0200273e19c124f3e24308"</span>, <span class="st">"value of marathon_pipe.steps[1][1].weights is not correct"</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_pipe.steps[<span class="dv">1</span>][<span class="dv">1</span>].weights).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864e"</span>).hexdigest() <span class="op">==</span> <span class="st">"ab385b8efd1b981d6c0200273e19c124f3e24308"</span>, <span class="st">"correct string value of marathon_pipe.steps[1][1].weights but incorrect case of letters"</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_pipe.steps[<span class="dv">0</span>][<span class="dv">1</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864f"</span>).hexdigest() <span class="op">==</span> <span class="st">"974eac74a0ad1ee3ad51d33c86e4f23b9caac296"</span>, <span class="st">"type of marathon_pipe.steps[0][1] is not correct"</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_pipe.steps[<span class="dv">0</span>][<span class="dv">1</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8864f"</span>).hexdigest() <span class="op">==</span> <span class="st">"88499ff4e2ed2a47e400d341106fb5b49551ed08"</span>, <span class="st">"value of marathon_pipe.steps[0][1] is not correct"</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_cv <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88650"</span>).hexdigest() <span class="op">==</span> <span class="st">"82c0b965cf5966540442e3581313923f152295a1"</span>, <span class="st">"type of marathon_cv is None is not bool. marathon_cv is None should be a bool"</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_cv <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88650"</span>).hexdigest() <span class="op">==</span> <span class="st">"e0832f10224a7c3b8fc8349d63cbcc366639d036"</span>, <span class="st">"boolean value of marathon_cv is None is not correct"</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">len</span>(marathon_cv[<span class="st">'train_score'</span>]))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88651"</span>).hexdigest() <span class="op">==</span> <span class="st">"2da35ca4faddbf2b4b47152b40d1fbb51614153a"</span>, <span class="st">"type of len(marathon_cv['train_score']) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_cv[<span class="st">'train_score'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88651"</span>).hexdigest() <span class="op">==</span> <span class="st">"c03676f0aa4939eab9beb8cdd1e1ad156ceff2c0"</span>, <span class="st">"value of len(marathon_cv['train_score']) is not correct"</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_cv[<span class="st">'train_score'</span>]))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88652"</span>).hexdigest() <span class="op">==</span> <span class="st">"1f1dd6525f2a541022058c1c5c49ef08440be730"</span>, <span class="st">"type of sum(marathon_cv['train_score']) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(marathon_cv[<span class="st">'train_score'</span>]), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88652"</span>).hexdigest() <span class="op">==</span> <span class="st">"5839a4484a5996becf1142a0c824e072abf9ae74"</span>, <span class="st">"value of sum(marathon_cv['train_score']) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_cv[<span class="st">'test_score'</span>]))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88653"</span>).hexdigest() <span class="op">==</span> <span class="st">"b2d3d500fa919b6f72c5a9bfbac6ddf39984c89e"</span>, <span class="st">"type of sum(marathon_cv['test_score']) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(marathon_cv[<span class="st">'test_score'</span>]), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"88653"</span>).hexdigest() <span class="op">==</span> <span class="st">"ceafaaed8afb31ab587e60437edb7aee28aed3e5"</span>, <span class="st">"value of sum(marathon_cv['test_score']) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 8.0</strong> <br> {points: 1}</p>
+<p>The major difference compared to other models from Chapters 6 and 7 is that we are running a <em>regression</em> rather than a <em>classification</em>. Using <code>KNeighborsRegressor</code> essentially tells <code>scikit-learn</code> that we need to use different metrics (<code>neg_root_mean_squared_error</code> rather than accuracy) for tuning and evaluation.</p>
+<p>Now, let’s use the <code>neg_root_mean_squared_error</code> to find the best setting for <span class="math inline">\(k\)</span> from our model. Let’s test 200 values of <span class="math inline">\(k\)</span>.</p>
+<p>First, create a parameter grid called <code>param_grid</code> that contains values of range 1 to 200.</p>
+<p>Next, tune your model such that it tests all the values in <code>range(1, 201, 1)</code> using <code>GridSearchCV</code> function with <code>cv=5</code> and <code>n_jobs=-1</code> and save the tuned model as <code>marathon_tuned</code>. Finally, fit the tuned model to the training dataset and save the <code>cv_results_</code> in a dataframe.</p>
+<p><em>Assign your answer to an object called <code>marathon_results</code>.</em></p>
+<div id="cell-30" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;c31d761e4100b98b50b69cbec445cad9&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-8c7e7ded673d28ec&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2019</span>) <span class="co"># DO NOT CHANGE</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># param_grid = _____</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># marathon_tuned = GridSearchCV(___, ___, ___, ___, ___)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># marathon_results = pd.DataFrame(____.fit(____, ____).____)</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>marathon_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-31" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;9d8c2145471357fcb872e0b617009f13&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-29d608ebfdd11366&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(param_grid <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d182e"</span>).hexdigest() <span class="op">==</span> <span class="st">"ec7bcbea68f702395cdd5e67180936ae258a3f3c"</span>, <span class="st">"type of param_grid is None is not bool. param_grid is None should be a bool"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(param_grid <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d182e"</span>).hexdigest() <span class="op">==</span> <span class="st">"3cf3edd9eddd1b5c4500aa5b52869832b40083d9"</span>, <span class="st">"boolean value of param_grid is None is not correct"</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(param_grid)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d182f"</span>).hexdigest() <span class="op">==</span> <span class="st">"ace9aac86250e076a5706a6c94d179a856ffdd1e"</span>, <span class="st">"type of type(param_grid) is not correct"</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="st">"kneighborsregressor__n_neighbors"</span> <span class="kw">in</span> param_grid)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1830"</span>).hexdigest() <span class="op">==</span> <span class="st">"ff29e4faf0e45be91ef5484ace002565aebc17a8"</span>, <span class="st">"type of </span><span class="ch">\"</span><span class="st">kneighborsregressor__n_neighbors</span><span class="ch">\"</span><span class="st"> in param_grid is not bool. </span><span class="ch">\"</span><span class="st">kneighborsregressor__n_neighbors</span><span class="ch">\"</span><span class="st"> in param_grid should be a bool"</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="st">"kneighborsregressor__n_neighbors"</span> <span class="kw">in</span> param_grid).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1830"</span>).hexdigest() <span class="op">==</span> <span class="st">"423cc17212d6b16b3a09484a00636ed40da12d0c"</span>, <span class="st">"boolean value of </span><span class="ch">\"</span><span class="st">kneighborsregressor__n_neighbors</span><span class="ch">\"</span><span class="st"> in param_grid is not correct"</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(i <span class="cf">for</span> i <span class="kw">in</span> param_grid[<span class="st">'kneighborsregressor__n_neighbors'</span>]))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1831"</span>).hexdigest() <span class="op">==</span> <span class="st">"e79769dca25d75ac1efdfd501a1a3e50a1248982"</span>, <span class="st">"type of sum(i for i in param_grid['kneighborsregressor__n_neighbors']) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(i <span class="cf">for</span> i <span class="kw">in</span> param_grid[<span class="st">'kneighborsregressor__n_neighbors'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1831"</span>).hexdigest() <span class="op">==</span> <span class="st">"3062f138a1709066561977581ee37b9da7187b8b"</span>, <span class="st">"value of sum(i for i in param_grid['kneighborsregressor__n_neighbors']) is not correct"</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_tuned <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1832"</span>).hexdigest() <span class="op">==</span> <span class="st">"9f763278e96c032f901645614bcc433e19b6da21"</span>, <span class="st">"type of marathon_tuned is None is not bool. marathon_tuned is None should be a bool"</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_tuned <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1832"</span>).hexdigest() <span class="op">==</span> <span class="st">"802f7ddda999c610b46d5eefeaad353b41db1f11"</span>, <span class="st">"boolean value of marathon_tuned is None is not correct"</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_tuned.n_splits_)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1833"</span>).hexdigest() <span class="op">==</span> <span class="st">"4ae49a96c27611edbdc55e4b6a0acdb6a0f4e361"</span>, <span class="st">"type of marathon_tuned.n_splits_ is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_tuned.n_splits_).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1833"</span>).hexdigest() <span class="op">==</span> <span class="st">"03197f439ff046e0849de2e1ea68e5abf3a3227a"</span>, <span class="st">"value of marathon_tuned.n_splits_ is not correct"</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_tuned.estimator[<span class="dv">0</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1834"</span>).hexdigest() <span class="op">==</span> <span class="st">"d6e10402eebb0cf168b578048a88cb545603e32a"</span>, <span class="st">"type of marathon_tuned.estimator[0] is not correct"</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_tuned.estimator[<span class="dv">0</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1834"</span>).hexdigest() <span class="op">==</span> <span class="st">"f5465c5fbaa6f3239fc28a1ff25004895b6c5876"</span>, <span class="st">"value of marathon_tuned.estimator[0] is not correct"</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_tuned.estimator[<span class="dv">1</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1835"</span>).hexdigest() <span class="op">==</span> <span class="st">"16467dbeabfbbbb3e3f104b63615a61965d962b2"</span>, <span class="st">"type of marathon_tuned.estimator[1] is not correct"</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_tuned.estimator[<span class="dv">1</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1835"</span>).hexdigest() <span class="op">==</span> <span class="st">"bf022c71f2b7bd9757a0f4c333efd82fa9d5a235"</span>, <span class="st">"value of marathon_tuned.estimator[1] is not correct"</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_tuned.param_grid <span class="op">==</span> param_grid)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1836"</span>).hexdigest() <span class="op">==</span> <span class="st">"576f7dc516eea23c2e820127a7892ceea3d0dab5"</span>, <span class="st">"type of marathon_tuned.param_grid == param_grid is not bool. marathon_tuned.param_grid == param_grid should be a bool"</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_tuned.param_grid <span class="op">==</span> param_grid).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1836"</span>).hexdigest() <span class="op">==</span> <span class="st">"681a7a81f3b2eb025a9461956a79a884370c9eed"</span>, <span class="st">"boolean value of marathon_tuned.param_grid == param_grid is not correct"</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_results <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1837"</span>).hexdigest() <span class="op">==</span> <span class="st">"8689f96913286ecd30d823e848b7eb97d738c848"</span>, <span class="st">"type of marathon_results is None is not bool. marathon_results is None should be a bool"</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_results <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1837"</span>).hexdigest() <span class="op">==</span> <span class="st">"0d219c756c386807c0464fa0cee1b865a1200bac"</span>, <span class="st">"boolean value of marathon_results is None is not correct"</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_results)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1838"</span>).hexdigest() <span class="op">==</span> <span class="st">"18ba9e44f8dde45008fd1011b189d83f547d79f3"</span>, <span class="st">"type of type(marathon_results) is not correct"</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_results.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1839"</span>).hexdigest() <span class="op">==</span> <span class="st">"21ab468813730121894ce75777b2e1fd48fdb5da"</span>, <span class="st">"type of marathon_results.shape is not tuple. marathon_results.shape should be a tuple"</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_results.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1839"</span>).hexdigest() <span class="op">==</span> <span class="st">"ad46a3a70676d9eb487222097e1246978dd107a0"</span>, <span class="st">"length of marathon_results.shape is not correct"</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_results.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1839"</span>).hexdigest() <span class="op">==</span> <span class="st">"702ab7880f169feb4a954839cfefe6ea051b42d1"</span>, <span class="st">"values of marathon_results.shape are not correct"</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_results.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d1839"</span>).hexdigest() <span class="op">==</span> <span class="st">"ac943869f441904a6bb3e649e3086382f6496051"</span>, <span class="st">"order of elements of marathon_results.shape is not correct"</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_results.param_kneighborsregressor__n_neighbors))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d183a"</span>).hexdigest() <span class="op">==</span> <span class="st">"46aa9236ef14c7d42d2b7d92052c5c94af6cab15"</span>, <span class="st">"type of sum(marathon_results.param_kneighborsregressor__n_neighbors) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(marathon_results.param_kneighborsregressor__n_neighbors)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d183a"</span>).hexdigest() <span class="op">==</span> <span class="st">"61a6b58502c1d2d00fb7a6a65c20cae775b189ff"</span>, <span class="st">"value of sum(marathon_results.param_kneighborsregressor__n_neighbors) is not correct"</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_results.mean_test_score))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d183b"</span>).hexdigest() <span class="op">==</span> <span class="st">"eb6784ad9e0df0d3b20b0857d501db1797afe75c"</span>, <span class="st">"type of sum(marathon_results.mean_test_score) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(marathon_results.mean_test_score), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d183b"</span>).hexdigest() <span class="op">==</span> <span class="st">"5c2e32ca9aacc4f5726277288252ac363fcd924d"</span>, <span class="st">"value of sum(marathon_results.mean_test_score) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_results.std_test_score))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d183c"</span>).hexdigest() <span class="op">==</span> <span class="st">"a4c7c7e034abaadcaf56057d19893a773dbf8fb1"</span>, <span class="st">"type of sum(marathon_results.std_test_score) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(marathon_results.std_test_score), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"d183c"</span>).hexdigest() <span class="op">==</span> <span class="st">"3000c4e4327bea85d84632c37db03bc1d008b2c0"</span>, <span class="st">"value of sum(marathon_results.std_test_score) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 8.1</strong> <br> {points: 1}</p>
+<p>Great! Now find the number of neighbors that will serve as our best <span class="math inline">\(k\)</span> value by calling the <code>best_params_</code> attribute of the model <code>marathon_tuned</code>. Your answer should simply be a dictionary with one key-value pair.</p>
+<p>Also, find the score for the best model by calling the <code>best_score_</code> attribute of the model <code>marathon_tuned</code>. Make sure to convert the negative RMSPE score we used for cross-validation into a positive RMSPE score for reporting by using a <code>-</code> sign.</p>
+<p><em>Assign your best parameters to an object called <code>marathon_min</code>, and assign your best RMSPE to an object called <code>marathon_best_RMSPE</code>.</em></p>
+<div id="cell-33" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;d86b5cdee75a41caa88010256f2c42ef&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-f9738d45da9e8a77&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___.best_params_</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = -___.best_score_</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>marathon_min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-34" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;17e17fc4f3ff2afda441dfc373e22a4e&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-b0dd9e2eb4743bab&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>marathon_best_RMSPE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-35" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;18e95c8a4dd3ad559c29dd3fd147c2d1&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-a1e34e1fb62d79f5&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_min <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae42"</span>).hexdigest() <span class="op">==</span> <span class="st">"2feff5d755380f5a1f50804a0c4948d723261eda"</span>, <span class="st">"type of marathon_min is None is not bool. marathon_min is None should be a bool"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_min <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae42"</span>).hexdigest() <span class="op">==</span> <span class="st">"5015b9976a1f2e2f2fa109305796f1e1702ba164"</span>, <span class="st">"boolean value of marathon_min is None is not correct"</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_min)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae43"</span>).hexdigest() <span class="op">==</span> <span class="st">"b4658974ee290076b30642296bffc395bf445d21"</span>, <span class="st">"type of type(marathon_min) is not correct"</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_min)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae44"</span>).hexdigest() <span class="op">==</span> <span class="st">"3040f94c545ff413539332503528deab08084a62"</span>, <span class="st">"type of marathon_min is not dict. marathon_min should be a dict"</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(<span class="bu">list</span>(marathon_min.keys()))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae44"</span>).hexdigest() <span class="op">==</span> <span class="st">"84224507b5177db8e9c88f5abd8824ece22645b8"</span>, <span class="st">"number of keys of marathon_min is not correct"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_min.keys()))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae44"</span>).hexdigest() <span class="op">==</span> <span class="st">"edf882d0536918e0a683172498fcad8c63f6af3c"</span>, <span class="st">"keys of marathon_min are not correct"</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_min.values()))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae44"</span>).hexdigest() <span class="op">==</span> <span class="st">"c3bca7dfbca0e41a87d4ff3e43c335504e37caeb"</span>, <span class="st">"correct keys, but values of marathon_min are not correct"</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_min).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae44"</span>).hexdigest() <span class="op">==</span> <span class="st">"80961d32128e4ca9746e99318dd97c9ed04c317f"</span>, <span class="st">"correct keys and values, but incorrect correspondence in keys and values of marathon_min"</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_best_RMSPE <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae45"</span>).hexdigest() <span class="op">==</span> <span class="st">"487be9299591e548ea7dcedef4c4e650814148d2"</span>, <span class="st">"type of marathon_best_RMSPE is None is not bool. marathon_best_RMSPE is None should be a bool"</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_best_RMSPE <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae45"</span>).hexdigest() <span class="op">==</span> <span class="st">"84ef8bfc80a388930431187a4d0640f62e727b78"</span>, <span class="st">"boolean value of marathon_best_RMSPE is None is not correct"</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_best_RMSPE)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae46"</span>).hexdigest() <span class="op">==</span> <span class="st">"78a416ab0e296d01fb1307a654bf9b70b1337868"</span>, <span class="st">"type of marathon_best_RMSPE is not correct"</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_best_RMSPE).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"9ae46"</span>).hexdigest() <span class="op">==</span> <span class="st">"8785f764d752095decf87a8dd24909d0016992f7"</span>, <span class="st">"value of marathon_best_RMSPE is not correct"</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 8.2</strong> <br> {points: 1}</p>
+<p>To assess how well our model might do at predicting on unseen data, we will assess its RMSPE on the test data.</p>
+<p>We will use the predict function to make predictions on the test data and store the predictions <code>marathon_prediction</code>. Remember that <code>GridSearchCV</code> automatically refits the model with the best found parameters, so you can use the <code>predict</code> method of the <code>marathon_tuned</code> variable for this step.</p>
+<p>Finally, we will compute the RMSPE on the test data using the <code>mean_squared_error</code> function. Don’t forget to take the square root to obtain the RMSPE!</p>
+<p><em>Note: <code>scikit-learn</code> also has a <code>score</code> function for the <code>KNeighborsRegressor</code>. The <code>score</code> function returns the coefficient of determination (often called <span class="math inline">\(R^2\)</span>) of the fit, not the RMSPE.</em></p>
+<p><em>Assign your answer in an object called <code>marathon_summary</code>.</em></p>
+<div id="cell-37" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;231e9a9aad23a5fac955ed2a8287ebbf&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-a4de6046a0bd5f96&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1234</span>) <span class="co"># DO NOT CHANGE</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___.___(___)</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = mean_squared_error(___, ___)**(1/2)</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>marathon_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-38" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;a20e2b36367ee4b66e70018ceaf71dc3&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-94fab75dca459b65&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_prediction <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e675"</span>).hexdigest() <span class="op">==</span> <span class="st">"e171ec8a4f6e825d47e43ba2c8d7e4962ff2f8b4"</span>, <span class="st">"type of marathon_prediction is None is not bool. marathon_prediction is None should be a bool"</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_prediction <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e675"</span>).hexdigest() <span class="op">==</span> <span class="st">"c76b30dacb294c54dc2932240aa7fa4c23543c56"</span>, <span class="st">"boolean value of marathon_prediction is None is not correct"</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_prediction)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e676"</span>).hexdigest() <span class="op">==</span> <span class="st">"be3ffc123e07105d4089655588fb6d71383eb08d"</span>, <span class="st">"type of type(marathon_prediction) is not correct"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_prediction.<span class="bu">sum</span>())).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e677"</span>).hexdigest() <span class="op">==</span> <span class="st">"d3da4b9915f115587058740bd3c406c49cbf5b2c"</span>, <span class="st">"type of marathon_prediction.sum() is not correct"</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_prediction.<span class="bu">sum</span>()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e677"</span>).hexdigest() <span class="op">==</span> <span class="st">"8c10d2be9c82e2bdbdcd44f3fbb35f6c102d0119"</span>, <span class="st">"value of marathon_prediction.sum() is not correct"</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_summary <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e678"</span>).hexdigest() <span class="op">==</span> <span class="st">"1581c288216e96bfb8d0fcc29cf60c18dd92909b"</span>, <span class="st">"type of marathon_summary is None is not bool. marathon_summary is None should be a bool"</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_summary <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e678"</span>).hexdigest() <span class="op">==</span> <span class="st">"6f8e105f98933eb6b68dbbb0f78058a8ac9dd80a"</span>, <span class="st">"boolean value of marathon_summary is None is not correct"</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_summary)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e679"</span>).hexdigest() <span class="op">==</span> <span class="st">"ba12bad71525a497b68612abadf62fd2a05b9230"</span>, <span class="st">"type of marathon_summary is not correct"</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_summary).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5e679"</span>).hexdigest() <span class="op">==</span> <span class="st">"ecbf8a32ee6fde067052e0cf254aaf3b674d001f"</span>, <span class="st">"value of marathon_summary is not correct"</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What does this RMSPE mean? RMSPE is measured in the units of the target/response variable, so it can sometimes be a bit hard to interpret. In this case, we have a helpful reference to compare against: we know that a typical marathon race time is somewhere between 3 - 5 hours. So this model allows us to predict a runner’s race time up to about +/-0.6 of an hour, or +/- 36 minutes. Relative the total race time, this margin of error is not <em>fantastic</em>, but not <em>terrible</em> either. We can certainly use the model to determine roughly whether an athlete will have a bad, good, or excellent race time, but probably cannot reliably distinguish between athletes of a similar caliber.</p>
+<p>For now, let’s consider this approach to thinking about RMSPE from our testing data set: as long as it’s not significantly worse than the cross-validation RMSPE of our best model (<strong>Question 8.1</strong>), then we can say that we’re not doing too much worse on the test data than we did on the training data. In future courses on statistical/machine learning, you will learn more about how to interpret RMSPE from testing data and other ways to assess models.</p>
+<p><strong>Question 8.3</strong> <br>{points: 1}</p>
+<p>The RMSPE from our testing data set is <em>much worse</em> than the cross-validation RMSPE of our best model.</p>
+<p><em>Assign your answer to an object named <code>answer8_3</code>. Make sure your answer is either <code>True</code> or <code>False</code>.</em></p>
+<div id="cell-41" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;26215e2be064314a108b179eedbf1505&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-24ccc13552b0fff1&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-42" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;0295e3c617a3641783400610f991da00&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-f39ed1223c189ec6&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer8_3)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"a3e08"</span>).hexdigest() <span class="op">==</span> <span class="st">"b07290d0d5a5f7304386a6085d09604c57fe55d4"</span>, <span class="st">"type of answer8_3 is not bool. answer8_3 should be a bool"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer8_3).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"a3e08"</span>).hexdigest() <span class="op">==</span> <span class="st">"0fd0dee1f68a3e7794645e623f2b2be2db15b5cf"</span>, <span class="st">"boolean value of answer8_3 is not correct"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 9.0</strong> <br> {points: 1}</p>
+<p>Let’s visualize what the relationship between <code>max</code> and <code>time_hrs</code> looks like with our best <span class="math inline">\(k\)</span> value to ultimately explore how the <span class="math inline">\(k\)</span> value affects <span class="math inline">\(k\)</span>-nn regression.</p>
+<p>To do so, use the <code>predict</code> function on <code>marathon_tuned</code> to use the model with the best <span class="math inline">\(K\)</span> value to create predictions for the <code>marathon_training</code> data. Then, add the column of predictions to the <code>marathon_training</code> data frame using the <code>assign</code> function. Name the resulting data frame <code>marathon_preds</code> and the new column <code>predictions</code>.</p>
+<p>Next, create a scatterplot with the marathon time (y-axis) against the maximum distance run per week (x-axis) from <code>marathon_preds</code>. Use <code>mark_circle</code> with an opacity of 0.4 to avoid overplotting. Assign your plot to a variable called <code>marathon_plot</code>. <strong>Plot the predictions as a black line over the data points.</strong> Remember the fundamentals of effective visualizations such as having a human-readable axes titles.</p>
+<p><em>Assign the data frame from the first part to a variable called <code>marathon_preds</code>, and the plot to a variable called <code>marathon_plot</code>.</em></p>
+<div id="cell-44" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;e740adac0cff3905a99f571b55640aee&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-e623a65f902a7e98&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2019</span>) <span class="co"># DO NOT CHANGE</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># marathon_preds = ____.assign(</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     predictions= _____.predict(____)</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># marathon_plot = ___</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>marathon_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-45" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;b7b8240f95f1bac98e79ee90b5df6b6c&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-5eff9c974a058bdf&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_preds <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef7"</span>).hexdigest() <span class="op">==</span> <span class="st">"feb8d8685b9e26c54c06aaf7f0f281aee880c614"</span>, <span class="st">"type of marathon_preds is None is not bool. marathon_preds is None should be a bool"</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_preds <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef7"</span>).hexdigest() <span class="op">==</span> <span class="st">"bc57fae1eae5ffdeeeada5122d0bb66260bd0ac6"</span>, <span class="st">"boolean value of marathon_preds is None is not correct"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_preds)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef8"</span>).hexdigest() <span class="op">==</span> <span class="st">"5246d7fd78d900c1aaed511af4b93a395c8f8f6b"</span>, <span class="st">"type of type(marathon_preds) is not correct"</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_preds.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef9"</span>).hexdigest() <span class="op">==</span> <span class="st">"47500ac86a3aa4df2352b61411ba2c643b26a21b"</span>, <span class="st">"type of marathon_preds.shape is not tuple. marathon_preds.shape should be a tuple"</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_preds.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef9"</span>).hexdigest() <span class="op">==</span> <span class="st">"c1dee5594a1047ae527ce7ff6fd93c09f5d7087f"</span>, <span class="st">"length of marathon_preds.shape is not correct"</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, marathon_preds.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef9"</span>).hexdigest() <span class="op">==</span> <span class="st">"45e6ce598dd4b9a99a59cd85e2bc95e4e6dcfa1d"</span>, <span class="st">"values of marathon_preds.shape are not correct"</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_preds.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80ef9"</span>).hexdigest() <span class="op">==</span> <span class="st">"8b0e8a50ed15369143176e9e9a444fb85a94925f"</span>, <span class="st">"order of elements of marathon_preds.shape is not correct"</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="st">"predictions"</span> <span class="kw">in</span> marathon_preds.columns)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efa"</span>).hexdigest() <span class="op">==</span> <span class="st">"bee6c28399c272e11c7b36d6af56c340b73f5de9"</span>, <span class="st">"type of </span><span class="ch">\"</span><span class="st">predictions</span><span class="ch">\"</span><span class="st"> in marathon_preds.columns is not bool. </span><span class="ch">\"</span><span class="st">predictions</span><span class="ch">\"</span><span class="st"> in marathon_preds.columns should be a bool"</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="st">"predictions"</span> <span class="kw">in</span> marathon_preds.columns).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efa"</span>).hexdigest() <span class="op">==</span> <span class="st">"bb01defbd41c2fca442d129ecde3d06ba69c793e"</span>, <span class="st">"boolean value of </span><span class="ch">\"</span><span class="st">predictions</span><span class="ch">\"</span><span class="st"> in marathon_preds.columns is not correct"</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_preds.predictions))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efb"</span>).hexdigest() <span class="op">==</span> <span class="st">"6694cadf894375ec79d08d843730bfa2ebeaa247"</span>, <span class="st">"type of sum(marathon_preds.predictions) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(marathon_preds.predictions), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efb"</span>).hexdigest() <span class="op">==</span> <span class="st">"14d7241b6832fe96cee98179e0bfbab800123337"</span>, <span class="st">"value of sum(marathon_preds.predictions) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(marathon_preds.time_hrs))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efc"</span>).hexdigest() <span class="op">==</span> <span class="st">"32fcb9d092fe59373b115cd2156579052d4bb724"</span>, <span class="st">"type of sum(marathon_preds.time_hrs) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(marathon_preds.time_hrs), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efc"</span>).hexdigest() <span class="op">==</span> <span class="st">"de864616f527a3484c98bc8e5ce5448442b3c180"</span>, <span class="st">"value of sum(marathon_preds.time_hrs) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_plot <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efd"</span>).hexdigest() <span class="op">==</span> <span class="st">"7802ca930a377d22b91bda34749b3473ae40ce6b"</span>, <span class="st">"type of marathon_plot is None is not bool. marathon_plot is None should be a bool"</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efd"</span>).hexdigest() <span class="op">==</span> <span class="st">"6080493d69f4752d4f838318c797543ab4092182"</span>, <span class="st">"boolean value of marathon_plot is None is not correct"</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">len</span>(marathon_plot.layer))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efe"</span>).hexdigest() <span class="op">==</span> <span class="st">"f5cd3e76aff8db41831d68252d099f01b5af0eeb"</span>, <span class="st">"type of len(marathon_plot.layer) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_plot.layer)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80efe"</span>).hexdigest() <span class="op">==</span> <span class="st">"791ae34b7ef2c822983fb1c67241cccbe65ce087"</span>, <span class="st">"value of len(marathon_plot.layer) is not correct"</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_plot.layer[<span class="dv">0</span>].mark)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80eff"</span>).hexdigest() <span class="op">==</span> <span class="st">"31988f4df3bdd784d531d340494800d13f512ec8"</span>, <span class="st">"type of marathon_plot.layer[0].mark is not correct"</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">0</span>].mark).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80eff"</span>).hexdigest() <span class="op">==</span> <span class="st">"833d54d5fea79d6426472768c3753a1d3e2aab10"</span>, <span class="st">"value of marathon_plot.layer[0].mark is not correct"</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_plot.layer[<span class="dv">1</span>].mark)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f00"</span>).hexdigest() <span class="op">==</span> <span class="st">"afb1d5a9e3ef12f0c2f446d06cc34948eac7babc"</span>, <span class="st">"type of marathon_plot.layer[1].mark is not correct"</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">1</span>].mark).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f00"</span>).hexdigest() <span class="op">==</span> <span class="st">"50a72f4524c38645971c4b6a9df41dc1257a95c3"</span>, <span class="st">"value of marathon_plot.layer[1].mark is not correct"</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.x[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f01"</span>).hexdigest() <span class="op">==</span> <span class="st">"6a6854dca69a83d48caec2cba6e1338a14a346fb"</span>, <span class="st">"type of marathon_plot.layer[0].encoding.x['shorthand'] is not str. marathon_plot.layer[0].encoding.x['shorthand'] should be an str"</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.x[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f01"</span>).hexdigest() <span class="op">==</span> <span class="st">"e63a8532d269c7f5a36c4d9e504de2fe4993dd7f"</span>, <span class="st">"length of marathon_plot.layer[0].encoding.x['shorthand'] is not correct"</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.x[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f01"</span>).hexdigest() <span class="op">==</span> <span class="st">"1bd0afc1bf2c4a34122b26e13c975a1f3463b0b9"</span>, <span class="st">"value of marathon_plot.layer[0].encoding.x['shorthand'] is not correct"</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.x[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f01"</span>).hexdigest() <span class="op">==</span> <span class="st">"1bd0afc1bf2c4a34122b26e13c975a1f3463b0b9"</span>, <span class="st">"correct string value of marathon_plot.layer[0].encoding.x['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f02"</span>).hexdigest() <span class="op">==</span> <span class="st">"f9dc36ce988a73cb1cb0b471255c1e10e4d91094"</span>, <span class="st">"type of marathon_plot.layer[0].encoding.y['shorthand'] is not str. marathon_plot.layer[0].encoding.y['shorthand'] should be an str"</span></span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f02"</span>).hexdigest() <span class="op">==</span> <span class="st">"6ce890fc97b51c036be327421ff4134099ff5209"</span>, <span class="st">"length of marathon_plot.layer[0].encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.y[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f02"</span>).hexdigest() <span class="op">==</span> <span class="st">"5afe1d7a1dd51c71a80027335b5a7b623548ea9e"</span>, <span class="st">"value of marathon_plot.layer[0].encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.y[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f02"</span>).hexdigest() <span class="op">==</span> <span class="st">"5afe1d7a1dd51c71a80027335b5a7b623548ea9e"</span>, <span class="st">"correct string value of marathon_plot.layer[0].encoding.y['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(marathon_plot.layer[<span class="dv">1</span>].encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f03"</span>).hexdigest() <span class="op">==</span> <span class="st">"32deb9ef407143db608af31b29a3adedbc08ca59"</span>, <span class="st">"type of marathon_plot.layer[1].encoding.y['shorthand'] is not str. marathon_plot.layer[1].encoding.y['shorthand'] should be an str"</span></span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(marathon_plot.layer[<span class="dv">1</span>].encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f03"</span>).hexdigest() <span class="op">==</span> <span class="st">"457b359edc893e20adf144c86cf19d1a75746764"</span>, <span class="st">"length of marathon_plot.layer[1].encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">1</span>].encoding.y[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f03"</span>).hexdigest() <span class="op">==</span> <span class="st">"91b908c0622ce400d6464a25c58cb64b9b250011"</span>, <span class="st">"value of marathon_plot.layer[1].encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(marathon_plot.layer[<span class="dv">1</span>].encoding.y[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f03"</span>).hexdigest() <span class="op">==</span> <span class="st">"91b908c0622ce400d6464a25c58cb64b9b250011"</span>, <span class="st">"correct string value of marathon_plot.layer[1].encoding.y['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">isinstance</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.x[<span class="st">'title'</span>], <span class="bu">str</span>))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f04"</span>).hexdigest() <span class="op">==</span> <span class="st">"6a9334f3b0f6f1f0d22d19bec2755550c05f1b9b"</span>, <span class="st">"type of isinstance(marathon_plot.layer[0].encoding.x['title'], str) is not bool. isinstance(marathon_plot.layer[0].encoding.x['title'], str) should be a bool"</span></span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">isinstance</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.x[<span class="st">'title'</span>], <span class="bu">str</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f04"</span>).hexdigest() <span class="op">==</span> <span class="st">"3902db8b41319e78ddf41fae51a6625a43b54f01"</span>, <span class="st">"boolean value of isinstance(marathon_plot.layer[0].encoding.x['title'], str) is not correct"</span></span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">isinstance</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.y[<span class="st">'title'</span>], <span class="bu">str</span>))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f05"</span>).hexdigest() <span class="op">==</span> <span class="st">"523124c5efd969114f88146347e99ccc8593d726"</span>, <span class="st">"type of isinstance(marathon_plot.layer[0].encoding.y['title'], str) is not bool. isinstance(marathon_plot.layer[0].encoding.y['title'], str) should be a bool"</span></span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">isinstance</span>(marathon_plot.layer[<span class="dv">0</span>].encoding.y[<span class="st">'title'</span>], <span class="bu">str</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"80f05"</span>).hexdigest() <span class="op">==</span> <span class="st">"43ecd7181832f23dda45839dbbd29bdbaabcd0b5"</span>, <span class="st">"boolean value of isinstance(marathon_plot.layer[0].encoding.y['title'], str) is not correct"</span></span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/posit-conf-2024\.github\.io\/ml-python\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

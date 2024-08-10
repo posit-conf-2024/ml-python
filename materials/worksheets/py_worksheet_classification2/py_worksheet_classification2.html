@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.55">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Worksheet - Classification (Part II) – Introduction to machine learning in Python with Scikit-learn</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Introduction to machine learning in Python with Scikit-learn</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Worksheet - Classification (Part II)</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/classification1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification I: training &amp; predicting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/classification2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification II: evaluation &amp; tuning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../materials/slides/ensembles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tree-based and ensemble models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning Goals:</a></li>
+  <li><a href="#fruit-data-example---part-ii" id="toc-fruit-data-example---part-ii" class="nav-link" data-scroll-target="#fruit-data-example---part-ii">1. Fruit Data Example - (Part II)</a></li>
+  <li><a href="#randomness-and-setting-seeds" id="toc-randomness-and-setting-seeds" class="nav-link" data-scroll-target="#randomness-and-setting-seeds">Randomness and Setting Seeds</a></li>
+  <li><a href="#splitting-the-data-into-a-training-and-test-set" id="toc-splitting-the-data-into-a-training-and-test-set" class="nav-link" data-scroll-target="#splitting-the-data-into-a-training-and-test-set">2. Splitting the data into a training and test set</a>
+  <ul class="collapse">
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">3. Cross-validation</a></li>
+  </ul></li>
+  <li><a href="#parameter-value-selection" id="toc-parameter-value-selection" class="nav-link" data-scroll-target="#parameter-value-selection">4. Parameter value selection</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Worksheet - Classification (Part II)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-goals" class="level3">
+<h3 class="anchored" data-anchor-id="learning-goals">Learning Goals:</h3>
+<p>After completing this workshop session, you will be able to:</p>
+<ul>
+<li>Describe what a test data set is and how it is used in classification.</li>
+<li>Understand several ways of representing classifier performance: accuracy, precision, and recall, and the confusion matrix.</li>
+<li>Using Python, evaluate classifier performance using a test data set and appropriate metrics.</li>
+<li>Using Python, execute cross-validation in Python to choose the number of neighbours.</li>
+<li>Identify when it is necessary to scale variables before classification and do this using Python</li>
+<li>In a dataset with &gt; 2 attributes, perform k-nearest neighbour classification in Python using the <code>scikit-learn</code> package to predict the class of a test dataset.</li>
+<li>Describe advantages and disadvantages of the k-nearest neighbour classification algorithm.</li>
+</ul>
+<p>This worksheet covers parts of <a href="https://python.datasciencebook.ca/classification2">Chapter 6</a> of the online textbook. You should read this chapter before attempting this assignment. Any place you see <code>___</code>, you must fill in the function, variable, or data to complete the code. Substitute the <code>raise NotImplementedError</code> with your completed code and answers then proceed to run the cell!</p>
+<div id="cell-2" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;492c0919a51f6fe3859c14f2af85c265&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-e3518ed3d64fb67c&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Run this cell before continuing.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> set_config</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_transformer</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> euclidean_distances</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> (</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    GridSearchCV,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    RandomizedSearchCV,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    cross_validate,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    train_test_split,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify working with large datasets in Altair</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>alt.data_transformers.disable_max_rows()</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Output dataframes instead of arrays</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>set_config(transform_output<span class="op">=</span><span class="st">"pandas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 0.1</strong> Multiple Choice:</p>
+<p>The confusion matrix is:</p>
+<p>A. A way to confuse you.</p>
+<p>B. A table where rows correspond to predicted class and columns correspond to true class.</p>
+<p>C. Each cell in the confusion matrix displays the number of observations with a particular predicted/true class as given by the row and column labels.</p>
+<p>D. Is an important tool for understanding what type of mistakes a classifier makes and how often these mistakes happen.</p>
+<p>E. All of the above except A.</p>
+<p><em>Assign your answer to an object called <code>answer0_1</code>. Make sure your answer is an uppercase letter and is surrounded by quotation marks (e.g.&nbsp;<code>"F"</code>)</em>.</p>
+<div id="cell-4" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;dbc594a5fd9430eaf02d441add6a930a&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-bb3b911307cc76c7&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-5" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;9d8ee2fabb67445b2baa2cf1b99a17bb&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-7b9855ea1388fce8&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer0_1)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"b9cdb"</span>).hexdigest() <span class="op">==</span> <span class="st">"351b6021c8f87571484eee4e4c7bf0a0b7ed21fc"</span>, <span class="st">"type of answer0_1 is not str. answer0_1 should be an str"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer0_1)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"b9cdb"</span>).hexdigest() <span class="op">==</span> <span class="st">"439859842b2ff5343f142aebc166bbd2f5c1ba63"</span>, <span class="st">"length of answer0_1 is not correct"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer0_1.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"b9cdb"</span>).hexdigest() <span class="op">==</span> <span class="st">"738521fce4199fe135093d56bdcd11e5af3694cb"</span>, <span class="st">"value of answer0_1 is not correct"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer0_1).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"b9cdb"</span>).hexdigest() <span class="op">==</span> <span class="st">"f04c8abf26aed0bfc1e3cac0304301b24f47827f"</span>, <span class="st">"correct string value of answer0_1 but incorrect case of letters"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Success!</code></pre>
+</div>
+</div>
+<p><strong>Question 0.2</strong> Multiple Choice:</p>
+<p>Precision and recall are ways to summarize the confusion matrix. What is something we must do before calculating precision and recall?</p>
+<p>A. Turn the values (counts of observations) appearing in each cell of the table into a proportion.</p>
+<p>B. Choose one of the class label as being more interesting and equate that with the “positive” label.</p>
+<p>C. Flip the column and rows of the matrix.</p>
+<p>D. None of the above.</p>
+<p><em>Assign your answer to an object called <code>answer0_2</code>. Make sure your answer is an uppercase letter and is surrounded by quotation marks (e.g.&nbsp;<code>"F"</code>)</em>.</p>
+<div id="cell-7" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;9375ebcb23d27e789886a0277a83ff37&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-4bd04adbf9a572a5&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-8" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;c99bf5e0377933f556b5bb06e0645b2d&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-93f255ff6cdfdc34&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer0_2)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"40f78"</span>).hexdigest() <span class="op">==</span> <span class="st">"88fbc36d74dbc11e3dc49cd606c9d12aab8dadde"</span>, <span class="st">"type of answer0_2 is not str. answer0_2 should be an str"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer0_2)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"40f78"</span>).hexdigest() <span class="op">==</span> <span class="st">"8f13c1689337a5e773751fc0a20a001db5754a5a"</span>, <span class="st">"length of answer0_2 is not correct"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer0_2.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"40f78"</span>).hexdigest() <span class="op">==</span> <span class="st">"904faf5c0cc90042d3f8b8e6064bae76b809e406"</span>, <span class="st">"value of answer0_2 is not correct"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer0_2).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"40f78"</span>).hexdigest() <span class="op">==</span> <span class="st">"a586864d6d403b52cf8043aaeda3ab9125c88230"</span>, <span class="st">"correct string value of answer0_2 but incorrect case of letters"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fruit-data-example---part-ii" class="level2">
+<h2 class="anchored" data-anchor-id="fruit-data-example---part-ii">1. Fruit Data Example - (Part II)</h2>
+<p><strong>Question 1.0</strong></p>
+<p>In the agricultural industry, cleaning, sorting, grading, and packaging food products are all necessary tasks in the post-harvest process. Products are classified based on appearance, size and shape, attributes which helps determine the quality of the food. Sorting can be done by humans, but it is tedious and time consuming. Automatic sorting could help save time and money. Images of the food products are captured and analysed to determine visual characteristics.</p>
+<p>The <a href="https://www.kaggle.com/mjamilmoughal/k-nearest-neighbor-classifier-to-predict-fruits/notebook">dataset</a> contains observations of fruit described with four features: (1) mass (in g), (2) width (in cm), (3) height (in cm), and (4) color score (on a scale from 0 - 1).</p>
+<p>To get started building a classifier that can classfiy a fruit based on its appearance, use <code>pd.read_csv</code> to load the file <code>fruit_data.csv</code> (found in the data folder) from the previous tutorial into your notebook.</p>
+<p><em>Assign your data to an object called <code>fruit_data</code>.</em></p>
+<div id="cell-10" class="cell" data-nbgrader="{}">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-11" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;c8f31d58ed295a17212ad60fa9249dea&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-03b586646cc9ea74&quot;,&quot;locked&quot;:false,&quot;points&quot;:3,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_data <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd4"</span>).hexdigest() <span class="op">==</span> <span class="st">"94dbd13369ff838be1cc37ddd2571e56a2adbad6"</span>, <span class="st">"type of fruit_data is None is not bool. fruit_data is None should be a bool"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_data <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd4"</span>).hexdigest() <span class="op">==</span> <span class="st">"32b4f132c7e4d7fd9a4568ae950c0ade0f91c972"</span>, <span class="st">"boolean value of fruit_data is None is not correct"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_data.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd5"</span>).hexdigest() <span class="op">==</span> <span class="st">"8bc91c167da94224c2c03ff132c43919b3ec3977"</span>, <span class="st">"type of fruit_data.shape is not tuple. fruit_data.shape should be a tuple"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_data.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd5"</span>).hexdigest() <span class="op">==</span> <span class="st">"e95430ca7bc9a404e2b167dfe8a30b4055fc9bcd"</span>, <span class="st">"length of fruit_data.shape is not correct"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_data.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd5"</span>).hexdigest() <span class="op">==</span> <span class="st">"89046d3b818261b39a3c972f538928b8817bb9ba"</span>, <span class="st">"values of fruit_data.shape are not correct"</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_data.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd5"</span>).hexdigest() <span class="op">==</span> <span class="st">"9a07d2fbcd6742a34bdf9d9a0f7b4d90d70fe81b"</span>, <span class="st">"order of elements of fruit_data.shape is not correct"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_data.fruit_name.dtype)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd6"</span>).hexdigest() <span class="op">==</span> <span class="st">"77c18e2fcbfeb18070e7059fdc3a6049fd40025b"</span>, <span class="st">"type of fruit_data.fruit_name.dtype is not correct"</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_data.fruit_name.dtype).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"8fbd6"</span>).hexdigest() <span class="op">==</span> <span class="st">"226ebd072ebdd8910b1c851f48d365fc91a37987"</span>, <span class="st">"value of fruit_data.fruit_name.dtype is not correct"</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a look at the first few observations in the fruit dataset. Run the cell below.</p>
+<div id="cell-13" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;f4f469982bf1cca15567b6e44725df2f&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-19eb282d44a51d90&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run this cell.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fruit_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s investigate the class proportions for each kind of fruit:</p>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fruit_data[<span class="st">'fruit_name'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="randomness-and-setting-seeds" class="level2">
+<h2 class="anchored" data-anchor-id="randomness-and-setting-seeds">Randomness and Setting Seeds</h2>
+<p>This worksheet uses functions from the <code>scikit-learn</code> library, which not only allows us to perform K-nearest neighbour classification, but also allows us to evaluate how well our classification worked. In order to ensure that the steps in the worksheet are reproducible, we need to set a <em><code>random_state</code></em> or <em>random seed</em>, i.e., a numerical “starting value,” which determines the sequence of random numbers Python will generate.</p>
+<p>Below in many cells we have included an argument to set the <code>random_state</code> or <code>np.random.seed</code>. They are necessary to make sure the autotesting code functions properly.</p>
+</section>
+<section id="splitting-the-data-into-a-training-and-test-set" class="level2">
+<h2 class="anchored" data-anchor-id="splitting-the-data-into-a-training-and-test-set">2. Splitting the data into a training and test set</h2>
+<p>In this exercise, we will be partitioning <code>fruit_data</code> into a training (75%) and testing (25%) set using the <code>scikit-learn</code> package. After creating the test set, we will put the test set away in a lock box and not touch it again until we have found the best k-nn classifier we can make using the training set. We will use the variable <code>fruit_name</code> as our class label.</p>
+<p><strong>Question 2.0</strong></p>
+<p>To create the training and test set, we would use the <code>train_test_split</code> function from <code>scikit-learn</code> package. Save the trained dataset and test dataset as <code>fruit_train</code> and <code>fruit_test</code>, respectively.</p>
+<div id="cell-18" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;e3a53ac95b91bca144661b01c9b4c133&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-c262636f2b9777e3&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Randomly take 75% of the data in the training set.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This will be proportional to the different number of fruit names in the dataset.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ___, ___ = train_test_split(___, test_size=___, random_state=123) # set the random state to be 123</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>fruit_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fruit_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-20" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;9b841e3ad8f51bda88aa7753fcf318af&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-7432078031e563b8&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_train <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b1"</span>).hexdigest() <span class="op">==</span> <span class="st">"9f77123ff7006f15c739b7b78f5f2d4de80459f5"</span>, <span class="st">"type of fruit_train is None is not bool. fruit_train is None should be a bool"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_train <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b1"</span>).hexdigest() <span class="op">==</span> <span class="st">"7ed9c577a01bef83e68375a03929f6c1cba7755b"</span>, <span class="st">"boolean value of fruit_train is None is not correct"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_test <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b2"</span>).hexdigest() <span class="op">==</span> <span class="st">"b0edefb6186b34edf34d83f7bcf5cbb59e46ea56"</span>, <span class="st">"type of fruit_test is None is not bool. fruit_test is None should be a bool"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_test <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b2"</span>).hexdigest() <span class="op">==</span> <span class="st">"96404ff84888a103c5f891759de786517fe317e2"</span>, <span class="st">"boolean value of fruit_test is None is not correct"</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_train.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b3"</span>).hexdigest() <span class="op">==</span> <span class="st">"ad58db68d7f455473cab66cff03bdba319b16f11"</span>, <span class="st">"type of fruit_train.shape is not tuple. fruit_train.shape should be a tuple"</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_train.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b3"</span>).hexdigest() <span class="op">==</span> <span class="st">"1d7f9a2b05a377135a71d8c34ecb0a5926601bb4"</span>, <span class="st">"length of fruit_train.shape is not correct"</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_train.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b3"</span>).hexdigest() <span class="op">==</span> <span class="st">"9e1e7bdacecb3a487b64e0f64d1f61366a6ea4fe"</span>, <span class="st">"values of fruit_train.shape are not correct"</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_train.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b3"</span>).hexdigest() <span class="op">==</span> <span class="st">"342376346f8cf46351b13bed9b0160a140dd9fbb"</span>, <span class="st">"order of elements of fruit_train.shape is not correct"</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_test.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b4"</span>).hexdigest() <span class="op">==</span> <span class="st">"c00a1e9b6f64d1629e4f464c1935eda7b0f96279"</span>, <span class="st">"type of fruit_test.shape is not tuple. fruit_test.shape should be a tuple"</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_test.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b4"</span>).hexdigest() <span class="op">==</span> <span class="st">"6c6e5d05f1db9c0aef7b920ba2cfd609e1a2d2d1"</span>, <span class="st">"length of fruit_test.shape is not correct"</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_test.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b4"</span>).hexdigest() <span class="op">==</span> <span class="st">"ade72264f11f0c795f1ca06d6df199248d2fda40"</span>, <span class="st">"values of fruit_test.shape are not correct"</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_test.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b4"</span>).hexdigest() <span class="op">==</span> <span class="st">"191ee842577393f5745b2c256304dcdd2895b4a6"</span>, <span class="st">"order of elements of fruit_test.shape is not correct"</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(fruit_train.mass))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b5"</span>).hexdigest() <span class="op">==</span> <span class="st">"d43052ac9a4c7109e3fd472091a2a67541dc4590"</span>, <span class="st">"type of sum(fruit_train.mass) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(fruit_train.mass)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b5"</span>).hexdigest() <span class="op">==</span> <span class="st">"03b793f8288b890907d114552b291e4cb42a95f0"</span>, <span class="st">"value of sum(fruit_train.mass) is not correct"</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(fruit_test.mass))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b6"</span>).hexdigest() <span class="op">==</span> <span class="st">"21310037fbeb70908577535bbc83ff4f6b2a975a"</span>, <span class="st">"type of sum(fruit_test.mass) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(fruit_test.mass)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"ef8b6"</span>).hexdigest() <span class="op">==</span> <span class="st">"baabdedf68419227ffd00e67f81a343e9c77d3e5"</span>, <span class="st">"value of sum(fruit_test.mass) is not correct"</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.1</strong></p>
+<p>K-nearest neighbors is sensitive to the scale of the predictors so we should do some preprocessing to standardize them. Remember that standardizing involves centering/shifting (subtracting the mean of each variable) and scaling (dividing by its standard deviation). Also remember that standardization is <em>part of your training procedure</em>, so you can’t use your test data to compute the centered / scaled values for each variable. Therefore, you must pass only the training data to your preprocessor to compute the preprocessing steps. This ensures that our test data does not influence any aspect of our model training. Once we have created the standardization preprocessor, we can then later on apply it separately to both the training and test data sets.</p>
+<p>For this exercise, let’s see if <code>mass</code> and <code>color_score</code> can predict <code>fruit_name</code>.</p>
+<p>To scale and center the data, first, pass the predictors to the <code>make_column_transformer</code> function to make the preprocessor.</p>
+<p><em>Assign your answer to an object called <code>fruit_preprocessor</code>.</em></p>
+<div id="cell-22" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;74ac5c1fc9e911ba2da76c8ed2fa4d99&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-aca4cc578b245211&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = make_column_transformer(</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     (___, [___, ___]),</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     verbose_feature_names_out=False</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>fruit_preprocessor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-23" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;2ad26ad7fcf1b58f4a49c65612a43b93&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-2453aaa31ba794b6&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_preprocessor <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d09"</span>).hexdigest() <span class="op">==</span> <span class="st">"c16043f1e011ae5e24d73f767d244e153de052d1"</span>, <span class="st">"type of fruit_preprocessor is None is not bool. fruit_preprocessor is None should be a bool"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_preprocessor <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d09"</span>).hexdigest() <span class="op">==</span> <span class="st">"a36c675b8869eb47d14d616bcfc17bf0679c1480"</span>, <span class="st">"boolean value of fruit_preprocessor is None is not correct"</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">type</span>(fruit_preprocessor))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0a"</span>).hexdigest() <span class="op">==</span> <span class="st">"5b4a6271e3d19f04ad8e3a02389bdde94d645e8f"</span>, <span class="st">"type of type(fruit_preprocessor) is not correct"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_preprocessor)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0a"</span>).hexdigest() <span class="op">==</span> <span class="st">"33fc23392075e2159cb275f5b072c2bd3eef06f2"</span>, <span class="st">"value of type(fruit_preprocessor) is not correct"</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">0</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0b"</span>).hexdigest() <span class="op">==</span> <span class="st">"c2ee407b203b6e1c1faf4f5bbefb51099c64d2fa"</span>, <span class="st">"type of fruit_preprocessor.transformers[0][0] is not str. fruit_preprocessor.transformers[0][0] should be an str"</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">0</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0b"</span>).hexdigest() <span class="op">==</span> <span class="st">"b66e860a0a8f53af64caf60afdbf123a56eddbfa"</span>, <span class="st">"length of fruit_preprocessor.transformers[0][0] is not correct"</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">0</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0b"</span>).hexdigest() <span class="op">==</span> <span class="st">"b0dd09d0d913f060dfae366a65bdc73cc4c6dbe9"</span>, <span class="st">"value of fruit_preprocessor.transformers[0][0] is not correct"</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">0</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0b"</span>).hexdigest() <span class="op">==</span> <span class="st">"b0dd09d0d913f060dfae366a65bdc73cc4c6dbe9"</span>, <span class="st">"correct string value of fruit_preprocessor.transformers[0][0] but incorrect case of letters"</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">2</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0c"</span>).hexdigest() <span class="op">==</span> <span class="st">"462915beb3245eb3f238c0e6100eba8c60d5eeeb"</span>, <span class="st">"type of fruit_preprocessor.transformers[0][2] is not list. fruit_preprocessor.transformers[0][2] should be a list"</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">2</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0c"</span>).hexdigest() <span class="op">==</span> <span class="st">"dbcd1005f772edc467986417157dca8731db4c76"</span>, <span class="st">"length of fruit_preprocessor.transformers[0][2] is not correct"</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">2</span>]))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0c"</span>).hexdigest() <span class="op">==</span> <span class="st">"280af5a8b2775780fabf4d84c5f5db2cfdbdbe56"</span>, <span class="st">"values of fruit_preprocessor.transformers[0][2] are not correct"</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_preprocessor.transformers[<span class="dv">0</span>][<span class="dv">2</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36d0c"</span>).hexdigest() <span class="op">==</span> <span class="st">"2b1472a2c7fea5769561b8e3eef648c0052e5e8a"</span>, <span class="st">"order of elements of fruit_preprocessor.transformers[0][2] is not correct"</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we have split the data, we can do things like exploratory data analysis and model fitting. Before we move onto the latter, run the cell below to visualize the two of the predictors (mass in grams, and width in cm) as a scatter plot, colouring the observations by their class labels.</p>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the scatterplot</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fruit_chart <span class="op">=</span> alt.Chart(fruit_data).mark_point(size<span class="op">=</span><span class="dv">15</span>).encode(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">"mass"</span>).title(<span class="st">"Mass (grams)"</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">"width"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        .title(<span class="st">"Width (cm)"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        .scale(zero<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>alt.Color(<span class="st">"fruit_name"</span>).title(<span class="st">"Fruit"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>fruit_chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.2</strong></p>
+<p>So far, we have split the training and testing datasets as well as preprocessed the data. Now, let’s create our K-nearest neighbour classifier with only the training set using the <code>scikit-learn</code> package. First, create the classifier by specifying that we want <span class="math inline">\(K = 3\)</span> neighbors. <em>Assign your answer to an object called <code>knn_spec</code></em>.</p>
+<p>Next, separate the predictor columns from the target column. Name the predictor variable <code>X</code> and the target <code>y</code>.</p>
+<p>Train the classifier with the training data set using the <code>make_pipeline</code> and <code>fit</code> function. The <code>make_pipeline</code> function allows you to bundle together your pre-processing, modeling, and post-processing requests. Scaffolding is provided below for you.</p>
+<p><em>Assign your answer to an object called <code>fruit_fit</code></em>.</p>
+<div id="cell-27" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;5041d48a1b93cd812e77448cffa6b1c3&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-00b2a6b0ba7df6c4&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = KNeighborsClassifier(n_neighbors=___)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___[["mass", "color_score"]]</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = fruit_train[___]</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = make_pipeline(___, ___).fit(___, ___)</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>fruit_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-28" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;8bcc3bca7905dfc97a65a726178bfbad&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-b8ce3699299555d5&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_spec <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e07"</span>).hexdigest() <span class="op">==</span> <span class="st">"e2d16a9547e72a3ae1e7aef7c84c6c0c587bad37"</span>, <span class="st">"type of knn_spec is None is not bool. knn_spec is None should be a bool"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_spec <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e07"</span>).hexdigest() <span class="op">==</span> <span class="st">"a15dcfacc29248935e7777a673f2a5eb8c9afe27"</span>, <span class="st">"boolean value of knn_spec is None is not correct"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">type</span>(knn_spec))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e08"</span>).hexdigest() <span class="op">==</span> <span class="st">"8192fb1b7fe569d5b3c2f3eab3fb65464e75bfb1"</span>, <span class="st">"type of type(knn_spec) is not correct"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_spec)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e08"</span>).hexdigest() <span class="op">==</span> <span class="st">"69a8d47f5a15872b58b9d89610eb519425f3fde2"</span>, <span class="st">"value of type(knn_spec) is not correct"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_spec.effective_metric_)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e09"</span>).hexdigest() <span class="op">==</span> <span class="st">"8a3cc99092881053a4372e18346c2e25f3f9c98e"</span>, <span class="st">"type of knn_spec.effective_metric_ is not str. knn_spec.effective_metric_ should be an str"</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(knn_spec.effective_metric_)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e09"</span>).hexdigest() <span class="op">==</span> <span class="st">"70f6652e73aa1506c93346ed63d995b98fab1b15"</span>, <span class="st">"length of knn_spec.effective_metric_ is not correct"</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_spec.effective_metric_.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e09"</span>).hexdigest() <span class="op">==</span> <span class="st">"ca0f4ad54d67bcd18ff83d85539d213a6136c949"</span>, <span class="st">"value of knn_spec.effective_metric_ is not correct"</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_spec.effective_metric_).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e09"</span>).hexdigest() <span class="op">==</span> <span class="st">"ca0f4ad54d67bcd18ff83d85539d213a6136c949"</span>, <span class="st">"correct string value of knn_spec.effective_metric_ but incorrect case of letters"</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_spec.n_neighbors)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0a"</span>).hexdigest() <span class="op">==</span> <span class="st">"b053dd855a7ee23c1a8f2db8de53400908f659ab"</span>, <span class="st">"type of knn_spec.n_neighbors is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_spec.n_neighbors).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0a"</span>).hexdigest() <span class="op">==</span> <span class="st">"b726c76a82a1e689bd8bf1a87e14148b1e1ffa28"</span>, <span class="st">"value of knn_spec.n_neighbors is not correct"</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(X.mass))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0b"</span>).hexdigest() <span class="op">==</span> <span class="st">"1d6efa7539e497d2785a27892fb55925101adc69"</span>, <span class="st">"type of sum(X.mass) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(X.mass)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0b"</span>).hexdigest() <span class="op">==</span> <span class="st">"acf33445c79fe8216094e045df98b2d792ffd530"</span>, <span class="st">"value of sum(X.mass) is not correct"</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(X.color_score))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0c"</span>).hexdigest() <span class="op">==</span> <span class="st">"9d9694d1c2272d3f4d59434862483d10ab72a496"</span>, <span class="st">"type of sum(X.color_score) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(X.color_score), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0c"</span>).hexdigest() <span class="op">==</span> <span class="st">"ae307b97500019064af59ef4e7b7ed62c89d5454"</span>, <span class="st">"value of sum(X.color_score) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(y.name)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0d"</span>).hexdigest() <span class="op">==</span> <span class="st">"6abe773b05068bd331b9458fe572e23efd0ba854"</span>, <span class="st">"type of y.name is not str. y.name should be an str"</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(y.name)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0d"</span>).hexdigest() <span class="op">==</span> <span class="st">"90f4248559ecfae4d207bd46db84457909a6af5f"</span>, <span class="st">"length of y.name is not correct"</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y.name.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0d"</span>).hexdigest() <span class="op">==</span> <span class="st">"92c4a59d1166ec03a74d8d9e0e7550629d7e35d5"</span>, <span class="st">"value of y.name is not correct"</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(y.name).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0d"</span>).hexdigest() <span class="op">==</span> <span class="st">"92c4a59d1166ec03a74d8d9e0e7550629d7e35d5"</span>, <span class="st">"correct string value of y.name but incorrect case of letters"</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_fit <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0e"</span>).hexdigest() <span class="op">==</span> <span class="st">"15099bad8aa8fd88e3ed8b0336fcd45b8f39af37"</span>, <span class="st">"type of fruit_fit is None is not bool. fruit_fit is None should be a bool"</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_fit <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0e"</span>).hexdigest() <span class="op">==</span> <span class="st">"cc6d59b8d76d220ac7ceeac94e7f984f2f6aacdb"</span>, <span class="st">"boolean value of fruit_fit is None is not correct"</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">type</span>(fruit_fit))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0f"</span>).hexdigest() <span class="op">==</span> <span class="st">"7b4a4056a45db874cc809a3221d59cca0c09005c"</span>, <span class="st">"type of type(fruit_fit) is not correct"</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_fit)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e0f"</span>).hexdigest() <span class="op">==</span> <span class="st">"dd6490f704dd393427bfc2cc32a050c152dd221d"</span>, <span class="st">"value of type(fruit_fit) is not correct"</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">len</span>(fruit_fit.named_steps))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e10"</span>).hexdigest() <span class="op">==</span> <span class="st">"2f62b5548ecff5633a52f4591fa7a95747b18374"</span>, <span class="st">"type of len(fruit_fit.named_steps) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_fit.named_steps)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e10"</span>).hexdigest() <span class="op">==</span> <span class="st">"da25296125b548d8848520ab24f87345dd290640"</span>, <span class="st">"value of len(fruit_fit.named_steps) is not correct"</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_fit.named_steps.keys())).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e11"</span>).hexdigest() <span class="op">==</span> <span class="st">"281cfae204ddee5837c5ebe161f9bcdcaa605d2e"</span>, <span class="st">"type of fruit_fit.named_steps.keys() is not correct"</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_fit.named_steps.keys()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"27e11"</span>).hexdigest() <span class="op">==</span> <span class="st">"6287d8aeb5a0ee86fcdc595d4a94d5ed18c48017"</span>, <span class="st">"value of fruit_fit.named_steps.keys() is not correct"</span></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.3</strong></p>
+<p>Now that we have created our K-nearest neighbor classifier object, let’s predict the class labels for our test set.</p>
+<p>We want to make sure to <code>assign</code> the predicted class labels to a new column in the dataframe, called <code>predicted</code>. To create the predicted class labels pass your fitted model pipeline and the <strong>test dataset</strong> to the <code>predict</code> function.</p>
+<p><em>Assign your answer to an object called <code>fruit_test_predictions</code>.</em></p>
+<div id="cell-30" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;427f26d7a9432a036288feefb0cb56a2&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-29a65e0d69fd64d3&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = fruit_test.___(</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     predicted=___.predict(___[[___, ___]])</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>fruit_test_predictions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-31" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;3de438fa2b68692386e3bb2473ed3cc0&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-144f33352d2b6add&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_test_predictions <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2bd"</span>).hexdigest() <span class="op">==</span> <span class="st">"2b270d171753a33179223403dd1ff41c35a42b87"</span>, <span class="st">"type of fruit_test_predictions is None is not bool. fruit_test_predictions is None should be a bool"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_test_predictions <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2bd"</span>).hexdigest() <span class="op">==</span> <span class="st">"a4451e8e45f322126a6fbc7a90c20ae3a5bee464"</span>, <span class="st">"boolean value of fruit_test_predictions is None is not correct"</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_test_predictions)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2be"</span>).hexdigest() <span class="op">==</span> <span class="st">"11449a9d181d481214112ee5255a27c33852aaac"</span>, <span class="st">"type of type(fruit_test_predictions) is not correct"</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_test_predictions.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2bf"</span>).hexdigest() <span class="op">==</span> <span class="st">"2d059656a62390dea1fb448bbdc215c77a9817f5"</span>, <span class="st">"type of fruit_test_predictions.shape is not tuple. fruit_test_predictions.shape should be a tuple"</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_test_predictions.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2bf"</span>).hexdigest() <span class="op">==</span> <span class="st">"c98f20a3aacd58713ce44462685524951a0d6beb"</span>, <span class="st">"length of fruit_test_predictions.shape is not correct"</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_test_predictions.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2bf"</span>).hexdigest() <span class="op">==</span> <span class="st">"269abef7b85b70a76ac2028e7198760edbf0102b"</span>, <span class="st">"values of fruit_test_predictions.shape are not correct"</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_test_predictions.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2bf"</span>).hexdigest() <span class="op">==</span> <span class="st">"ccdebed5e7deb5b68c4991d2b4130e87ba2f5bb8"</span>, <span class="st">"order of elements of fruit_test_predictions.shape is not correct"</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="st">"predicted"</span> <span class="kw">in</span> fruit_test_predictions.columns)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2c0"</span>).hexdigest() <span class="op">==</span> <span class="st">"95b9c71897a9496eda9fa4e37c40745a4b6017c6"</span>, <span class="st">"type of </span><span class="ch">\"</span><span class="st">predicted</span><span class="ch">\"</span><span class="st"> in fruit_test_predictions.columns is not bool. </span><span class="ch">\"</span><span class="st">predicted</span><span class="ch">\"</span><span class="st"> in fruit_test_predictions.columns should be a bool"</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="st">"predicted"</span> <span class="kw">in</span> fruit_test_predictions.columns).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"2f2c0"</span>).hexdigest() <span class="op">==</span> <span class="st">"c3cace2eeb4178326381514950fac3f2606c7de7"</span>, <span class="st">"boolean value of </span><span class="ch">\"</span><span class="st">predicted</span><span class="ch">\"</span><span class="st"> in fruit_test_predictions.columns is not correct"</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.4</strong></p>
+<p>Great! We have now computed some predictions for our test datasets! From glancing at the dataframe above, it looks like most of them are correct, but wouldn’t it be interesting if we could find out the exact accuracy of our classifier?</p>
+<p>Thankfully, the <code>score</code> function from the <code>scikit-learn</code> package can help us. To get the statistics about the quality of our model, you need to call the <code>score</code> function on the <code>fruit_fit</code> model. Name the predictors <code>X_test</code> and the target <code>y_test</code>. We should pass the <code>X_test</code> and <code>y_test</code> into the <code>score</code> function.</p>
+<p><em>Assign your answer to an object called <code>fruit_prediction_accuracy</code>.</em></p>
+<div id="cell-33" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;0da43d20ab65590c71c78f4764730635&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-4ac19dfcaec7e27c&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___[[___, ___]]</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___["fruit_name"]</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = fruit_fit.score(___, ___)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>fruit_prediction_accuracy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-34" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;4aa9957aa1cf23419d665e7bb387c34f&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-a268da3370127d6c&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_prediction_accuracy <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"58ea0"</span>).hexdigest() <span class="op">==</span> <span class="st">"7488706d3b954877e08217e6c10b6e56e6a7b906"</span>, <span class="st">"type of fruit_prediction_accuracy is None is not bool. fruit_prediction_accuracy is None should be a bool"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_prediction_accuracy <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"58ea0"</span>).hexdigest() <span class="op">==</span> <span class="st">"2ede9eb19115d81336d63c4f466910ed740a56cc"</span>, <span class="st">"boolean value of fruit_prediction_accuracy is None is not correct"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_prediction_accuracy)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"58ea1"</span>).hexdigest() <span class="op">==</span> <span class="st">"d1b9e2d27e4f648284fe90f1e995ff37b15b3b52"</span>, <span class="st">"type of fruit_prediction_accuracy is not correct"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_prediction_accuracy).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"58ea1"</span>).hexdigest() <span class="op">==</span> <span class="st">"cba4f4b8508049ee804d50c214f02a7d03ec456b"</span>, <span class="st">"value of fruit_prediction_accuracy is not correct"</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.5</strong></p>
+<p>Now, let’s look at the <em>confusion matrix</em> for the classifier. This will show us a table comparing the predicted labels with the true labels.</p>
+<p>A confusion matrix is essentially a classification matrix. The columns of the confusion matrix represent the actual class and the rows represent the predicted class (or vice versa). Shown below is an example of a confusion matrix.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Predicted Positive</th>
+<th style="text-align: center;">Predicted Negative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Truly Positive</strong></td>
+<td style="text-align: center;">True Positive</td>
+<td style="text-align: center;">False Negative</td>
+</tr>
+<tr class="even">
+<td><strong>Truly Negative</strong></td>
+<td style="text-align: center;">False Positive</td>
+<td style="text-align: center;">True Negative</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A <strong>true positive</strong> is an outcome where the model correctly predicts the positive class.</li>
+<li>A <strong>true negative</strong> is an outcome where the model correctly predicts the negative class.</li>
+<li>A <strong>false positive</strong> is an outcome where the model incorrectly predicts the positive class.</li>
+<li>A <strong>false negative</strong> is an outcome where the model incorrectly predicts the negative class.</li>
+</ul>
+<p><br></p>
+<p>We can create a confusion matrix by using the <code>crosstab</code> function from <code>pandas</code>. In the dataframe created by <code>crosstab</code>, the true labels will be to the left, and the predicted labels will be on top (as in the matrix above). In contrast to the confusion matrix above where there are only two possible outcomes (positive/negative), we have four possible outcomes (the four fruit names). Therefore, our dataframe will be bigger than the matrix above and contain 16 possible outcomes instead of 4.</p>
+<p><em>Assign your answer to an object called <code>fruit_mat</code></em>.</p>
+<div id="cell-36" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;c2b31640db0361c9bacee8ed24d9a5c9&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-f0716222fa3e3c93&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = pd.___(</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     fruit_test_predictions[___],  # True labels</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     fruit_test_predictions[___],  # Predicted labels</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>fruit_mat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With many observations, it can be difficult to interpret the confusion matrix when it is presented as a table like above. In these cases, we could instead use the <code>ConfusionMatrixDisplay</code> function of the <code>scikit-learn</code> package to visualize the confusion matrix as a heatmap. Please run the cell below to see the fruit confusion matrix as a heatmap.</p>
+<div id="cell-38" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;6588ef2080171ce2db93b621b987b025&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-3061000e84af6cf1&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> ConfusionMatrixDisplay</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_estimator(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    fruit_fit,  <span class="co"># We are directly passing the pipeline and let sklearn do the predictions for us</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    X_test,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    y_test</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-39" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;0abec553977fbaf5d7af96e9c91d0a61&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-d3d5c46250e8450a&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_mat <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6d49c"</span>).hexdigest() <span class="op">==</span> <span class="st">"a56e492407ffda77dae01cf693d7cec3160d24a5"</span>, <span class="st">"type of fruit_mat is None is not bool. fruit_mat is None should be a bool"</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_mat <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6d49c"</span>).hexdigest() <span class="op">==</span> <span class="st">"c7f4085c7df1435511dabd1fe07a5e3f0bf6a04a"</span>, <span class="st">"boolean value of fruit_mat is None is not correct"</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_mat)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6d49d"</span>).hexdigest() <span class="op">==</span> <span class="st">"28c9794a963e59bc5a7cf363c4c0e2789544fc33"</span>, <span class="st">"type of type(fruit_mat) is not correct"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_mat.to_numpy().<span class="bu">sum</span>())).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6d49e"</span>).hexdigest() <span class="op">==</span> <span class="st">"01e9653b50d767f4025c03eca241b30e06583876"</span>, <span class="st">"type of fruit_mat.to_numpy().sum() is not correct"</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_mat.to_numpy().<span class="bu">sum</span>()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6d49e"</span>).hexdigest() <span class="op">==</span> <span class="st">"bf73171c60376a7a7ab9275366e3d8a810042a38"</span>, <span class="st">"value of fruit_mat.to_numpy().sum() is not correct"</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.6</strong> Multiple Choice:</p>
+<p>Reading <code>fruit_mat</code>, how many observations were labelled correctly?</p>
+<p>A. 7</p>
+<p>B. 8</p>
+<p>C. 9</p>
+<p>D. 14</p>
+<p><em>Assign your answer to an object called <code>answer2_6</code>. Make sure your answer is an uppercase letter and is surrounded by quotation marks (e.g.&nbsp;<code>"F"</code>).</em></p>
+<div id="cell-41" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;5e7b8bec2ebf2a2dfbc88324181066a7&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-c4d8f09cbf40df59&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>answer2_6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-42" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;2cd11c3acf848a13c4af8a7988d8aeb4&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-5715f106e3bbf143&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2_6)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"63bd7"</span>).hexdigest() <span class="op">==</span> <span class="st">"74364102b77b3fd097894f4b2ed5ffe1a3bedb6e"</span>, <span class="st">"type of answer2_6 is not str. answer2_6 should be an str"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(answer2_6)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"63bd7"</span>).hexdigest() <span class="op">==</span> <span class="st">"aa9b3cc37bc9e2a6492756385bfc9db9b3b3ffad"</span>, <span class="st">"length of answer2_6 is not correct"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2_6.lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"63bd7"</span>).hexdigest() <span class="op">==</span> <span class="st">"ee28d9dab7da140c2703a3142b1a76eca2f29704"</span>, <span class="st">"value of answer2_6 is not correct"</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(answer2_6).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"63bd7"</span>).hexdigest() <span class="op">==</span> <span class="st">"f37d9ce6ca5d36961515b5c2a132fd356075f5f3"</span>, <span class="st">"correct string value of answer2_6 but incorrect case of letters"</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.7</strong> Multiple Choice:</p>
+<p>Reading <code>fruit_mat</code>, let’s suppse that we are really interested in the lemons, and treat “lemon” as being the “positive” class. What is the precision of our classifier?</p>
+<p><em>Assign your answer to an object called <code>answer2_7</code>.</em></p>
+<div id="cell-44" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;98f4907c1eeadd6053479fe452a7693f&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-a367bf90bd355e95&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>answer2_7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-45" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;a3d9b4d2413625c76f7444ec3d5e16f1&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-5f0f2377e7f409eb&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2_7)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"cf09a"</span>).hexdigest() <span class="op">==</span> <span class="st">"a2acc89ec6bf6fbfcaf70c4f3fd8e257714b28f5"</span>, <span class="st">"type of answer2_7 is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(answer2_7, <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"cf09a"</span>).hexdigest() <span class="op">==</span> <span class="st">"6e0748f97ae0f02ee4986a895c656d7199300d4c"</span>, <span class="st">"value of answer2_7 is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 2.8</strong> Multiple Choice:</p>
+<p>Again, let us treat “lemon” as being the “positive” class. What is the recall of our classifier?</p>
+<p><em>Assign your answer to an object called <code>answer2_8</code>.</em></p>
+<div id="cell-47" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;5b9785a5ec2d7253156570903072a313&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-af1ca8ba519ccb84&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>answer2_8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-48" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;a61f34fbe0f7cb285c1d1f45f624da76&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-5a5fe862e860e48a&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(answer2_8)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"51283"</span>).hexdigest() <span class="op">==</span> <span class="st">"458dc6e2f39b0dc333b972f861a30a8b8840373e"</span>, <span class="st">"type of answer2_8 is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(answer2_8, <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"51283"</span>).hexdigest() <span class="op">==</span> <span class="st">"2769552e2d149c93b991ad429cb50a9b3b1877a6"</span>, <span class="st">"value of answer2_8 is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="cross-validation">3. Cross-validation</h3>
+<p><strong>Question 3.1</strong></p>
+<p>The vast majority of predictive models in statistics and machine learning have parameters that you have to pick. For the past few exercises, we have had to pick the number of neighbours for the class vote, which we have done arbitraily. But, is it possible to make this selection, <em>i.e., tune the model, in a principled way?</em> Ideally, we want to pick the number of neighborurs to maximize the performance of our classifier on data <em>it hasn’t seen yet</em>.</p>
+<p>An important aspect of the tuning process is that we can, if we want to, split our training data again, train and evaluate a classifier for each split, and then choose the parameter based on all of the different results. If we just split our training data once, our best parameter choice will depend strongly on the randomness from how this single split was made. Using multiple different splits, we’ll get a more robust estimate of accuracy, which will lead to a more suitable choice of the number of neighbours <span class="math inline">\(K\)</span> to perform well on unseen data.</p>
+<p>The idea of training and evaluating models on multiple training data splits times is called “cross-validation”. In cross-validation, we split our overall training data into <span class="math inline">\(C\)</span> evenly-sized chunks, and then iteratively use 1 chunk as the <strong>validation set</strong> and combine the remaining <span class="math inline">\(C−1\)</span> chunks as the <strong>training set.</strong> The validation set is used in a similar was as the test set, <strong>except</strong> that the test set is only used once at the end to report model performance whether we use model performance on the validation set to select the model during cross-validation.</p>
+<hr>
+<p>We can perform a cross-validation in Python using the <code>cross_validate</code> function from the <code>scikit-learn</code> package. To use this function, you have to identify the model, the training set, and specify the <code>cv</code> parameter (the number of folds <span class="math inline">\(C\)</span>, defaults to 5). We should set <code>return_train_score</code> to be <code>True</code> to return the training score as well.</p>
+<p>Before we use the <code>cross_validate</code> function, we need to perform the pipeline analysis again. You can reuse the <code>X</code> and <code>y</code> variables you constructed from the training data earlier, as well as the <code>fruit_preprocessor</code>and <code>knn_spec</code> variables. However, you will need to create a new pipeline since the one we made earlier is already fitted on all the data and here we want to fit it on different splits of the data during cross-validation. Since the cross_validate function outputs a dictionary, we use <code>pd.DataFrame</code> to convert it to a dataframe for convenience, as in the textbook.</p>
+<p><em>Assign your answer to an object called <code>fruit_vfold_score</code></em>.</p>
+<div id="cell-50" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;f60b0bcd81f1e4ebeafca651704f6143&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-40206dc81c114f74&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2020</span>)  <span class="co"># DO NOT REMOVE</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___(fruit_preprocessor, knn_spec)</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = pd.___(</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     cross_validate(</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         estimator=___,</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv=5,</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         X=___,</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         y=___,</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         return_train_score=True,</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>fruit_vfold_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-51" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;6e48fc4fdb0bde9e52914588c690381f&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-4f7b62f0f7b0a200&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_vfold_score <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a22"</span>).hexdigest() <span class="op">==</span> <span class="st">"b1fc58d5e23c9423bbf8765714e5e58804fce66a"</span>, <span class="st">"type of fruit_vfold_score is None is not bool. fruit_vfold_score is None should be a bool"</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_vfold_score <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a22"</span>).hexdigest() <span class="op">==</span> <span class="st">"d2cc03f8ff44ef13491fa232070b6de92b811475"</span>, <span class="st">"boolean value of fruit_vfold_score is None is not correct"</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_vfold_score)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a23"</span>).hexdigest() <span class="op">==</span> <span class="st">"d2dcb89307585b23fa4ca6f8a76f8c2c0f23346f"</span>, <span class="st">"type of type(fruit_vfold_score) is not correct"</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_vfold_score.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a24"</span>).hexdigest() <span class="op">==</span> <span class="st">"546d04c6fccac7326ab7400bb48a82c394c90130"</span>, <span class="st">"type of fruit_vfold_score.shape is not tuple. fruit_vfold_score.shape should be a tuple"</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_vfold_score.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a24"</span>).hexdigest() <span class="op">==</span> <span class="st">"d8cd8be65e2d915f492f7185bcd2736d2f68a197"</span>, <span class="st">"length of fruit_vfold_score.shape is not correct"</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_vfold_score.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a24"</span>).hexdigest() <span class="op">==</span> <span class="st">"653cb8e4264891bd349087f0a6ae4d134fd597c4"</span>, <span class="st">"values of fruit_vfold_score.shape are not correct"</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_vfold_score.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a24"</span>).hexdigest() <span class="op">==</span> <span class="st">"89f531606aaf9ca14b74ef68296d4ab26838067f"</span>, <span class="st">"order of elements of fruit_vfold_score.shape is not correct"</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_pipe <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a25"</span>).hexdigest() <span class="op">==</span> <span class="st">"9541e0d3962315e7cfa81d63c9ff1179e06dbe63"</span>, <span class="st">"type of fruit_pipe is None is not bool. fruit_pipe is None should be a bool"</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_pipe <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a25"</span>).hexdigest() <span class="op">==</span> <span class="st">"020dfe9202b64ad0e6861ad87373f929d736eefc"</span>, <span class="st">"boolean value of fruit_pipe is None is not correct"</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">type</span>(fruit_pipe))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a26"</span>).hexdigest() <span class="op">==</span> <span class="st">"fd97847bfa2e68ff8df95e6074f5a234c145fd58"</span>, <span class="st">"type of type(fruit_pipe) is not correct"</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_pipe)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a26"</span>).hexdigest() <span class="op">==</span> <span class="st">"656864c949d89ae0be260be526c38fa4039065bd"</span>, <span class="st">"value of type(fruit_pipe) is not correct"</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">len</span>(fruit_pipe.named_steps))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a27"</span>).hexdigest() <span class="op">==</span> <span class="st">"bbcdb9c08b17d3d8a66fe4a53686f010ae0bccbb"</span>, <span class="st">"type of len(fruit_pipe.named_steps) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_pipe.named_steps)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a27"</span>).hexdigest() <span class="op">==</span> <span class="st">"33ba12d9299d1f48e8d73ede50813d18a77ff874"</span>, <span class="st">"value of len(fruit_pipe.named_steps) is not correct"</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_pipe.named_steps.keys())).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a28"</span>).hexdigest() <span class="op">==</span> <span class="st">"ea5bb9eb37991a1ed3ecb7735822ec397000ce42"</span>, <span class="st">"type of fruit_pipe.named_steps.keys() is not correct"</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_pipe.named_steps.keys()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"36a28"</span>).hexdigest() <span class="op">==</span> <span class="st">"577fdf89e2c84a15d65fa7cec8269b13b6314a4e"</span>, <span class="st">"value of fruit_pipe.named_steps.keys() is not correct"</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 3.2</strong></p>
+<p>Now that we have ran a cross-validation on each train/validation split, one has to ask, how accurate was the classifier’s validation across the folds? We can aggregate the <em>mean</em> and <em>standard error</em> of these scores from each folds. The standard error is essentially a measure of how uncertain we are in the mean value. Use the <code>agg</code> dataframe method to compute both the mean and the standard error; make sure the first row of the dataframe contains the mean values and the second contains the standard error values.</p>
+<p><em>Assign your answer to an object called <code>fruit_metrics</code>.</em></p>
+<div id="cell-53" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;fa447ea751c3eab0498e9b706aa3d369&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-0474eb947592495c&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = fruit_vfold_score.___([___, ___])</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>fruit_metrics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-54" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;ab6e7577ffcabba7c2f29f7e921d26bd&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-099fb002dba6ced0&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_metrics.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7608a"</span>).hexdigest() <span class="op">==</span> <span class="st">"8e5f57d0f7ed0aa98c690da117537d080d1bff1a"</span>, <span class="st">"type of fruit_metrics.shape is not tuple. fruit_metrics.shape should be a tuple"</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(fruit_metrics.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7608a"</span>).hexdigest() <span class="op">==</span> <span class="st">"f68c65a025bd3924f48305894fadea89e0c5b46e"</span>, <span class="st">"length of fruit_metrics.shape is not correct"</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, fruit_metrics.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7608a"</span>).hexdigest() <span class="op">==</span> <span class="st">"bbca15d44552fa5e34cd23e46733915b6043b927"</span>, <span class="st">"values of fruit_metrics.shape are not correct"</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_metrics.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7608a"</span>).hexdigest() <span class="op">==</span> <span class="st">"f8ddb51af4648fc9c62d3c1d3a78fc8589ac74ca"</span>, <span class="st">"order of elements of fruit_metrics.shape is not correct"</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(fruit_metrics.test_score)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7608b"</span>).hexdigest() <span class="op">==</span> <span class="st">"4fae85143b5b445ce9b9807dfe9a1a379dc90033"</span>, <span class="st">"type of fruit_metrics.test_score is not correct"</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(fruit_metrics.test_score).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"7608b"</span>).hexdigest() <span class="op">==</span> <span class="st">"6924635698218860ac3c086773cb0acfa29dace4"</span>, <span class="st">"value of fruit_metrics.test_score is not correct"</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="parameter-value-selection" class="level2">
+<h2 class="anchored" data-anchor-id="parameter-value-selection">4. Parameter value selection</h2>
+<p>Using a 5-fold cross-validation, we have established a prediction accuracy for our classifier. If we were to improve our classifier, we would like to try different number of neighbours, <span class="math inline">\(K\)</span>. Then we could use cross-validation to calculate an accuracy for each value of <span class="math inline">\(K\)</span> in a reasonable range, and pick the value of <span class="math inline">\(K\)</span> that gives us the best accuracy on the validation data.</p>
+<p>The great thing about the <code>scikit-learn</code> package is that it provides functions to conveniently tune parameters such as <span class="math inline">\(K\)</span> by training and evaluating models (via crossvalidation) for a range of specified values of <span class="math inline">\(K\)</span>. The function we will use here is called “exhaustive grid search” (<a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">sklearn.model_selection.GridSearchCV</a>).</p>
+<p><strong>Question 4.0</strong></p>
+<p>Create a new K-nearest neighbor model specification but instead of specifying a particular value for the <code>n_neighbors</code> argument, try exploring a range of values with <code>GridSearchCV</code>. Before we use <code>GridSearchCV</code>, we should define the grid of values that we want to explore, and redefine the pipeline without specifying a particular value of <span class="math inline">\(K\)</span>. To save us some time, instruct the grid search to use 4-fold cross-validation, rather than the default 5-fold.</p>
+<p><em>Assign your answer to an object called <code>knn_tune_grid</code>.</em></p>
+<div id="cell-56" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;beef813212d7344df87d4eef86e8ee5a&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-a8f5ba28a8665763&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Run this cell</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"kneighborsclassifier__n_neighbors"</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">15</span>, <span class="dv">1</span>),</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>fruit_tune_pipe <span class="op">=</span> make_pipeline(fruit_preprocessor, KNeighborsClassifier())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-57" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;2a8f25395382a131d54eaf3c5fd0af6c&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-2d0448675438bdec&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = GridSearchCV(</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     ___, ___, ___=__,</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>knn_tune_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-58" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;1c5af2710440358e55f713ac54c3e1e0&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-381d21c4c1474e80&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_tune_grid <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e3"</span>).hexdigest() <span class="op">==</span> <span class="st">"b8f0b73e45acd1ecde4311b54cb8ca5c4fd48116"</span>, <span class="st">"type of knn_tune_grid is None is not bool. knn_tune_grid is None should be a bool"</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_tune_grid <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e3"</span>).hexdigest() <span class="op">==</span> <span class="st">"22ff6a02d8a0748a0942a49f18a56f89c44071a4"</span>, <span class="st">"boolean value of knn_tune_grid is None is not correct"</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">type</span>(knn_tune_grid))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e4"</span>).hexdigest() <span class="op">==</span> <span class="st">"bba351be309dda4ac68b4ebd1aafb92b79462f94"</span>, <span class="st">"type of type(knn_tune_grid) is not correct"</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_tune_grid)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e4"</span>).hexdigest() <span class="op">==</span> <span class="st">"5daba4ef43b4a410d3c641b8d3b2e56daed064e6"</span>, <span class="st">"value of type(knn_tune_grid) is not correct"</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_tune_grid.param_grid.keys())).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e5"</span>).hexdigest() <span class="op">==</span> <span class="st">"ff297bec527b81362f07bc67cd01011f1add1a08"</span>, <span class="st">"type of knn_tune_grid.param_grid.keys() is not correct"</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_tune_grid.param_grid.keys()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e5"</span>).hexdigest() <span class="op">==</span> <span class="st">"1c7370822141bce722ca65597af73993dba4a560"</span>, <span class="st">"value of knn_tune_grid.param_grid.keys() is not correct"</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_tune_grid.estimator.named_steps.keys())).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e6"</span>).hexdigest() <span class="op">==</span> <span class="st">"dd0e8c205b661479a0048e81ead835f12b2b5ddf"</span>, <span class="st">"type of knn_tune_grid.estimator.named_steps.keys() is not correct"</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_tune_grid.estimator.named_steps.keys()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e6"</span>).hexdigest() <span class="op">==</span> <span class="st">"9fe3afc262d1fef9058a7a3342aa8dbc9a76685c"</span>, <span class="st">"value of knn_tune_grid.estimator.named_steps.keys() is not correct"</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_tune_grid.cv)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e7"</span>).hexdigest() <span class="op">==</span> <span class="st">"947f9f92f52034f3258a2e920f111db2ce0fc28b"</span>, <span class="st">"type of knn_tune_grid.cv is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(knn_tune_grid.cv).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"de7e7"</span>).hexdigest() <span class="op">==</span> <span class="st">"048c41e7d49846e06e4228f89a17df11f2732e82"</span>, <span class="st">"value of knn_tune_grid.cv is not correct"</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 4.1</strong></p>
+<p>Now, let’s fit the grid search object to the data, using the <code>X</code> and <code>y</code> variables we created earlier.</p>
+<p><em>Assign your tuned model to a variable called <code>knn_model_grid</code>.</em></p>
+<p>Next, from <code>knn_model_grid</code>, find out the <code>cv_results_</code> and save it in a dataframe.</p>
+<p><em>Assign your answer to a variable called <code>accuracies_grid</code>.</em></p>
+<div id="cell-60" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;d831300d27f2f152a47fbee10735be1f&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-c0d2f1edbe342214&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = ___.fit(___, ___)</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = pd.DataFrame(___.cv_results_)</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>accuracies_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-61" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;187fb4d3a74910bd31f11936d0504b3e&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-0cbc6a47a2b14884&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">type</span>(knn_model_grid))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa1"</span>).hexdigest() <span class="op">==</span> <span class="st">"7800ffeeffbe3f109596728a651492f72ed697b9"</span>, <span class="st">"type of type(knn_model_grid) is not correct"</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(knn_model_grid)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa1"</span>).hexdigest() <span class="op">==</span> <span class="st">"a777b6bc7a96e92dc37d7e48e532c4403b013440"</span>, <span class="st">"value of type(knn_model_grid) is not correct"</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracies_grid <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa2"</span>).hexdigest() <span class="op">==</span> <span class="st">"2bbc8cb94c17fac722104bbe0ae8178d6283ea7d"</span>, <span class="st">"type of accuracies_grid is None is not bool. accuracies_grid is None should be a bool"</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracies_grid <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa2"</span>).hexdigest() <span class="op">==</span> <span class="st">"b31adcd31362204c2f193a8d747bac72afd4a47a"</span>, <span class="st">"boolean value of accuracies_grid is None is not correct"</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracies_grid)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa3"</span>).hexdigest() <span class="op">==</span> <span class="st">"a67afa6224ce1811c7d07895e39f81d73e309929"</span>, <span class="st">"type of type(accuracies_grid) is not correct"</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracies_grid.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa4"</span>).hexdigest() <span class="op">==</span> <span class="st">"07ba20ae9b6524ef5c009590c807287bad2b6ca8"</span>, <span class="st">"type of accuracies_grid.shape is not tuple. accuracies_grid.shape should be a tuple"</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(accuracies_grid.shape)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa4"</span>).hexdigest() <span class="op">==</span> <span class="st">"e362cae886bd94094b80f36e4d1c28b67e1ca7d7"</span>, <span class="st">"length of accuracies_grid.shape is not correct"</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sorted</span>(<span class="bu">map</span>(<span class="bu">str</span>, accuracies_grid.shape))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa4"</span>).hexdigest() <span class="op">==</span> <span class="st">"2a86bd742543c1a3f2d3750c8ae31e564709e00e"</span>, <span class="st">"values of accuracies_grid.shape are not correct"</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracies_grid.shape).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa4"</span>).hexdigest() <span class="op">==</span> <span class="st">"bcd625ee3af5d1cd105b2b2335288631494670e5"</span>, <span class="st">"order of elements of accuracies_grid.shape is not correct"</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(accuracies_grid.mean_test_score))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa5"</span>).hexdigest() <span class="op">==</span> <span class="st">"f04499ac18fececdea66994f437f6fe195a9a404"</span>, <span class="st">"type of sum(accuracies_grid.mean_test_score) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(accuracies_grid.mean_test_score), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa5"</span>).hexdigest() <span class="op">==</span> <span class="st">"fef13114978598bb2dd1245e857f4ad0cd359ce9"</span>, <span class="st">"value of sum(accuracies_grid.mean_test_score) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(accuracies_grid.std_test_score))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa6"</span>).hexdigest() <span class="op">==</span> <span class="st">"90280827318185a637233f593624365d40176a3a"</span>, <span class="st">"type of sum(accuracies_grid.std_test_score) is not float. Please make sure it is float and not np.float64, etc. You can cast your value into a float using float()"</span></span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">round</span>(<span class="bu">sum</span>(accuracies_grid.std_test_score), <span class="dv">2</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa6"</span>).hexdigest() <span class="op">==</span> <span class="st">"7ea1bce420fa1d5037e56e6b0e1b99bf030cc962"</span>, <span class="st">"value of sum(accuracies_grid.std_test_score) is not correct (rounded to 2 decimal places)"</span></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(<span class="bu">sum</span>(accuracies_grid.param_kneighborsclassifier__n_neighbors))).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa7"</span>).hexdigest() <span class="op">==</span> <span class="st">"bcd0d8dac389990c3750e6af054592990b173ab3"</span>, <span class="st">"type of sum(accuracies_grid.param_kneighborsclassifier__n_neighbors) is not int. Please make sure it is int and not np.int64, etc. You can cast your value into an int using int()"</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">sum</span>(accuracies_grid.param_kneighborsclassifier__n_neighbors)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"5aaa7"</span>).hexdigest() <span class="op">==</span> <span class="st">"8805dfb33692c14619c01c7dd91f5135cbda75dd"</span>, <span class="st">"value of sum(accuracies_grid.param_kneighborsclassifier__n_neighbors) is not correct"</span></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Question 4.2</strong></p>
+<p>Visually inspecting the grid search results can help us find the best value for the number of neighbors parameter.</p>
+<p>Create a line plot using the <code>accuracies_grid</code> dataframe with <code>param_kneighborsclassifier__n_neighbors</code> on the x-axis and the <code>mean_test_score</code> on the y-axis. Use <code>point=True</code> to include a point for each value of <span class="math inline">\(K\)</span>. Make it an effective visualization.</p>
+<p><em>Assign your answer to a variable called <code>accuracy_versus_k_grid</code>.</em></p>
+<div id="cell-63" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;4e96eaef76b4e28713c48167de7269f4&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-b8ae5cb978d3f8f2&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ___ = alt.Chart(___).mark_line(___).encode(</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     x=alt.X(___)</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co">#         .title(___)</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">#         .scale(zero=False),</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     y=alt.Y(___)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         .title(___)</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         .scale(zero=False)</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>accuracy_versus_k_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-64" class="cell" data-editable="true" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;1ba354bdf0deb8202c970dc369690896&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-6d62d960eaff34d6&quot;,&quot;locked&quot;:false,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false,&quot;task&quot;:false}">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hashlib <span class="im">import</span> sha1</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracy_versus_k_grid <span class="kw">is</span> <span class="va">None</span>)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6363"</span>).hexdigest() <span class="op">==</span> <span class="st">"87aea9e6a7c50496055760ac5f8da1558cd36bbd"</span>, <span class="st">"type of accuracy_versus_k_grid is None is not bool. accuracy_versus_k_grid is None should be a bool"</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid <span class="kw">is</span> <span class="va">None</span>).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6363"</span>).hexdigest() <span class="op">==</span> <span class="st">"97d9d9c5a176cbd7e29b0dacb28ca2875d1fc330"</span>, <span class="st">"boolean value of accuracy_versus_k_grid is None is not correct"</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracy_versus_k_grid.encoding.x[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6364"</span>).hexdigest() <span class="op">==</span> <span class="st">"e3175586c7aca8d91960689a5362be05a9843531"</span>, <span class="st">"type of accuracy_versus_k_grid.encoding.x['shorthand'] is not str. accuracy_versus_k_grid.encoding.x['shorthand'] should be an str"</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(accuracy_versus_k_grid.encoding.x[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6364"</span>).hexdigest() <span class="op">==</span> <span class="st">"bc650671ac20b6c78d46c4d81c4da5fb776adf7a"</span>, <span class="st">"length of accuracy_versus_k_grid.encoding.x['shorthand'] is not correct"</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid.encoding.x[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6364"</span>).hexdigest() <span class="op">==</span> <span class="st">"b40361992fe114502030798e70d94b33e1ebff13"</span>, <span class="st">"value of accuracy_versus_k_grid.encoding.x['shorthand'] is not correct"</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid.encoding.x[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6364"</span>).hexdigest() <span class="op">==</span> <span class="st">"b40361992fe114502030798e70d94b33e1ebff13"</span>, <span class="st">"correct string value of accuracy_versus_k_grid.encoding.x['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracy_versus_k_grid.encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6365"</span>).hexdigest() <span class="op">==</span> <span class="st">"359150eb18472065771be3fabdfe0bc17f14c652"</span>, <span class="st">"type of accuracy_versus_k_grid.encoding.y['shorthand'] is not str. accuracy_versus_k_grid.encoding.y['shorthand'] should be an str"</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">len</span>(accuracy_versus_k_grid.encoding.y[<span class="st">'shorthand'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6365"</span>).hexdigest() <span class="op">==</span> <span class="st">"a77f4185f8ba84217e96c473d78afe7defecd6d9"</span>, <span class="st">"length of accuracy_versus_k_grid.encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid.encoding.y[<span class="st">'shorthand'</span>].lower()).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6365"</span>).hexdigest() <span class="op">==</span> <span class="st">"888d0123d2b4b33cf32214184508a0981b6737c9"</span>, <span class="st">"value of accuracy_versus_k_grid.encoding.y['shorthand'] is not correct"</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid.encoding.y[<span class="st">'shorthand'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6365"</span>).hexdigest() <span class="op">==</span> <span class="st">"888d0123d2b4b33cf32214184508a0981b6737c9"</span>, <span class="st">"correct string value of accuracy_versus_k_grid.encoding.y['shorthand'] but incorrect case of letters"</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracy_versus_k_grid.mark)).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6366"</span>).hexdigest() <span class="op">==</span> <span class="st">"4f70c15a9e4661590d768563d18d2bf38949d4ca"</span>, <span class="st">"type of accuracy_versus_k_grid.mark is not correct"</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid.mark).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6366"</span>).hexdigest() <span class="op">==</span> <span class="st">"792bb3fbbb9b6f8d1cf136e30874108af9aac99e"</span>, <span class="st">"value of accuracy_versus_k_grid.mark is not correct"</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(<span class="bu">type</span>(accuracy_versus_k_grid.mark[<span class="st">'point'</span>])).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6367"</span>).hexdigest() <span class="op">==</span> <span class="st">"734ecab84aea2bf10ce9cfa3ca4ebe42f82594bc"</span>, <span class="st">"type of accuracy_versus_k_grid.mark['point'] is not bool. accuracy_versus_k_grid.mark['point'] should be a bool"</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sha1(<span class="bu">str</span>(accuracy_versus_k_grid.mark[<span class="st">'point'</span>]).encode(<span class="st">"utf-8"</span>)<span class="op">+</span><span class="st">b"6367"</span>).hexdigest() <span class="op">==</span> <span class="st">"a0f7053f039367549a809452ba2ef7ef8eec5bec"</span>, <span class="st">"boolean value of accuracy_versus_k_grid.mark['point'] is not correct"</span></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Success!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From the plots above, we can see that <span class="math inline">\(K = 2\)</span> or <span class="math inline">\(3\)</span> provides the highest accuracy. Larger <span class="math inline">\(K\)</span> values result in a reduced accuracy estimate. Remember: the values you see on this plot are <strong>estimates</strong> of the true accuracy of our classifier. Although this is the best information we have access to for what the ideal value of <span class="math inline">\(K\)</span> would be, it is not a gurantee that the classifier will always be more accurate with this parameter value when it is used in practice!</p>
+<p>Great, now you have completed a full analysis with cross-validation using the <code>scikit-learn</code> package! For your information, we can choose any number of folds and typically, the more we use the better our accuracy estimate will be (lower standard error). However, more folds would mean a greater computation time. In practice, <span class="math inline">\(cv\)</span> is chosen to be either 5 or 10.</p>
+<p><strong>Discussion question</strong>: because we are learning, we did something in this worksheet we were not supposed to do, what was it?</p>
+<blockquote class="blockquote">
+<p>Your answer here</p>
+</blockquote>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/posit-conf-2024\.github\.io\/ml-python\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
