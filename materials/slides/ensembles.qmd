@@ -40,6 +40,25 @@ pd.set_option('display.max_rows', 5)
 - [Decision Trees](https://mlu-explain.github.io/decision-tree/)  
   by Jared Wilber & Lucía Santamaría
 
+## Classification Decision trees
+
+- Use recursive binary splitting to grow a classification tree
+  (splitting of the predictor space into $J$ distinct, non-overlapping regions).
+
+-  For every observation that falls into the region $R_j$ , 
+  we make the same prediction, 
+  which is the majority vote for the training observations in $R_j$.
+  
+- Where to split the predictor space is done in a top-down and greedy manner,
+  and in practice for classification, the best split at any point in the algorithm
+  is one that minimizes the Gini index (a measure of node purity).
+  
+- Decision trees are useful because they are very interpretable.
+
+- A limitation of decision trees is that theyn tend to overfit, 
+  so in practice we use cross-validation to tune a hyperparameter, 
+  $\alpha$, to find the optimal, pruned tree.
+
 ## Example: the heart data set
 
 :::: {.columns}
@@ -55,6 +74,7 @@ pd.set_option('display.max_rows', 5)
 
 ::: {.column width="50%"}
 ```{python}
+import pandas as pd
 heart = pd.read_csv("data/Heart.csv", index_col=0)
 heart.info()
 ```
@@ -105,10 +125,13 @@ can we treat them the same as numerical ones? **No!**
 Let's split the data into training and test sets:
 
 ```{python}
+import numpy as np
 from sklearn.model_selection import train_test_split
 
+np.random.seed(2024)
+
 heart_train, heart_test = train_test_split(
-    heart, train_size=0.75, stratify=heart["AHD"]
+    heart, train_size=0.8, stratify=heart["AHD"]
 )
 
 X_train = heart_train.drop(columns=['AHD'])
@@ -165,7 +188,6 @@ results
 
 ```{python}
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.pipeline import make_pipeline
 
 decision_tree = DecisionTreeClassifier()
 
@@ -190,13 +212,23 @@ results
 ## Can we do better?
 
 - We could tune some decision tree parameters 
-  (e.g., Gini impurity, maximum tree depth, etc)...
+  (e.g., alpha, maximum tree depth, etc)...
 
 - We could also try a different tree-based method!
 
 - [The Random Forest Algorithm](https://mlu-explain.github.io/random-forest/) 
   by Jenny Yeon & Jared Wilber
   
+## The Random Forest Algorithm
+
+1. Build a number of decision trees on bootstrapped training samples.
+
+2. When building the trees from the bootstrapped samples, 
+  at each stage of splitting, 
+  the best splitting is computed using a randomly selected subset of the features.
+
+3. Take the majority votes across all the trees for the final prediction.
+
 ## Random forest in `scikit-learn` & missing values
 
 :::: {.columns}
@@ -274,7 +306,7 @@ results
 ```{python}
 from sklearn.model_selection import GridSearchCV
 
-rf_param_grid = {'randomforestclassifier__n_estimators': [100, 150, 200, 250],
+rf_param_grid = {'randomforestclassifier__n_estimators': [200, 400, 600, 800, 1000],
               'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],
               'randomforestclassifier__max_features': [1, 2, 3, 4, 5, 6, 7]}
 
@@ -339,18 +371,15 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 gradient_boosted_classifier = GradientBoostingClassifier()
 gb_pipeline = make_pipeline(heart_preprocessor, gradient_boosted_classifier)
-
-gb_param_grid = {'gradientboostingclassifier__n_estimators': [200, 400, 600, 800],
+gb_param_grid = {'gradientboostingclassifier__n_estimators': [200, 400, 600, 800, 1000],
               'gradientboostingclassifier__max_depth': [1, 3, 5, 7, 9],
               'gradientboostingclassifier__learning_rate': [0.001, 0.005, 0.01]}
-
 gb_tune_grid = GridSearchCV(
     estimator=gb_pipeline,
     param_grid=gb_param_grid,
     cv=10,
     n_jobs=-1 # tells computer to use all available CPUs
 )
-
 gb_tune_grid.fit(
     X_train_drop_na,
     y_train_drop_na
@@ -387,6 +416,205 @@ results
 - Remember - no peaking at the test set until you choose! 
   And then, you should only look at the test set for one model!
 
+## Precision and recall on the tuned random forest model
+
+```{python}
+from sklearn.metrics import make_scorer, precision_score, recall_score
+
+scoring = {
+    'accuracy': 'accuracy',
+    'precision': make_scorer(precision_score, pos_label='Yes'),  # Assuming 'Yes' is the positive class
+    'recall': make_scorer(recall_score, pos_label='Yes')         # Assuming 'Yes' is the positive class
+}
+
+rf_tune_grid = GridSearchCV(
+    estimator=rf_pipeline,
+    param_grid=rf_param_grid,
+    cv=10,
+    n_jobs=-1,
+    scoring=scoring,
+    refit='accuracy'
+)
+
+rf_tune_grid.fit(X_train_drop_na, y_train_drop_na)
+```
+
+## Precision and recall cont'd
+
+- What do we think? Is this model ready for production in a diagnostic setting?
+
+- How could we improve it further?
+
+```{python}
+cv_results = pd.DataFrame(rf_tune_grid.cv_results_)
+
+mean_precision = cv_results['mean_test_precision'].iloc[rf_tune_grid.best_index_]
+sem_precision = cv_results['std_test_precision'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)
+mean_recall = cv_results['mean_test_recall'].iloc[rf_tune_grid.best_index_]
+sem_recall = cv_results['std_test_recall'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)
+
+results_rf_tuned = pd.DataFrame({
+    'mean': [rf_tune_grid.best_score_, mean_precision, mean_recall],
+    'sem': [cv_results['std_test_accuracy'].iloc[rf_tune_grid.best_index_] / np.sqrt(10), sem_precision, sem_recall],
+}, index=['accuracy', 'precision', 'recall'])
+
+results_rf_tuned
+```
+
+## Feature importances
+
+:::: {.columns}
+::: {.column width="50%"}
+
+**Key points:**
+
+- Decision trees are very interpretable (decision rules!), however in ensemble 
+  models (e.g., Random Forest and Boosting) there are many trees - 
+  individual decision rules are not as meaningful...
+
+- Instead, we can calculate feature importances. For ensemble tree models,
+  these are computed as the mean and standard deviation 
+  of accumulation of the impurity decrease within each tree.
+  
+- These are calculated on the training set, 
+  as that is the set the model is trained on.
+  
+:::
+
+::: {.column width="50%"}
+
+**Notes of caution!**
+
+- Feature importances can be unreliable with both highly cardinal, 
+  and multicollinear features.
+  
+- Unlike the linear model coefficients, feature importances do not have a sign!
+  They tell us about importance, but not an “up or down”.
+
+- Increasing a feature may cause the prediction to first go up, and then go down.
+
+- Alternatives to feature importance to understanding models exist 
+  (e.g., [SHAP](https://shap.readthedocs.io/en/latest/example_notebooks/overviews/An%20introduction%20to%20explainable%20AI%20with%20Shapley%20values.html) 
+  (SHapley Additive exPlanations))
+  
+:::
+::::
+
+## Feature importances in `scikit-learn`
+
+```{python}
+# Access the best pipeline
+best_pipeline = rf_tune_grid.best_estimator_
+
+# Extract the trained RandomForestClassifier from the pipeline
+best_rf = best_pipeline.named_steps['randomforestclassifier']
+
+# Extract feature names after preprocessing
+# Get the names of features from each transformer in the pipeline
+numeric_features = numeric_feats
+categorical_feature_names = best_pipeline.named_steps['columntransformer'].transformers_[2][1].get_feature_names_out(categorical_feats)
+passthrough_features = passthrough_feats
+
+# Combine all feature names into a single list
+feature_names = np.concatenate([numeric_features, passthrough_features, categorical_feature_names])
+
+# Calculate feature importances
+feature_importances = best_rf.feature_importances_
+
+# Create a DataFrame to display feature importances
+importances_df = pd.DataFrame({
+    'Feature': feature_names,
+    'Importance': feature_importances
+})
+
+# Sort by importance (descending order)
+importances_df = importances_df.sort_values(by='Importance', ascending=False)
+```
+
+## Visualizing the results
+
+:::: {.columns}
+::: {.column width="50%"}
+
+```{python}
+import altair as alt
+
+bar_chart = alt.Chart(importances_df).mark_bar().encode(
+    x=alt.X('Importance:Q', title='Feature Importance'),
+    y=alt.Y('Feature:N', sort='-x', title='Feature'),
+    tooltip=['Feature', 'Importance']
+).properties(
+    title='Feature Importances from Random Forest Model',
+    width=350,
+    height=400
+)
+```
+:::
+
+::: {.column width="50%"}
+
+```{python}
+bar_chart
+```
+
+:::
+::::
+
+## Evaluating on the test set
+
+1. Predict on the test set:
+
+```{python}
+heart_test_drop_na = heart_test.dropna()
+X_test_drop_na = heart_test_drop_na.drop(columns=['AHD'])
+y_test_drop_na = heart_test_drop_na['AHD']
+
+heart_test_drop_na["predicted"] = rf_tune_grid.predict(
+    X_test_drop_na
+)
+```
+
+## Evaluating on the test set
+
+2. Examine accuracy, precision and recall:
+
+:::: {.columns}
+::: {.column width="50%"}
+```{python}
+rf_tune_grid.score(
+    X_test_drop_na,
+    y_test_drop_na
+)
+```
+
+```{python}
+precision_score(
+    y_true=heart_test_drop_na["AHD"],
+    y_pred=heart_test_drop_na["predicted"],
+    pos_label='Yes'
+)
+```
+
+```{python}
+recall_score(
+    y_true=heart_test_drop_na["AHD"],
+    y_pred=heart_test_drop_na["predicted"],
+    pos_label='Yes'
+)
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+conf_matrix = pd.crosstab(
+    heart_test_drop_na["AHD"],
+    heart_test_drop_na["predicted"]
+)
+print(conf_matrix)
+```
+:::
+::::
+
 ## Other boosting models:
 
 :::: {.columns}
@@ -398,16 +626,16 @@ results
 - GPU training, networked parallel training
 - Supports sparse data
 - Typically better scores than random forests
+:::
 
+::: {.column width="50%"}
 [LightGBM](https://lightgbm.readthedocs.io/)
 
 - Not part of sklearn but has similar interface.
 - Small model size
 - Faster
 - Typically better scores than random forests
-:::
 
-::: {.column width="50%"}
 [CatBoost](https://catboost.ai/)
 - Not part of sklearn but has similar interface.
 - Usually better scores but slower compared to XGBoost and LightGBM
