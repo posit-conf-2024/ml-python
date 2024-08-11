@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Introduction to machine learning in Python with Scikit-learn",
     "section": "",
-    "text": "by Tiffany Timbers, Daniel Chen\n\n:spiral_calendar: August 12, 2024\n:alarm_clock: 09:00 - 17:00\n:hotel: ROOM TBD\n:writing_hand: pos.it/conf\n\n\n\n\n\n\n\n\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification continued\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression I & II\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Introduction to ensemble models (e.g., random forest and gradient boosted classifiers)"
+    "text": "by Tiffany Timbers, Daniel Chen\n\n🗓️ August 12, 2024 ⏰ 09:00 - 17:00 🏨 ROOM TBD ✍️ pos.it/conf\n\n\n\n\n\n\n\n\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification continued\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression I & II\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Introduction to ensemble models (e.g., random forest and gradient boosted classifiers)"
   },
   {
     "objectID": "index.html#schedule",
@@ -631,7 +631,7 @@
     "href": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
     "title": "Classification II: evaluation & tuning",
     "section": "Cross-validation in scikit-learn",
-    "text": "Cross-validation in scikit-learn\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.005469    0.007428    0.860465\n1   0.004946    0.005508    0.837209\n..       ...         ...         ...\n8   0.004052    0.004892    0.904762\n9   0.004192    0.004904    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
+    "text": "Cross-validation in scikit-learn\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.005015    0.007298    0.860465\n1   0.004715    0.005407    0.837209\n..       ...         ...         ...\n8   0.003959    0.004643    0.904762\n9   0.004019    0.004736    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
     "crumbs": [
       "Home",
       "Slides",
@@ -843,11 +843,23 @@
     ]
   },
   {
+    "objectID": "materials/slides/ensembles.html#classification-decision-trees",
+    "href": "materials/slides/ensembles.html#classification-decision-trees",
+    "title": "Tree-based and ensemble models",
+    "section": "Classification Decision trees",
+    "text": "Classification Decision trees\n\nUse recursive binary splitting to grow a classification tree (splitting of the predictor space into \\(J\\) distinct, non-overlapping regions).\nFor every observation that falls into the region \\(R_j\\) , we make the same prediction, which is the majority vote for the training observations in \\(R_j\\).\nWhere to split the predictor space is done in a top-down and greedy manner, and in practice for classification, the best split at any point in the algorithm is one that minimizes the Gini index (a measure of node purity).\nDecision trees are useful because they are very interpretable.\nA limitation of decision trees is that theyn tend to overfit, so in practice we use cross-validation to tune a hyperparameter, \\(\\alpha\\), to find the optimal, pruned tree.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
     "objectID": "materials/slides/ensembles.html#example-the-heart-data-set",
     "href": "materials/slides/ensembles.html#example-the-heart-data-set",
     "title": "Tree-based and ensemble models",
     "section": "Example: the heart data set",
-    "text": "Example: the heart data set\n\n\n\nLet’s consider a situation where we’d like to be able to predict the presence of heart disease (AHD) in patients, based off 13 measured characteristics.\nThe heart data set contains a binary outcome for heart disease for patients who presented with chest pain.\n\n\n\nheart = pd.read_csv(\"data/Heart.csv\", index_col=0)\nheart.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 303 entries, 1 to 303\nData columns (total 14 columns):\n #   Column     Non-Null Count  Dtype  \n---  ------     --------------  -----  \n 0   Age        303 non-null    int64  \n 1   Sex        303 non-null    int64  \n 2   ChestPain  303 non-null    object \n 3   RestBP     303 non-null    int64  \n 4   Chol       303 non-null    int64  \n 5   Fbs        303 non-null    int64  \n 6   RestECG    303 non-null    int64  \n 7   MaxHR      303 non-null    int64  \n 8   ExAng      303 non-null    int64  \n 9   Oldpeak    303 non-null    float64\n 10  Slope      303 non-null    int64  \n 11  Ca         299 non-null    float64\n 12  Thal       301 non-null    object \n 13  AHD        303 non-null    object \ndtypes: float64(2), int64(9), object(3)\nmemory usage: 35.5+ KB",
+    "text": "Example: the heart data set\n\n\n\nLet’s consider a situation where we’d like to be able to predict the presence of heart disease (AHD) in patients, based off 13 measured characteristics.\nThe heart data set contains a binary outcome for heart disease for patients who presented with chest pain.\n\n\n\nimport pandas as pd\nheart = pd.read_csv(\"data/Heart.csv\", index_col=0)\nheart.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 303 entries, 1 to 303\nData columns (total 14 columns):\n #   Column     Non-Null Count  Dtype  \n---  ------     --------------  -----  \n 0   Age        303 non-null    int64  \n 1   Sex        303 non-null    int64  \n 2   ChestPain  303 non-null    object \n 3   RestBP     303 non-null    int64  \n 4   Chol       303 non-null    int64  \n 5   Fbs        303 non-null    int64  \n 6   RestECG    303 non-null    int64  \n 7   MaxHR      303 non-null    int64  \n 8   ExAng      303 non-null    int64  \n 9   Oldpeak    303 non-null    float64\n 10  Slope      303 non-null    int64  \n 11  Ca         299 non-null    float64\n 12  Thal       301 non-null    object \n 13  AHD        303 non-null    object \ndtypes: float64(2), int64(9), object(3)\nmemory usage: 35.5+ KB",
     "crumbs": [
       "Home",
       "Slides",
@@ -895,7 +907,7 @@
     "href": "materials/slides/ensembles.html#data-splitting",
     "title": "Tree-based and ensemble models",
     "section": "Data splitting",
-    "text": "Data splitting\nLet’s split the data into training and test sets:\n\nfrom sklearn.model_selection import train_test_split\n\nheart_train, heart_test = train_test_split(\n    heart, train_size=0.75, stratify=heart[\"AHD\"]\n)\n\nX_train = heart_train.drop(columns=['AHD'])\ny_train = heart_train['AHD']\nX_test = heart_test.drop(columns=['AHD'])\ny_test = heart_test['AHD']",
+    "text": "Data splitting\nLet’s split the data into training and test sets:\n\nimport numpy as np\nfrom sklearn.model_selection import train_test_split\n\nnp.random.seed(2024)\n\nheart_train, heart_test = train_test_split(\n    heart, train_size=0.8, stratify=heart[\"AHD\"]\n)\n\nX_train = heart_train.drop(columns=['AHD'])\ny_train = heart_train['AHD']\nX_test = heart_test.drop(columns=['AHD'])\ny_test = heart_test['AHD']",
     "crumbs": [
       "Home",
       "Slides",
@@ -919,7 +931,7 @@
     "href": "materials/slides/ensembles.html#fitting-a-dummy-classifier",
     "title": "Tree-based and ensemble models",
     "section": "Fitting a dummy classifier",
-    "text": "Fitting a dummy classifier\n\nfrom sklearn.dummy import DummyClassifier\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.model_selection import cross_validate\n\ndummy = DummyClassifier()\ndummy_pipeline = make_pipeline(heart_preprocessor, dummy)\ncv_10_dummy = pd.DataFrame(\n    cross_validate(\n        estimator=dummy_pipeline,\n        cv=10,\n        X=X_train,\n        y=y_train\n    )\n)\ncv_10_dummy_metrics = cv_10_dummy.agg([\"mean\", \"sem\"])\nresults = pd.DataFrame({'mean' : [cv_10_dummy_metrics.test_score.iloc[0]],\n  'sem' : [cv_10_dummy_metrics.test_score.iloc[1]]},\n  index = ['Dummy classifier']\n)\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541897\n0.006051",
+    "text": "Fitting a dummy classifier\n\nfrom sklearn.dummy import DummyClassifier\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.model_selection import cross_validate\n\ndummy = DummyClassifier()\ndummy_pipeline = make_pipeline(heart_preprocessor, dummy)\ncv_10_dummy = pd.DataFrame(\n    cross_validate(\n        estimator=dummy_pipeline,\n        cv=10,\n        X=X_train,\n        y=y_train\n    )\n)\ncv_10_dummy_metrics = cv_10_dummy.agg([\"mean\", \"sem\"])\nresults = pd.DataFrame({'mean' : [cv_10_dummy_metrics.test_score.iloc[0]],\n  'sem' : [cv_10_dummy_metrics.test_score.iloc[1]]},\n  index = ['Dummy classifier']\n)\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.00299",
     "crumbs": [
       "Home",
       "Slides",
@@ -931,7 +943,7 @@
     "href": "materials/slides/ensembles.html#fitting-a-decision-tree",
     "title": "Tree-based and ensemble models",
     "section": "Fitting a decision tree",
-    "text": "Fitting a decision tree\n\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.pipeline import make_pipeline\n\ndecision_tree = DecisionTreeClassifier()\n\ndt_pipeline = make_pipeline(heart_preprocessor, decision_tree)\ncv_10_dt = pd.DataFrame(\n    cross_validate(\n        estimator=dt_pipeline,\n        cv=10,\n        X=X_train,\n        y=y_train\n    )\n)\ncv_10_dt_metrics = cv_10_dt.agg([\"mean\", \"sem\"])\nresults_dt = pd.DataFrame({'mean' : [cv_10_dt_metrics.test_score.iloc[0]],\n  'sem' : [cv_10_dt_metrics.test_score.iloc[1]]},\n  index = ['Decision tree']\n)\nresults = pd.concat([results, results_dt])\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541897\n0.006051\n\n\nDecision tree\n0.753755\n0.026767",
+    "text": "Fitting a decision tree\n\nfrom sklearn.tree import DecisionTreeClassifier\n\ndecision_tree = DecisionTreeClassifier()\n\ndt_pipeline = make_pipeline(heart_preprocessor, decision_tree)\ncv_10_dt = pd.DataFrame(\n    cross_validate(\n        estimator=dt_pipeline,\n        cv=10,\n        X=X_train,\n        y=y_train\n    )\n)\ncv_10_dt_metrics = cv_10_dt.agg([\"mean\", \"sem\"])\nresults_dt = pd.DataFrame({'mean' : [cv_10_dt_metrics.test_score.iloc[0]],\n  'sem' : [cv_10_dt_metrics.test_score.iloc[1]]},\n  index = ['Decision tree']\n)\nresults = pd.concat([results, results_dt])\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661",
     "crumbs": [
       "Home",
       "Slides",
@@ -943,7 +955,19 @@
     "href": "materials/slides/ensembles.html#can-we-do-better",
     "title": "Tree-based and ensemble models",
     "section": "Can we do better?",
-    "text": "Can we do better?\n\nWe could tune some decision tree parameters (e.g., Gini impurity, maximum tree depth, etc)…\nWe could also try a different tree-based method!\nThe Random Forest Algorithm by Jenny Yeon & Jared Wilber",
+    "text": "Can we do better?\n\nWe could tune some decision tree parameters (e.g., alpha, maximum tree depth, etc)…\nWe could also try a different tree-based method!\nThe Random Forest Algorithm by Jenny Yeon & Jared Wilber",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#the-random-forest-algorithm",
+    "href": "materials/slides/ensembles.html#the-random-forest-algorithm",
+    "title": "Tree-based and ensemble models",
+    "section": "The Random Forest Algorithm",
+    "text": "The Random Forest Algorithm\n\nBuild a number of decision trees on bootstrapped training samples.\nWhen building the trees from the bootstrapped samples, at each stage of splitting, the best splitting is computed using a randomly selected subset of the features.\nTake the majority votes across all the trees for the final prediction.",
     "crumbs": [
       "Home",
       "Slides",
@@ -967,7 +991,7 @@
     "href": "materials/slides/ensembles.html#random-forest-in-scikit-learn",
     "title": "Tree-based and ensemble models",
     "section": "Random forest in scikit-learn",
-    "text": "Random forest in scikit-learn\n\nfrom sklearn.ensemble import RandomForestClassifier\n\nrandom_forest = RandomForestClassifier()\nrf_pipeline = make_pipeline(heart_preprocessor, random_forest)\ncv_10_rf = pd.DataFrame(\n    cross_validate(\n        estimator=rf_pipeline,\n        cv=10,\n        X=X_train_drop_na,\n        y=y_train_drop_na\n    )\n)\n\ncv_10_rf_metrics = cv_10_rf.agg([\"mean\", \"sem\"])\nresults_rf = pd.DataFrame({'mean' : [cv_10_rf_metrics.test_score.iloc[0]],\n  'sem' : [cv_10_rf_metrics.test_score.iloc[1]]},\n  index = ['Random forest']\n)\nresults = pd.concat([results, results_rf])\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541897\n0.006051\n\n\nDecision tree\n0.753755\n0.026767\n\n\nRandom forest\n0.788933\n0.029478",
+    "text": "Random forest in scikit-learn\n\nfrom sklearn.ensemble import RandomForestClassifier\n\nrandom_forest = RandomForestClassifier()\nrf_pipeline = make_pipeline(heart_preprocessor, random_forest)\ncv_10_rf = pd.DataFrame(\n    cross_validate(\n        estimator=rf_pipeline,\n        cv=10,\n        X=X_train_drop_na,\n        y=y_train_drop_na\n    )\n)\n\ncv_10_rf_metrics = cv_10_rf.agg([\"mean\", \"sem\"])\nresults_rf = pd.DataFrame({'mean' : [cv_10_rf_metrics.test_score.iloc[0]],\n  'sem' : [cv_10_rf_metrics.test_score.iloc[1]]},\n  index = ['Random forest']\n)\nresults = pd.concat([results, results_rf])\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813",
     "crumbs": [
       "Home",
       "Slides",
@@ -991,7 +1015,7 @@
     "href": "materials/slides/ensembles.html#tuning-random-forest-in-scikit-learn",
     "title": "Tree-based and ensemble models",
     "section": "Tuning random forest in scikit-learn",
-    "text": "Tuning random forest in scikit-learn\n\nfrom sklearn.model_selection import GridSearchCV\n\nrf_param_grid = {'randomforestclassifier__n_estimators': [100, 150, 200, 250],\n              'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n              'randomforestclassifier__max_features': [1, 2, 3, 4, 5, 6, 7]}\n\nrf_tune_grid = GridSearchCV(\n    estimator=rf_pipeline,\n    param_grid=rf_param_grid,\n    cv=10,\n    n_jobs=-1 # tells computer to use all available CPUs\n)\nrf_tune_grid.fit(\n    X_train_drop_na,\n    y_train_drop_na\n)\n\ncv_10_rf_tuned_metrics = pd.DataFrame(rf_tune_grid.cv_results_)\nresults_rf_tuned = pd.DataFrame({'mean' : rf_tune_grid.best_score_,\n  'sem' : pd.DataFrame(rf_tune_grid.cv_results_)['std_test_score'][6] / 10**(1/2)},\n  index = ['Random forest tuned']\n)\nresults = pd.concat([results, results_rf_tuned])",
+    "text": "Tuning random forest in scikit-learn\n\nfrom sklearn.model_selection import GridSearchCV\n\nrf_param_grid = {'randomforestclassifier__n_estimators': [200, 400, 600, 800, 1000],\n              'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n              'randomforestclassifier__max_features': [1, 2, 3, 4, 5, 6, 7]}\n\nrf_tune_grid = GridSearchCV(\n    estimator=rf_pipeline,\n    param_grid=rf_param_grid,\n    cv=10,\n    n_jobs=-1 # tells computer to use all available CPUs\n)\nrf_tune_grid.fit(\n    X_train_drop_na,\n    y_train_drop_na\n)\n\ncv_10_rf_tuned_metrics = pd.DataFrame(rf_tune_grid.cv_results_)\nresults_rf_tuned = pd.DataFrame({'mean' : rf_tune_grid.best_score_,\n  'sem' : pd.DataFrame(rf_tune_grid.cv_results_)['std_test_score'][6] / 10**(1/2)},\n  index = ['Random forest tuned']\n)\nresults = pd.concat([results, results_rf_tuned])",
     "crumbs": [
       "Home",
       "Slides",
@@ -1003,7 +1027,7 @@
     "href": "materials/slides/ensembles.html#random-forest-results",
     "title": "Tree-based and ensemble models",
     "section": "Random Forest results",
-    "text": "Random Forest results\nHow did the Random Forest compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541897\n0.006051\n\n\nDecision tree\n0.753755\n0.026767\n\n\nRandom forest\n0.788933\n0.029478\n\n\nRandom forest tuned\n0.851976\n0.022681",
+    "text": "Random Forest results\nHow did the Random Forest compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813\n\n\nRandom forest tuned\n0.864855\n0.020858",
     "crumbs": [
       "Home",
       "Slides",
@@ -1039,7 +1063,7 @@
     "href": "materials/slides/ensembles.html#tuning-gradientboostingclassifier-with-scikit-learn-1",
     "title": "Tree-based and ensemble models",
     "section": "Tuning GradientBoostingClassifier with scikit-learn",
-    "text": "Tuning GradientBoostingClassifier with scikit-learn\n\nfrom sklearn.ensemble import GradientBoostingClassifier\n\ngradient_boosted_classifier = GradientBoostingClassifier()\ngb_pipeline = make_pipeline(heart_preprocessor, gradient_boosted_classifier)\n\ngb_param_grid = {'gradientboostingclassifier__n_estimators': [200, 400, 600, 800],\n              'gradientboostingclassifier__max_depth': [1, 3, 5, 7, 9],\n              'gradientboostingclassifier__learning_rate': [0.001, 0.005, 0.01]}\n\ngb_tune_grid = GridSearchCV(\n    estimator=gb_pipeline,\n    param_grid=gb_param_grid,\n    cv=10,\n    n_jobs=-1 # tells computer to use all available CPUs\n)\n\ngb_tune_grid.fit(\n    X_train_drop_na,\n    y_train_drop_na\n)\n\ncv_10_gb_tuned_metrics = pd.DataFrame(gb_tune_grid.cv_results_)\nresults_gb_tuned = pd.DataFrame({'mean' : gb_tune_grid.best_score_,\n  'sem' : pd.DataFrame(gb_tune_grid.cv_results_)['std_test_score'][6] / 10**(1/2)},\n  index = ['Gradient boosted classifier tuned']\n)\nresults = pd.concat([results, results_gb_tuned])",
+    "text": "Tuning GradientBoostingClassifier with scikit-learn\n\nfrom sklearn.ensemble import GradientBoostingClassifier\n\ngradient_boosted_classifier = GradientBoostingClassifier()\ngb_pipeline = make_pipeline(heart_preprocessor, gradient_boosted_classifier)\ngb_param_grid = {'gradientboostingclassifier__n_estimators': [200, 400, 600, 800, 1000],\n              'gradientboostingclassifier__max_depth': [1, 3, 5, 7, 9],\n              'gradientboostingclassifier__learning_rate': [0.001, 0.005, 0.01]}\ngb_tune_grid = GridSearchCV(\n    estimator=gb_pipeline,\n    param_grid=gb_param_grid,\n    cv=10,\n    n_jobs=-1 # tells computer to use all available CPUs\n)\ngb_tune_grid.fit(\n    X_train_drop_na,\n    y_train_drop_na\n)\n\ncv_10_gb_tuned_metrics = pd.DataFrame(gb_tune_grid.cv_results_)\nresults_gb_tuned = pd.DataFrame({'mean' : gb_tune_grid.best_score_,\n  'sem' : pd.DataFrame(gb_tune_grid.cv_results_)['std_test_score'][6] / 10**(1/2)},\n  index = ['Gradient boosted classifier tuned']\n)\nresults = pd.concat([results, results_gb_tuned])",
     "crumbs": [
       "Home",
       "Slides",
@@ -1051,7 +1075,7 @@
     "href": "materials/slides/ensembles.html#gradientboostingclassifier-results",
     "title": "Tree-based and ensemble models",
     "section": "GradientBoostingClassifier results",
-    "text": "GradientBoostingClassifier results\nHow did the GradientBoostingClassifier compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541897\n0.006051\n\n\nDecision tree\n0.753755\n0.026767\n\n\nRandom forest\n0.788933\n0.029478\n\n\nRandom forest tuned\n0.851976\n0.022681\n\n\nGradient boosted classifier tuned\n0.829447\n0.018979",
+    "text": "GradientBoostingClassifier results\nHow did the GradientBoostingClassifier compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813\n\n\nRandom forest tuned\n0.864855\n0.020858\n\n\nGradient boosted classifier tuned\n0.851993\n0.027695",
     "crumbs": [
       "Home",
       "Slides",
@@ -1071,11 +1095,95 @@
     ]
   },
   {
+    "objectID": "materials/slides/ensembles.html#precision-and-recall-on-the-tuned-random-forest-model",
+    "href": "materials/slides/ensembles.html#precision-and-recall-on-the-tuned-random-forest-model",
+    "title": "Tree-based and ensemble models",
+    "section": "Precision and recall on the tuned random forest model",
+    "text": "Precision and recall on the tuned random forest model\n\nfrom sklearn.metrics import make_scorer, precision_score, recall_score\n\nscoring = {\n    'accuracy': 'accuracy',\n    'precision': make_scorer(precision_score, pos_label='Yes'),  # Assuming 'Yes' is the positive class\n    'recall': make_scorer(recall_score, pos_label='Yes')         # Assuming 'Yes' is the positive class\n}\n\nrf_tune_grid = GridSearchCV(\n    estimator=rf_pipeline,\n    param_grid=rf_param_grid,\n    cv=10,\n    n_jobs=-1,\n    scoring=scoring,\n    refit='accuracy'\n)\n\nrf_tune_grid.fit(X_train_drop_na, y_train_drop_na)\n\nGridSearchCV(cv=10,\n             estimator=Pipeline(steps=[('columntransformer',\n                                        ColumnTransformer(transformers=[('standardscaler',\n                                                                         StandardScaler(),\n                                                                         ['Age',\n                                                                          'RestBP',\n                                                                          'Chol',\n                                                                          'RestECG',\n                                                                          'MaxHR',\n                                                                          'Oldpeak',\n                                                                          'Slope',\n                                                                          'Ca']),\n                                                                        ('passthrough',\n                                                                         'passthrough',\n                                                                         ['Sex',\n                                                                          'Fbs',\n                                                                          'ExAng']),\n                                                                        ('onehotencoder',\n                                                                         OneHotEncoder(handle_unknown='ignore'),\n                                                                         ['ChestPain',\n                                                                          'Thal'])])),\n                                       ('randomforestclas...\n             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,\n                                                                  6, 7],\n                         'randomforestclassifier__n_estimators': [200, 400, 600,\n                                                                  800, 1000]},\n             refit='accuracy',\n             scoring={'accuracy': 'accuracy',\n                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),\n                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)})In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.  GridSearchCV?Documentation for GridSearchCViFittedGridSearchCV(cv=10,\n             estimator=Pipeline(steps=[('columntransformer',\n                                        ColumnTransformer(transformers=[('standardscaler',\n                                                                         StandardScaler(),\n                                                                         ['Age',\n                                                                          'RestBP',\n                                                                          'Chol',\n                                                                          'RestECG',\n                                                                          'MaxHR',\n                                                                          'Oldpeak',\n                                                                          'Slope',\n                                                                          'Ca']),\n                                                                        ('passthrough',\n                                                                         'passthrough',\n                                                                         ['Sex',\n                                                                          'Fbs',\n                                                                          'ExAng']),\n                                                                        ('onehotencoder',\n                                                                         OneHotEncoder(handle_unknown='ignore'),\n                                                                         ['ChestPain',\n                                                                          'Thal'])])),\n                                       ('randomforestclas...\n             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,\n                                                                  6, 7],\n                         'randomforestclassifier__n_estimators': [200, 400, 600,\n                                                                  800, 1000]},\n             refit='accuracy',\n             scoring={'accuracy': 'accuracy',\n                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),\n                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)}) best_estimator_: PipelinePipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Age', 'RestBP', 'Chol',\n                                                   'RestECG', 'MaxHR',\n                                                   'Oldpeak', 'Slope', 'Ca']),\n                                                 ('passthrough', 'passthrough',\n                                                  ['Sex', 'Fbs', 'ExAng']),\n                                                 ('onehotencoder',\n                                                  OneHotEncoder(handle_unknown='ignore'),\n                                                  ['ChestPain', 'Thal'])])),\n                ('randomforestclassifier',\n                 RandomForestClassifier(max_depth=5, max_features=1,\n                                        n_estimators=1000))])  columntransformer: ColumnTransformer?Documentation for columntransformer: ColumnTransformerColumnTransformer(transformers=[('standardscaler', StandardScaler(),\n                                 ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR',\n                                  'Oldpeak', 'Slope', 'Ca']),\n                                ('passthrough', 'passthrough',\n                                 ['Sex', 'Fbs', 'ExAng']),\n                                ('onehotencoder',\n                                 OneHotEncoder(handle_unknown='ignore'),\n                                 ['ChestPain', 'Thal'])]) standardscaler['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak', 'Slope', 'Ca']  StandardScaler?Documentation for StandardScalerStandardScaler() passthrough['Sex', 'Fbs', 'ExAng'] passthroughpassthrough onehotencoder['ChestPain', 'Thal']  OneHotEncoder?Documentation for OneHotEncoderOneHotEncoder(handle_unknown='ignore')  RandomForestClassifier?Documentation for RandomForestClassifierRandomForestClassifier(max_depth=5, max_features=1, n_estimators=1000)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#precision-and-recall-contd",
+    "href": "materials/slides/ensembles.html#precision-and-recall-contd",
+    "title": "Tree-based and ensemble models",
+    "section": "Precision and recall cont’d",
+    "text": "Precision and recall cont’d\n\nWhat do we think? Is this model ready for production in a diagnostic setting?\nHow could we improve it further?\n\n\ncv_results = pd.DataFrame(rf_tune_grid.cv_results_)\n\nmean_precision = cv_results['mean_test_precision'].iloc[rf_tune_grid.best_index_]\nsem_precision = cv_results['std_test_precision'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)\nmean_recall = cv_results['mean_test_recall'].iloc[rf_tune_grid.best_index_]\nsem_recall = cv_results['std_test_recall'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)\n\nresults_rf_tuned = pd.DataFrame({\n    'mean': [rf_tune_grid.best_score_, mean_precision, mean_recall],\n    'sem': [cv_results['std_test_accuracy'].iloc[rf_tune_grid.best_index_] / np.sqrt(10), sem_precision, sem_recall],\n}, index=['accuracy', 'precision', 'recall'])\n\nresults_rf_tuned\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\naccuracy\n0.864855\n0.016385\n\n\nprecision\n0.910505\n0.021429\n\n\nrecall\n0.789091\n0.031513",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#feature-importances",
+    "href": "materials/slides/ensembles.html#feature-importances",
+    "title": "Tree-based and ensemble models",
+    "section": "Feature importances",
+    "text": "Feature importances\n\n\nKey points:\n\nDecision trees are very interpretable (decision rules!), however in ensemble models (e.g., Random Forest and Boosting) there are many trees - individual decision rules are not as meaningful…\nInstead, we can calculate feature importances. For ensemble tree models, these are computed as the mean and standard deviation of accumulation of the impurity decrease within each tree.\nThese are calculated on the training set, as that is the set the model is trained on.\n\n\nNotes of caution!\n\nFeature importances can be unreliable with both highly cardinal, and multicollinear features.\nUnlike the linear model coefficients, feature importances do not have a sign! They tell us about importance, but not an “up or down”.\nIncreasing a feature may cause the prediction to first go up, and then go down.\nAlternatives to feature importance to understanding models exist (e.g., SHAP (SHapley Additive exPlanations))",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#feature-importances-in-scikit-learn",
+    "href": "materials/slides/ensembles.html#feature-importances-in-scikit-learn",
+    "title": "Tree-based and ensemble models",
+    "section": "Feature importances in scikit-learn",
+    "text": "Feature importances in scikit-learn\n\n# Access the best pipeline\nbest_pipeline = rf_tune_grid.best_estimator_\n\n# Extract the trained RandomForestClassifier from the pipeline\nbest_rf = best_pipeline.named_steps['randomforestclassifier']\n\n# Extract feature names after preprocessing\n# Get the names of features from each transformer in the pipeline\nnumeric_features = numeric_feats\ncategorical_feature_names = best_pipeline.named_steps['columntransformer'].transformers_[2][1].get_feature_names_out(categorical_feats)\npassthrough_features = passthrough_feats\n\n# Combine all feature names into a single list\nfeature_names = np.concatenate([numeric_features, passthrough_features, categorical_feature_names])\n\n# Calculate feature importances\nfeature_importances = best_rf.feature_importances_\n\n# Create a DataFrame to display feature importances\nimportances_df = pd.DataFrame({\n    'Feature': feature_names,\n    'Importance': feature_importances\n})\n\n# Sort by importance (descending order)\nimportances_df = importances_df.sort_values(by='Importance', ascending=False)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#visualizing-the-results",
+    "href": "materials/slides/ensembles.html#visualizing-the-results",
+    "title": "Tree-based and ensemble models",
+    "section": "Visualizing the results",
+    "text": "Visualizing the results\n\n\n\nimport altair as alt\n\nbar_chart = alt.Chart(importances_df).mark_bar().encode(\n    x=alt.X('Importance:Q', title='Feature Importance'),\n    y=alt.Y('Feature:N', sort='-x', title='Feature'),\n    tooltip=['Feature', 'Importance']\n).properties(\n    title='Feature Importances from Random Forest Model',\n    width=350,\n    height=400\n)\n\n\n\nbar_chart",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#evaluating-on-the-test-set",
+    "href": "materials/slides/ensembles.html#evaluating-on-the-test-set",
+    "title": "Tree-based and ensemble models",
+    "section": "Evaluating on the test set",
+    "text": "Evaluating on the test set\n\nPredict on the test set:\n\n\nheart_test_drop_na = heart_test.dropna()\nX_test_drop_na = heart_test_drop_na.drop(columns=['AHD'])\ny_test_drop_na = heart_test_drop_na['AHD']\n\nheart_test_drop_na[\"predicted\"] = rf_tune_grid.predict(\n    X_test_drop_na\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#evaluating-on-the-test-set-1",
+    "href": "materials/slides/ensembles.html#evaluating-on-the-test-set-1",
+    "title": "Tree-based and ensemble models",
+    "section": "Evaluating on the test set",
+    "text": "Evaluating on the test set\n\nExamine accuracy, precision and recall:\n\n\n\n\nrf_tune_grid.score(\n    X_test_drop_na,\n    y_test_drop_na\n)\n\n0.7704918032786885\n\n\n\nprecision_score(\n    y_true=heart_test_drop_na[\"AHD\"],\n    y_pred=heart_test_drop_na[\"predicted\"],\n    pos_label='Yes'\n)\n\nnp.float64(0.75)\n\n\n\nrecall_score(\n    y_true=heart_test_drop_na[\"AHD\"],\n    y_pred=heart_test_drop_na[\"predicted\"],\n    pos_label='Yes'\n)\n\nnp.float64(0.75)\n\n\n\n\nconf_matrix = pd.crosstab(\n    heart_test_drop_na[\"AHD\"],\n    heart_test_drop_na[\"predicted\"]\n)\nprint(conf_matrix)\n\npredicted  No  Yes\nAHD               \nNo         26    7\nYes         7   21",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
     "objectID": "materials/slides/ensembles.html#other-boosting-models",
     "href": "materials/slides/ensembles.html#other-boosting-models",
     "title": "Tree-based and ensemble models",
     "section": "Other boosting models:",
-    "text": "Other boosting models:\n\n\nXGBoost\n\nNot part of sklearn but has similar interface.\nSupports missing values\nGPU training, networked parallel training\nSupports sparse data\nTypically better scores than random forests\n\nLightGBM\n\nNot part of sklearn but has similar interface.\nSmall model size\nFaster\nTypically better scores than random forests\n\n\nCatBoost - Not part of sklearn but has similar interface. - Usually better scores but slower compared to XGBoost and LightGBM",
+    "text": "Other boosting models:\n\n\nXGBoost\n\nNot part of sklearn but has similar interface.\nSupports missing values\nGPU training, networked parallel training\nSupports sparse data\nTypically better scores than random forests\n\n\nLightGBM\n\nNot part of sklearn but has similar interface.\nSmall model size\nFaster\nTypically better scores than random forests\n\nCatBoost - Not part of sklearn but has similar interface. - Usually better scores but slower compared to XGBoost and LightGBM",
     "crumbs": [
       "Home",
       "Slides",

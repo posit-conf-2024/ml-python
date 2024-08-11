@@ -417,6 +417,17 @@ by Jared Wilber &amp; Lucía Santamaría</li>
 </ul>
 </section>
 
+<section id="classification-decision-trees" class="title-slide slide level2 center">
+<h2>Classification Decision trees</h2>
+<ul>
+<li><p>Use recursive binary splitting to grow a classification tree (splitting of the predictor space into <span class="math inline">\(J\)</span> distinct, non-overlapping regions).</p></li>
+<li><p>For every observation that falls into the region <span class="math inline">\(R_j\)</span> , we make the same prediction, which is the majority vote for the training observations in <span class="math inline">\(R_j\)</span>.</p></li>
+<li><p>Where to split the predictor space is done in a top-down and greedy manner, and in practice for classification, the best split at any point in the algorithm is one that minimizes the Gini index (a measure of node purity).</p></li>
+<li><p>Decision trees are useful because they are very interpretable.</p></li>
+<li><p>A limitation of decision trees is that theyn tend to overfit, so in practice we use cross-validation to tune a hyperparameter, <span class="math inline">\(\alpha\)</span>, to find the optimal, pruned tree.</p></li>
+</ul>
+</section>
+
 <section id="example-the-heart-data-set" class="title-slide slide level2 center">
 <h2>Example: the heart data set</h2>
 <div class="columns">
@@ -426,9 +437,10 @@ by Jared Wilber &amp; Lucía Santamaría</li>
 <li><p>The <a href="https://www.statlearning.com/s/Heart.csv">heart data set</a> contains a binary outcome for heart disease for patients who presented with chest pain.</p></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="9a9dfcc1" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>heart <span class="op">=</span> pd.read_csv(<span class="st">"data/Heart.csv"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-2"><a></a>heart.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b5fa3f0d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a></a>heart <span class="op">=</span> pd.read_csv(<span class="st">"data/Heart.csv"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-3"><a></a>heart.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
 Index: 303 entries, 1 to 303
@@ -461,7 +473,7 @@ memory usage: 35.5+ KB</code></pre>
 <ul>
 <li>An angiographic test was performed and a label for <code>AHD</code> of Yes was labelled to indicate the presence of heart disease, otherwise the label was No.</li>
 </ul>
-<div id="100b6ec9" class="cell" data-execution_count="3">
+<div id="75c97676" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>heart.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -596,7 +608,7 @@ memory usage: 35.5+ KB</code></pre>
 <section id="do-we-have-a-class-imbalance" class="title-slide slide level2 center">
 <h2>Do we have a class imbalance?</h2>
 <p>It’s always important to check this, as it may impact your splitting and/or modeling decisions.</p>
-<div id="00de15a5" class="cell" data-execution_count="4">
+<div id="3464f563" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>heart[<span class="st">'AHD'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>AHD
@@ -625,23 +637,26 @@ Name: proportion, dtype: float64</code></pre>
 <section id="data-splitting" class="title-slide slide level2 center">
 <h2>Data splitting</h2>
 <p>Let’s split the data into training and test sets:</p>
-<div id="37a206f3" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb6-2"><a></a></span>
-<span id="cb6-3"><a></a>heart_train, heart_test <span class="op">=</span> train_test_split(</span>
-<span id="cb6-4"><a></a>    heart, train_size<span class="op">=</span><span class="fl">0.75</span>, stratify<span class="op">=</span>heart[<span class="st">"AHD"</span>]</span>
-<span id="cb6-5"><a></a>)</span>
-<span id="cb6-6"><a></a></span>
-<span id="cb6-7"><a></a>X_train <span class="op">=</span> heart_train.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
-<span id="cb6-8"><a></a>y_train <span class="op">=</span> heart_train[<span class="st">'AHD'</span>]</span>
-<span id="cb6-9"><a></a>X_test <span class="op">=</span> heart_test.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
-<span id="cb6-10"><a></a>y_test <span class="op">=</span> heart_test[<span class="st">'AHD'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="2a461762" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-2"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb6-3"><a></a></span>
+<span id="cb6-4"><a></a>np.random.seed(<span class="dv">2024</span>)</span>
+<span id="cb6-5"><a></a></span>
+<span id="cb6-6"><a></a>heart_train, heart_test <span class="op">=</span> train_test_split(</span>
+<span id="cb6-7"><a></a>    heart, train_size<span class="op">=</span><span class="fl">0.8</span>, stratify<span class="op">=</span>heart[<span class="st">"AHD"</span>]</span>
+<span id="cb6-8"><a></a>)</span>
+<span id="cb6-9"><a></a></span>
+<span id="cb6-10"><a></a>X_train <span class="op">=</span> heart_train.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
+<span id="cb6-11"><a></a>y_train <span class="op">=</span> heart_train[<span class="st">'AHD'</span>]</span>
+<span id="cb6-12"><a></a>X_test <span class="op">=</span> heart_test.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
+<span id="cb6-13"><a></a>y_test <span class="op">=</span> heart_test[<span class="st">'AHD'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 
 <section id="one-hot-encoding-pre-processing" class="title-slide slide level2 center">
 <h2>One hot encoding &amp; pre-processing</h2>
-<div id="45f6da6b" class="cell" data-execution_count="6">
+<div id="8ae88304" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
 <span id="cb7-2"><a></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_transformer, make_column_selector</span>
 <span id="cb7-3"><a></a></span>
@@ -659,7 +674,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="fitting-a-dummy-classifier" class="title-slide slide level2 center">
 <h2>Fitting a dummy classifier</h2>
-<div id="8a4e6605" class="cell" data-execution_count="7">
+<div id="f7034ef7" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="im">from</span> sklearn.dummy <span class="im">import</span> DummyClassifier</span>
 <span id="cb8-2"><a></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
 <span id="cb8-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_validate</span>
@@ -707,8 +722,8 @@ Name: proportion, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Dummy classifier</td>
-<td>0.541897</td>
-<td>0.006051</td>
+<td>0.541333</td>
+<td>0.00299</td>
 </tr>
 </tbody>
 </table>
@@ -720,28 +735,27 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="fitting-a-decision-tree" class="title-slide slide level2 center">
 <h2>Fitting a decision tree</h2>
-<div id="0e8d6086" class="cell" data-execution_count="8">
+<div id="1829a507" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
-<span id="cb9-2"><a></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
-<span id="cb9-3"><a></a></span>
-<span id="cb9-4"><a></a>decision_tree <span class="op">=</span> DecisionTreeClassifier()</span>
-<span id="cb9-5"><a></a></span>
-<span id="cb9-6"><a></a>dt_pipeline <span class="op">=</span> make_pipeline(heart_preprocessor, decision_tree)</span>
-<span id="cb9-7"><a></a>cv_10_dt <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb9-8"><a></a>    cross_validate(</span>
-<span id="cb9-9"><a></a>        estimator<span class="op">=</span>dt_pipeline,</span>
-<span id="cb9-10"><a></a>        cv<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb9-11"><a></a>        X<span class="op">=</span>X_train,</span>
-<span id="cb9-12"><a></a>        y<span class="op">=</span>y_train</span>
-<span id="cb9-13"><a></a>    )</span>
-<span id="cb9-14"><a></a>)</span>
-<span id="cb9-15"><a></a>cv_10_dt_metrics <span class="op">=</span> cv_10_dt.agg([<span class="st">"mean"</span>, <span class="st">"sem"</span>])</span>
-<span id="cb9-16"><a></a>results_dt <span class="op">=</span> pd.DataFrame({<span class="st">'mean'</span> : [cv_10_dt_metrics.test_score.iloc[<span class="dv">0</span>]],</span>
-<span id="cb9-17"><a></a>  <span class="st">'sem'</span> : [cv_10_dt_metrics.test_score.iloc[<span class="dv">1</span>]]},</span>
-<span id="cb9-18"><a></a>  index <span class="op">=</span> [<span class="st">'Decision tree'</span>]</span>
-<span id="cb9-19"><a></a>)</span>
-<span id="cb9-20"><a></a>results <span class="op">=</span> pd.concat([results, results_dt])</span>
-<span id="cb9-21"><a></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a></a></span>
+<span id="cb9-3"><a></a>decision_tree <span class="op">=</span> DecisionTreeClassifier()</span>
+<span id="cb9-4"><a></a></span>
+<span id="cb9-5"><a></a>dt_pipeline <span class="op">=</span> make_pipeline(heart_preprocessor, decision_tree)</span>
+<span id="cb9-6"><a></a>cv_10_dt <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb9-7"><a></a>    cross_validate(</span>
+<span id="cb9-8"><a></a>        estimator<span class="op">=</span>dt_pipeline,</span>
+<span id="cb9-9"><a></a>        cv<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb9-10"><a></a>        X<span class="op">=</span>X_train,</span>
+<span id="cb9-11"><a></a>        y<span class="op">=</span>y_train</span>
+<span id="cb9-12"><a></a>    )</span>
+<span id="cb9-13"><a></a>)</span>
+<span id="cb9-14"><a></a>cv_10_dt_metrics <span class="op">=</span> cv_10_dt.agg([<span class="st">"mean"</span>, <span class="st">"sem"</span>])</span>
+<span id="cb9-15"><a></a>results_dt <span class="op">=</span> pd.DataFrame({<span class="st">'mean'</span> : [cv_10_dt_metrics.test_score.iloc[<span class="dv">0</span>]],</span>
+<span id="cb9-16"><a></a>  <span class="st">'sem'</span> : [cv_10_dt_metrics.test_score.iloc[<span class="dv">1</span>]]},</span>
+<span id="cb9-17"><a></a>  index <span class="op">=</span> [<span class="st">'Decision tree'</span>]</span>
+<span id="cb9-18"><a></a>)</span>
+<span id="cb9-19"><a></a>results <span class="op">=</span> pd.concat([results, results_dt])</span>
+<span id="cb9-20"><a></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 <style scoped="">
@@ -769,13 +783,13 @@ Name: proportion, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Dummy classifier</td>
-<td>0.541897</td>
-<td>0.006051</td>
+<td>0.541333</td>
+<td>0.002990</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Decision tree</td>
-<td>0.753755</td>
-<td>0.026767</td>
+<td>0.760833</td>
+<td>0.027661</td>
 </tr>
 </tbody>
 </table>
@@ -788,10 +802,19 @@ Name: proportion, dtype: float64</code></pre>
 <section id="can-we-do-better" class="title-slide slide level2 center">
 <h2>Can we do better?</h2>
 <ul>
-<li><p>We could tune some decision tree parameters (e.g., Gini impurity, maximum tree depth, etc)…</p></li>
+<li><p>We could tune some decision tree parameters (e.g., alpha, maximum tree depth, etc)…</p></li>
 <li><p>We could also try a different tree-based method!</p></li>
 <li><p><a href="https://mlu-explain.github.io/random-forest/">The Random Forest Algorithm</a> by Jenny Yeon &amp; Jared Wilber</p></li>
 </ul>
+</section>
+
+<section id="the-random-forest-algorithm" class="title-slide slide level2 center">
+<h2>The Random Forest Algorithm</h2>
+<ol type="1">
+<li><p>Build a number of decision trees on bootstrapped training samples.</p></li>
+<li><p>When building the trees from the bootstrapped samples, at each stage of splitting, the best splitting is computed using a randomly selected subset of the features.</p></li>
+<li><p>Take the majority votes across all the trees for the final prediction.</p></li>
+</ol>
 </section>
 
 <section id="random-forest-in-scikit-learn-missing-values" class="title-slide slide level2 center">
@@ -805,14 +828,14 @@ Name: proportion, dtype: float64</code></pre>
 </ul>
 </div><div class="column" style="width:50%;">
 <p>How many rows have missing observations:</p>
-<div id="a1936914" class="cell" data-execution_count="9">
+<div id="9ca74f16" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>heart.isna().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>np.int64(6)</code></pre>
 </div>
 </div>
 <p>Drop rows with missing observations:</p>
-<div id="874ba2c2" class="cell" data-execution_count="10">
+<div id="cb9cb28e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>heart_train_drop_na <span class="op">=</span> heart_train.dropna()</span>
 <span id="cb12-2"><a></a></span>
 <span id="cb12-3"><a></a>X_train_drop_na <span class="op">=</span> heart_train_drop_na.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
@@ -823,7 +846,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="random-forest-in-scikit-learn" class="title-slide slide level2 center">
 <h2>Random forest in <code>scikit-learn</code></h2>
-<div id="959d7b2e" class="cell" data-execution_count="11">
+<div id="08af7b8c" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb13-2"><a></a></span>
 <span id="cb13-3"><a></a>random_forest <span class="op">=</span> RandomForestClassifier()</span>
@@ -871,18 +894,18 @@ Name: proportion, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Dummy classifier</td>
-<td>0.541897</td>
-<td>0.006051</td>
+<td>0.541333</td>
+<td>0.002990</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Decision tree</td>
-<td>0.753755</td>
-<td>0.026767</td>
+<td>0.760833</td>
+<td>0.027661</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Random forest</td>
-<td>0.788933</td>
-<td>0.029478</td>
+<td>0.813768</td>
+<td>0.017813</td>
 </tr>
 </tbody>
 </table>
@@ -907,10 +930,10 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="tuning-random-forest-in-scikit-learn" class="title-slide slide level2 center">
 <h2>Tuning random forest in <code>scikit-learn</code></h2>
-<div id="ead85e4a" class="cell" data-execution_count="12">
+<div id="f2ffec8e" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
 <span id="cb14-2"><a></a></span>
-<span id="cb14-3"><a></a>rf_param_grid <span class="op">=</span> {<span class="st">'randomforestclassifier__n_estimators'</span>: [<span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">250</span>],</span>
+<span id="cb14-3"><a></a>rf_param_grid <span class="op">=</span> {<span class="st">'randomforestclassifier__n_estimators'</span>: [<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>],</span>
 <span id="cb14-4"><a></a>              <span class="st">'randomforestclassifier__max_depth'</span>: [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>],</span>
 <span id="cb14-5"><a></a>              <span class="st">'randomforestclassifier__max_features'</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>]}</span>
 <span id="cb14-6"><a></a></span>
@@ -937,7 +960,7 @@ Name: proportion, dtype: float64</code></pre>
 <section id="random-forest-results" class="title-slide slide level2 center">
 <h2>Random Forest results</h2>
 <p>How did the Random Forest compare against the other models we tried?</p>
-<div id="58b8ec8a" class="cell" data-execution_count="13">
+<div id="466fe744" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
@@ -966,23 +989,23 @@ Name: proportion, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Dummy classifier</td>
-<td>0.541897</td>
-<td>0.006051</td>
+<td>0.541333</td>
+<td>0.002990</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Decision tree</td>
-<td>0.753755</td>
-<td>0.026767</td>
+<td>0.760833</td>
+<td>0.027661</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Random forest</td>
-<td>0.788933</td>
-<td>0.029478</td>
+<td>0.813768</td>
+<td>0.017813</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Random forest tuned</td>
-<td>0.851976</td>
-<td>0.022681</td>
+<td>0.864855</td>
+<td>0.020858</td>
 </tr>
 </tbody>
 </table>
@@ -1017,41 +1040,38 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="tuning-gradientboostingclassifier-with-scikit-learn-1" class="title-slide slide level2 center">
 <h2>Tuning <code>GradientBoostingClassifier</code> with <code>scikit-learn</code></h2>
-<div id="c2ab2f69" class="cell" data-execution_count="14">
+<div id="d688d5fb" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> GradientBoostingClassifier</span>
 <span id="cb16-2"><a></a></span>
 <span id="cb16-3"><a></a>gradient_boosted_classifier <span class="op">=</span> GradientBoostingClassifier()</span>
 <span id="cb16-4"><a></a>gb_pipeline <span class="op">=</span> make_pipeline(heart_preprocessor, gradient_boosted_classifier)</span>
-<span id="cb16-5"><a></a></span>
-<span id="cb16-6"><a></a>gb_param_grid <span class="op">=</span> {<span class="st">'gradientboostingclassifier__n_estimators'</span>: [<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>],</span>
-<span id="cb16-7"><a></a>              <span class="st">'gradientboostingclassifier__max_depth'</span>: [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>],</span>
-<span id="cb16-8"><a></a>              <span class="st">'gradientboostingclassifier__learning_rate'</span>: [<span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>]}</span>
-<span id="cb16-9"><a></a></span>
-<span id="cb16-10"><a></a>gb_tune_grid <span class="op">=</span> GridSearchCV(</span>
-<span id="cb16-11"><a></a>    estimator<span class="op">=</span>gb_pipeline,</span>
-<span id="cb16-12"><a></a>    param_grid<span class="op">=</span>gb_param_grid,</span>
-<span id="cb16-13"><a></a>    cv<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb16-14"><a></a>    n_jobs<span class="op">=-</span><span class="dv">1</span> <span class="co"># tells computer to use all available CPUs</span></span>
-<span id="cb16-15"><a></a>)</span>
-<span id="cb16-16"><a></a></span>
-<span id="cb16-17"><a></a>gb_tune_grid.fit(</span>
-<span id="cb16-18"><a></a>    X_train_drop_na,</span>
-<span id="cb16-19"><a></a>    y_train_drop_na</span>
-<span id="cb16-20"><a></a>)</span>
-<span id="cb16-21"><a></a></span>
-<span id="cb16-22"><a></a>cv_10_gb_tuned_metrics <span class="op">=</span> pd.DataFrame(gb_tune_grid.cv_results_)</span>
-<span id="cb16-23"><a></a>results_gb_tuned <span class="op">=</span> pd.DataFrame({<span class="st">'mean'</span> : gb_tune_grid.best_score_,</span>
-<span id="cb16-24"><a></a>  <span class="st">'sem'</span> : pd.DataFrame(gb_tune_grid.cv_results_)[<span class="st">'std_test_score'</span>][<span class="dv">6</span>] <span class="op">/</span> <span class="dv">10</span><span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)},</span>
-<span id="cb16-25"><a></a>  index <span class="op">=</span> [<span class="st">'Gradient boosted classifier tuned'</span>]</span>
-<span id="cb16-26"><a></a>)</span>
-<span id="cb16-27"><a></a>results <span class="op">=</span> pd.concat([results, results_gb_tuned])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-5"><a></a>gb_param_grid <span class="op">=</span> {<span class="st">'gradientboostingclassifier__n_estimators'</span>: [<span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">600</span>, <span class="dv">800</span>, <span class="dv">1000</span>],</span>
+<span id="cb16-6"><a></a>              <span class="st">'gradientboostingclassifier__max_depth'</span>: [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>],</span>
+<span id="cb16-7"><a></a>              <span class="st">'gradientboostingclassifier__learning_rate'</span>: [<span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>]}</span>
+<span id="cb16-8"><a></a>gb_tune_grid <span class="op">=</span> GridSearchCV(</span>
+<span id="cb16-9"><a></a>    estimator<span class="op">=</span>gb_pipeline,</span>
+<span id="cb16-10"><a></a>    param_grid<span class="op">=</span>gb_param_grid,</span>
+<span id="cb16-11"><a></a>    cv<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb16-12"><a></a>    n_jobs<span class="op">=-</span><span class="dv">1</span> <span class="co"># tells computer to use all available CPUs</span></span>
+<span id="cb16-13"><a></a>)</span>
+<span id="cb16-14"><a></a>gb_tune_grid.fit(</span>
+<span id="cb16-15"><a></a>    X_train_drop_na,</span>
+<span id="cb16-16"><a></a>    y_train_drop_na</span>
+<span id="cb16-17"><a></a>)</span>
+<span id="cb16-18"><a></a></span>
+<span id="cb16-19"><a></a>cv_10_gb_tuned_metrics <span class="op">=</span> pd.DataFrame(gb_tune_grid.cv_results_)</span>
+<span id="cb16-20"><a></a>results_gb_tuned <span class="op">=</span> pd.DataFrame({<span class="st">'mean'</span> : gb_tune_grid.best_score_,</span>
+<span id="cb16-21"><a></a>  <span class="st">'sem'</span> : pd.DataFrame(gb_tune_grid.cv_results_)[<span class="st">'std_test_score'</span>][<span class="dv">6</span>] <span class="op">/</span> <span class="dv">10</span><span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)},</span>
+<span id="cb16-22"><a></a>  index <span class="op">=</span> [<span class="st">'Gradient boosted classifier tuned'</span>]</span>
+<span id="cb16-23"><a></a>)</span>
+<span id="cb16-24"><a></a>results <span class="op">=</span> pd.concat([results, results_gb_tuned])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 
 <section id="gradientboostingclassifier-results" class="title-slide slide level2 center">
 <h2><code>GradientBoostingClassifier</code> results</h2>
 <p>How did the <code>GradientBoostingClassifier</code> compare against the other models we tried?</p>
-<div id="f2681f58" class="cell" data-execution_count="15">
+<div id="c4543625" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <div>
@@ -1080,28 +1100,28 @@ Name: proportion, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Dummy classifier</td>
-<td>0.541897</td>
-<td>0.006051</td>
+<td>0.541333</td>
+<td>0.002990</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Decision tree</td>
-<td>0.753755</td>
-<td>0.026767</td>
+<td>0.760833</td>
+<td>0.027661</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Random forest</td>
-<td>0.788933</td>
-<td>0.029478</td>
+<td>0.813768</td>
+<td>0.017813</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Random forest tuned</td>
-<td>0.851976</td>
-<td>0.022681</td>
+<td>0.864855</td>
+<td>0.020858</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Gradient boosted classifier tuned</td>
-<td>0.829447</td>
-<td>0.018979</td>
+<td>0.851993</td>
+<td>0.027695</td>
 </tr>
 </tbody>
 </table>
@@ -1121,6 +1141,799 @@ Name: proportion, dtype: float64</code></pre>
 </ul>
 </section>
 
+<section id="precision-and-recall-on-the-tuned-random-forest-model" class="title-slide slide level2 center">
+<h2>Precision and recall on the tuned random forest model</h2>
+<div id="cb34a4ed" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> make_scorer, precision_score, recall_score</span>
+<span id="cb18-2"><a></a></span>
+<span id="cb18-3"><a></a>scoring <span class="op">=</span> {</span>
+<span id="cb18-4"><a></a>    <span class="st">'accuracy'</span>: <span class="st">'accuracy'</span>,</span>
+<span id="cb18-5"><a></a>    <span class="st">'precision'</span>: make_scorer(precision_score, pos_label<span class="op">=</span><span class="st">'Yes'</span>),  <span class="co"># Assuming 'Yes' is the positive class</span></span>
+<span id="cb18-6"><a></a>    <span class="st">'recall'</span>: make_scorer(recall_score, pos_label<span class="op">=</span><span class="st">'Yes'</span>)         <span class="co"># Assuming 'Yes' is the positive class</span></span>
+<span id="cb18-7"><a></a>}</span>
+<span id="cb18-8"><a></a></span>
+<span id="cb18-9"><a></a>rf_tune_grid <span class="op">=</span> GridSearchCV(</span>
+<span id="cb18-10"><a></a>    estimator<span class="op">=</span>rf_pipeline,</span>
+<span id="cb18-11"><a></a>    param_grid<span class="op">=</span>rf_param_grid,</span>
+<span id="cb18-12"><a></a>    cv<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb18-13"><a></a>    n_jobs<span class="op">=-</span><span class="dv">1</span>,</span>
+<span id="cb18-14"><a></a>    scoring<span class="op">=</span>scoring,</span>
+<span id="cb18-15"><a></a>    refit<span class="op">=</span><span class="st">'accuracy'</span></span>
+<span id="cb18-16"><a></a>)</span>
+<span id="cb18-17"><a></a></span>
+<span id="cb18-18"><a></a>rf_tune_grid.fit(X_train_drop_na, y_train_drop_na)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</a></style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>GridSearchCV(cv=10,
+             estimator=Pipeline(steps=[('columntransformer',
+                                        ColumnTransformer(transformers=[('standardscaler',
+                                                                         StandardScaler(),
+                                                                         ['Age',
+                                                                          'RestBP',
+                                                                          'Chol',
+                                                                          'RestECG',
+                                                                          'MaxHR',
+                                                                          'Oldpeak',
+                                                                          'Slope',
+                                                                          'Ca']),
+                                                                        ('passthrough',
+                                                                         'passthrough',
+                                                                         ['Sex',
+                                                                          'Fbs',
+                                                                          'ExAng']),
+                                                                        ('onehotencoder',
+                                                                         OneHotEncoder(handle_unknown='ignore'),
+                                                                         ['ChestPain',
+                                                                          'Thal'])])),
+                                       ('randomforestclas...
+             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],
+                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,
+                                                                  6, 7],
+                         'randomforestclassifier__n_estimators': [200, 400, 600,
+                                                                  800, 1000]},
+             refit='accuracy',
+             scoring={'accuracy': 'accuracy',
+                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),
+                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)})</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;GridSearchCV<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.model_selection.GridSearchCV.html">?<span>Documentation for GridSearchCV</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>GridSearchCV(cv=10,
+             estimator=Pipeline(steps=[('columntransformer',
+                                        ColumnTransformer(transformers=[('standardscaler',
+                                                                         StandardScaler(),
+                                                                         ['Age',
+                                                                          'RestBP',
+                                                                          'Chol',
+                                                                          'RestECG',
+                                                                          'MaxHR',
+                                                                          'Oldpeak',
+                                                                          'Slope',
+                                                                          'Ca']),
+                                                                        ('passthrough',
+                                                                         'passthrough',
+                                                                         ['Sex',
+                                                                          'Fbs',
+                                                                          'ExAng']),
+                                                                        ('onehotencoder',
+                                                                         OneHotEncoder(handle_unknown='ignore'),
+                                                                         ['ChestPain',
+                                                                          'Thal'])])),
+                                       ('randomforestclas...
+             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],
+                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,
+                                                                  6, 7],
+                         'randomforestclassifier__n_estimators': [200, 400, 600,
+                                                                  800, 1000]},
+             refit='accuracy',
+             scoring={'accuracy': 'accuracy',
+                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),
+                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)})</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">best_estimator_: Pipeline</label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('columntransformer',
+                 ColumnTransformer(transformers=[('standardscaler',
+                                                  StandardScaler(),
+                                                  ['Age', 'RestBP', 'Chol',
+                                                   'RestECG', 'MaxHR',
+                                                   'Oldpeak', 'Slope', 'Ca']),
+                                                 ('passthrough', 'passthrough',
+                                                  ['Sex', 'Fbs', 'ExAng']),
+                                                 ('onehotencoder',
+                                                  OneHotEncoder(handle_unknown='ignore'),
+                                                  ['ChestPain', 'Thal'])])),
+                ('randomforestclassifier',
+                 RandomForestClassifier(max_depth=5, max_features=1,
+                                        n_estimators=1000))])</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;columntransformer: ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for columntransformer: ColumnTransformer</span></a></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
+                                 ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR',
+                                  'Oldpeak', 'Slope', 'Ca']),
+                                ('passthrough', 'passthrough',
+                                 ['Sex', 'Fbs', 'ExAng']),
+                                ('onehotencoder',
+                                 OneHotEncoder(handle_unknown='ignore'),
+                                 ['ChestPain', 'Thal'])])</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox"><label for="sk-estimator-id-4" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">standardscaler</label><div class="sk-toggleable__content fitted"><pre>['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak', 'Slope', 'Ca']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox"><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox"><label for="sk-estimator-id-6" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">passthrough</label><div class="sk-toggleable__content fitted"><pre>['Sex', 'Fbs', 'ExAng']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox"><label for="sk-estimator-id-7" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">passthrough</label><div class="sk-toggleable__content fitted"><pre>passthrough</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox"><label for="sk-estimator-id-8" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">onehotencoder</label><div class="sk-toggleable__content fitted"><pre>['ChestPain', 'Thal']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-9" type="checkbox"><label for="sk-estimator-id-9" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-10" type="checkbox"><label for="sk-estimator-id-10" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestClassifier.html">?<span>Documentation for RandomForestClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestClassifier(max_depth=5, max_features=1, n_estimators=1000)</pre></div> </div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+</section>
+
+<section id="precision-and-recall-contd" class="title-slide slide level2 center">
+<h2>Precision and recall cont’d</h2>
+<ul>
+<li><p>What do we think? Is this model ready for production in a diagnostic setting?</p></li>
+<li><p>How could we improve it further?</p></li>
+</ul>
+<div id="243a8840" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>cv_results <span class="op">=</span> pd.DataFrame(rf_tune_grid.cv_results_)</span>
+<span id="cb19-2"><a></a></span>
+<span id="cb19-3"><a></a>mean_precision <span class="op">=</span> cv_results[<span class="st">'mean_test_precision'</span>].iloc[rf_tune_grid.best_index_]</span>
+<span id="cb19-4"><a></a>sem_precision <span class="op">=</span> cv_results[<span class="st">'std_test_precision'</span>].iloc[rf_tune_grid.best_index_] <span class="op">/</span> np.sqrt(<span class="dv">10</span>)</span>
+<span id="cb19-5"><a></a>mean_recall <span class="op">=</span> cv_results[<span class="st">'mean_test_recall'</span>].iloc[rf_tune_grid.best_index_]</span>
+<span id="cb19-6"><a></a>sem_recall <span class="op">=</span> cv_results[<span class="st">'std_test_recall'</span>].iloc[rf_tune_grid.best_index_] <span class="op">/</span> np.sqrt(<span class="dv">10</span>)</span>
+<span id="cb19-7"><a></a></span>
+<span id="cb19-8"><a></a>results_rf_tuned <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb19-9"><a></a>    <span class="st">'mean'</span>: [rf_tune_grid.best_score_, mean_precision, mean_recall],</span>
+<span id="cb19-10"><a></a>    <span class="st">'sem'</span>: [cv_results[<span class="st">'std_test_accuracy'</span>].iloc[rf_tune_grid.best_index_] <span class="op">/</span> np.sqrt(<span class="dv">10</span>), sem_precision, sem_recall],</span>
+<span id="cb19-11"><a></a>}, index<span class="op">=</span>[<span class="st">'accuracy'</span>, <span class="st">'precision'</span>, <span class="st">'recall'</span>])</span>
+<span id="cb19-12"><a></a></span>
+<span id="cb19-13"><a></a>results_rf_tuned</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">sem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">accuracy</td>
+<td>0.864855</td>
+<td>0.016385</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">precision</td>
+<td>0.910505</td>
+<td>0.021429</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">recall</td>
+<td>0.789091</td>
+<td>0.031513</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+
+<section id="feature-importances" class="title-slide slide level2 center">
+<h2>Feature importances</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Key points:</strong></p>
+<ul>
+<li><p>Decision trees are very interpretable (decision rules!), however in ensemble models (e.g., Random Forest and Boosting) there are many trees - individual decision rules are not as meaningful…</p></li>
+<li><p>Instead, we can calculate feature importances. For ensemble tree models, these are computed as the mean and standard deviation of accumulation of the impurity decrease within each tree.</p></li>
+<li><p>These are calculated on the training set, as that is the set the model is trained on.</p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Notes of caution!</strong></p>
+<ul>
+<li><p>Feature importances can be unreliable with both highly cardinal, and multicollinear features.</p></li>
+<li><p>Unlike the linear model coefficients, feature importances do not have a sign! They tell us about importance, but not an “up or down”.</p></li>
+<li><p>Increasing a feature may cause the prediction to first go up, and then go down.</p></li>
+<li><p>Alternatives to feature importance to understanding models exist (e.g., <a href="https://shap.readthedocs.io/en/latest/example_notebooks/overviews/An%20introduction%20to%20explainable%20AI%20with%20Shapley%20values.html">SHAP</a> (SHapley Additive exPlanations))</p></li>
+</ul>
+</div></div>
+</section>
+
+<section id="feature-importances-in-scikit-learn" class="title-slide slide level2 center">
+<h2>Feature importances in <code>scikit-learn</code></h2>
+<div id="bff85d50" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a><span class="co"># Access the best pipeline</span></span>
+<span id="cb20-2"><a></a>best_pipeline <span class="op">=</span> rf_tune_grid.best_estimator_</span>
+<span id="cb20-3"><a></a></span>
+<span id="cb20-4"><a></a><span class="co"># Extract the trained RandomForestClassifier from the pipeline</span></span>
+<span id="cb20-5"><a></a>best_rf <span class="op">=</span> best_pipeline.named_steps[<span class="st">'randomforestclassifier'</span>]</span>
+<span id="cb20-6"><a></a></span>
+<span id="cb20-7"><a></a><span class="co"># Extract feature names after preprocessing</span></span>
+<span id="cb20-8"><a></a><span class="co"># Get the names of features from each transformer in the pipeline</span></span>
+<span id="cb20-9"><a></a>numeric_features <span class="op">=</span> numeric_feats</span>
+<span id="cb20-10"><a></a>categorical_feature_names <span class="op">=</span> best_pipeline.named_steps[<span class="st">'columntransformer'</span>].transformers_[<span class="dv">2</span>][<span class="dv">1</span>].get_feature_names_out(categorical_feats)</span>
+<span id="cb20-11"><a></a>passthrough_features <span class="op">=</span> passthrough_feats</span>
+<span id="cb20-12"><a></a></span>
+<span id="cb20-13"><a></a><span class="co"># Combine all feature names into a single list</span></span>
+<span id="cb20-14"><a></a>feature_names <span class="op">=</span> np.concatenate([numeric_features, passthrough_features, categorical_feature_names])</span>
+<span id="cb20-15"><a></a></span>
+<span id="cb20-16"><a></a><span class="co"># Calculate feature importances</span></span>
+<span id="cb20-17"><a></a>feature_importances <span class="op">=</span> best_rf.feature_importances_</span>
+<span id="cb20-18"><a></a></span>
+<span id="cb20-19"><a></a><span class="co"># Create a DataFrame to display feature importances</span></span>
+<span id="cb20-20"><a></a>importances_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb20-21"><a></a>    <span class="st">'Feature'</span>: feature_names,</span>
+<span id="cb20-22"><a></a>    <span class="st">'Importance'</span>: feature_importances</span>
+<span id="cb20-23"><a></a>})</span>
+<span id="cb20-24"><a></a></span>
+<span id="cb20-25"><a></a><span class="co"># Sort by importance (descending order)</span></span>
+<span id="cb20-26"><a></a>importances_df <span class="op">=</span> importances_df.sort_values(by<span class="op">=</span><span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="visualizing-the-results" class="title-slide slide level2 center">
+<h2>Visualizing the results</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="2f719473" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb21-2"><a></a></span>
+<span id="cb21-3"><a></a>bar_chart <span class="op">=</span> alt.Chart(importances_df).mark_bar().encode(</span>
+<span id="cb21-4"><a></a>    x<span class="op">=</span>alt.X(<span class="st">'Importance:Q'</span>, title<span class="op">=</span><span class="st">'Feature Importance'</span>),</span>
+<span id="cb21-5"><a></a>    y<span class="op">=</span>alt.Y(<span class="st">'Feature:N'</span>, sort<span class="op">=</span><span class="st">'-x'</span>, title<span class="op">=</span><span class="st">'Feature'</span>),</span>
+<span id="cb21-6"><a></a>    tooltip<span class="op">=</span>[<span class="st">'Feature'</span>, <span class="st">'Importance'</span>]</span>
+<span id="cb21-7"><a></a>).properties(</span>
+<span id="cb21-8"><a></a>    title<span class="op">=</span><span class="st">'Feature Importances from Random Forest Model'</span>,</span>
+<span id="cb21-9"><a></a>    width<span class="op">=</span><span class="dv">350</span>,</span>
+<span id="cb21-10"><a></a>    height<span class="op">=</span><span class="dv">400</span></span>
+<span id="cb21-11"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div id="dc5d0db2" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>bar_chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+
+<style>
+  #altair-viz-0b0185fc088e40cd90962f154861b176.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-0b0185fc088e40cd90962f154861b176.vega-embed details,
+  #altair-viz-0b0185fc088e40cd90962f154861b176.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-0b0185fc088e40cd90962f154861b176"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-0b0185fc088e40cd90962f154861b176") {
+      outputDiv = document.getElementById("altair-viz-0b0185fc088e40cd90962f154861b176");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-602e2252ed0c7ac95feed1cfc880ce83"}, "mark": {"type": "bar"}, "encoding": {"tooltip": [{"field": "Feature", "type": "nominal"}, {"field": "Importance", "type": "quantitative"}], "x": {"field": "Importance", "title": "Feature Importance", "type": "quantitative"}, "y": {"field": "Feature", "sort": "-x", "title": "Feature", "type": "nominal"}}, "height": 400, "title": "Feature Importances from Random Forest Model", "width": 350, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-602e2252ed0c7ac95feed1cfc880ce83": [{"Feature": "MaxHR", "Importance": 0.09664877775208966}, {"Feature": "ChestPain_asymptomatic", "Importance": 0.09248976821379669}, {"Feature": "Ca", "Importance": 0.0919353734798094}, {"Feature": "Thal_normal", "Importance": 0.0866841585978116}, {"Feature": "Age", "Importance": 0.08490114154033833}, {"Feature": "Thal_reversable", "Importance": 0.08355309358314968}, {"Feature": "Oldpeak", "Importance": 0.08090893777277551}, {"Feature": "ExAng", "Importance": 0.06445574360734929}, {"Feature": "RestBP", "Importance": 0.05454367453307465}, {"Feature": "Chol", "Importance": 0.054095921589250646}, {"Feature": "Slope", "Importance": 0.04933830994690277}, {"Feature": "ChestPain_nonanginal", "Importance": 0.040301164751652796}, {"Feature": "Sex", "Importance": 0.02909072887124015}, {"Feature": "ChestPain_nontypical", "Importance": 0.02767867667278666}, {"Feature": "RestECG", "Importance": 0.024322043271410826}, {"Feature": "ChestPain_typical", "Importance": 0.019856072883473578}, {"Feature": "Fbs", "Importance": 0.009658384631765044}, {"Feature": "Thal_fixed", "Importance": 0.009538028301322679}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+</div></div>
+</section>
+
+<section id="evaluating-on-the-test-set" class="title-slide slide level2 center">
+<h2>Evaluating on the test set</h2>
+<ol type="1">
+<li>Predict on the test set:</li>
+</ol>
+<div id="3cfa42b8" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>heart_test_drop_na <span class="op">=</span> heart_test.dropna()</span>
+<span id="cb23-2"><a></a>X_test_drop_na <span class="op">=</span> heart_test_drop_na.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
+<span id="cb23-3"><a></a>y_test_drop_na <span class="op">=</span> heart_test_drop_na[<span class="st">'AHD'</span>]</span>
+<span id="cb23-4"><a></a></span>
+<span id="cb23-5"><a></a>heart_test_drop_na[<span class="st">"predicted"</span>] <span class="op">=</span> rf_tune_grid.predict(</span>
+<span id="cb23-6"><a></a>    X_test_drop_na</span>
+<span id="cb23-7"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="evaluating-on-the-test-set-1" class="title-slide slide level2 center">
+<h2>Evaluating on the test set</h2>
+<ol start="2" type="1">
+<li>Examine accuracy, precision and recall:</li>
+</ol>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="e706fd80" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>rf_tune_grid.score(</span>
+<span id="cb24-2"><a></a>    X_test_drop_na,</span>
+<span id="cb24-3"><a></a>    y_test_drop_na</span>
+<span id="cb24-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>0.7704918032786885</code></pre>
+</div>
+</div>
+<div id="c90b68d3" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>precision_score(</span>
+<span id="cb26-2"><a></a>    y_true<span class="op">=</span>heart_test_drop_na[<span class="st">"AHD"</span>],</span>
+<span id="cb26-3"><a></a>    y_pred<span class="op">=</span>heart_test_drop_na[<span class="st">"predicted"</span>],</span>
+<span id="cb26-4"><a></a>    pos_label<span class="op">=</span><span class="st">'Yes'</span></span>
+<span id="cb26-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>np.float64(0.75)</code></pre>
+</div>
+</div>
+<div id="721ca2a3" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>recall_score(</span>
+<span id="cb28-2"><a></a>    y_true<span class="op">=</span>heart_test_drop_na[<span class="st">"AHD"</span>],</span>
+<span id="cb28-3"><a></a>    y_pred<span class="op">=</span>heart_test_drop_na[<span class="st">"predicted"</span>],</span>
+<span id="cb28-4"><a></a>    pos_label<span class="op">=</span><span class="st">'Yes'</span></span>
+<span id="cb28-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>np.float64(0.75)</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div id="c63fe0be" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>conf_matrix <span class="op">=</span> pd.crosstab(</span>
+<span id="cb30-2"><a></a>    heart_test_drop_na[<span class="st">"AHD"</span>],</span>
+<span id="cb30-3"><a></a>    heart_test_drop_na[<span class="st">"predicted"</span>]</span>
+<span id="cb30-4"><a></a>)</span>
+<span id="cb30-5"><a></a><span class="bu">print</span>(conf_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>predicted  No  Yes
+AHD               
+No         26    7
+Yes         7   21</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+
 <section id="other-boosting-models" class="title-slide slide level2 center">
 <h2>Other boosting models:</h2>
 <div class="columns">
@@ -1133,6 +1946,7 @@ Name: proportion, dtype: float64</code></pre>
 <li>Supports sparse data</li>
 <li>Typically better scores than random forests</li>
 </ul>
+</div><div class="column" style="width:50%;">
 <p><a href="https://lightgbm.readthedocs.io/">LightGBM</a></p>
 <ul>
 <li>Not part of sklearn but has similar interface.</li>
@@ -1140,7 +1954,6 @@ Name: proportion, dtype: float64</code></pre>
 <li>Faster</li>
 <li>Typically better scores than random forests</li>
 </ul>
-</div><div class="column" style="width:50%;">
 <p><a href="https://catboost.ai/">CatBoost</a> - Not part of sklearn but has similar interface. - Usually better scores but slower compared to XGBoost and LightGBM</p>
 </div></div>
 </section>
