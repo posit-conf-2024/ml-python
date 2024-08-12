@@ -385,15 +385,15 @@ window.Quarto = {
 <p>Create a scatterplot of the data with <code>Symmetry</code> on the x-axis and <code>Radius</code> on the y-axis. Modify your aesthetics by colouring for <code>Class</code>. As you create this plot, ensure you follow the guidelines for creating effective visualizations. In particular, note in the chart axis titles whether the data is standardized or not and add a suitable opacity level to the graphical mark. You should also replace the values in the dataframe’s <code>Class</code> column from <code>'M'</code> to <code>'Malignant'</code> and from <code>'B'</code> to <code>'Benign'</code>.</p>
 <p><em>Assign your plot to an object called <code>cancer_plot</code>.</em></p>
 <div id="cell-16" class="cell" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;4333fde6fe293e05d20ecc4346eb82fc&quot;,&quot;grade&quot;:false,&quot;grade_id&quot;:&quot;cell-6dadc99c524407f7&quot;,&quot;locked&quot;:false,&quot;schema_version&quot;:3,&quot;solution&quot;:true}">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cancer["Class"] = cancer["Class"].___({</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     ___,</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     ___</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># })</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># cancer_plot = ___</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cancer[<span class="st">"Class"</span>] <span class="op">=</span> cancer[<span class="st">"Class"</span>].replace({</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'M'</span> : <span class="st">'Malignant'</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'B'</span> : <span class="st">'Benign'</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>cancer_plot <span class="op">=</span> alt.Chart(cancer).mark_point(opacity<span class="op">=</span><span class="fl">0.5</span>).encode(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">"Symmetry"</span>).title(<span class="st">"Standardized symmetry"</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">"Radius"</span>).title(<span class="st">"Standardized radius"</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>alt.Color(<span class="st">"Class"</span>).title(<span class="st">"Diagnosis"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>cancer_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-17" class="cell" data-editable="false" data-nbgrader="{&quot;cell_type&quot;:&quot;code&quot;,&quot;checksum&quot;:&quot;4786867d177d0f026fca0485f6428b1a&quot;,&quot;grade&quot;:true,&quot;grade_id&quot;:&quot;cell-82ee9aaeac954391&quot;,&quot;locked&quot;:true,&quot;points&quot;:1,&quot;schema_version&quot;:3,&quot;solution&quot;:false}">
