@@ -1,5 +1,6 @@
 ---
-title: "Welcome!"
+title: "Welcome"
+subtitle: Introduction to Introduction to machine learning in Python
 format:
   revealjs:
     #footer: "posit::conf 2024 - Introduction to machine learning in Python with Scikit-learn"
