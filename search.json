@@ -202,6 +202,570 @@
     ]
   },
   {
+    "objectID": "materials/slides/classification2.html#session-learning-objectives",
+    "href": "materials/slides/classification2.html#session-learning-objectives",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Session learning objectives",
+    "text": "Session learning objectives\nBy the end of the session, learners will be able to do the following:\n\nDescribe what training, validation, and test data sets are and how they are used in classification.\nSplit data into training, validation, and test data sets.\nDescribe what a random seed is and its importance in reproducible data analysis.\nSet the random seed in Python using the numpy.random.seed function.\nDescribe and interpret accuracy, precision, recall, and confusion matrices.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#session-learning-objectives-contd",
+    "href": "materials/slides/classification2.html#session-learning-objectives-contd",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Session learning objectives cont’d",
+    "text": "Session learning objectives cont’d\nBy the end of the session, learners will be able to do the following:\n\nEvaluate classification accuracy, precision, and recall in Python using a test set, a single validation set, and cross-validation.\nProduce a confusion matrix in Python.\nChoose the number of neighbors in a K-nearest neighbors classifier by maximizing estimated cross-validation accuracy.\nDescribe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors classification.\nDescribe the advantages and disadvantages of the K-nearest neighbors classification algorithm.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#evaluating-performance",
+    "href": "materials/slides/classification2.html#evaluating-performance",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Evaluating performance",
+    "text": "Evaluating performance\n\nSometimes our classifier might make the wrong prediction.\nA classifier does not need to be right 100% of the time to be useful, though we don’t want the classifier to make too many wrong predictions.\nHow do we measure how “good” our classifier is?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#data-splitting",
+    "href": "materials/slides/classification2.html#data-splitting",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Data splitting",
+    "text": "Data splitting\n\nThe trick is to split the data into a training set and test set.\nOnly the training set when building the classifier.\nTo evaluate the performance of the classifier, we first set aside the labels from the test set, and then use the classifier to predict the labels in the test set.\nIf our predictions match the actual labels for the observations in the test set, then we have some confidence that our classifier might also accurately predict the class labels for new observations without known class labels.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#splitting-the-data-into-training-and-testing-sets",
+    "href": "materials/slides/classification2.html#splitting-the-data-into-training-and-testing-sets",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Splitting the data into training and testing sets",
+    "text": "Splitting the data into training and testing sets",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#prediction-accuracy",
+    "href": "materials/slides/classification2.html#prediction-accuracy",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Prediction accuracy",
+    "text": "Prediction accuracy\n\\[\\mathrm{accuracy} = \\frac{\\mathrm{number \\; of  \\; correct  \\; predictions}}{\\mathrm{total \\;  number \\;  of  \\; predictions}}\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#is-knowing-accuracy-enough",
+    "href": "materials/slides/classification2.html#is-knowing-accuracy-enough",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Is knowing accuracy enough?",
+    "text": "Is knowing accuracy enough?\n\n\nExample accuracy calculation:\n\n\\[\\mathrm{accuracy} = \\frac{\\mathrm{number \\; of  \\; correct  \\; predictions}}{\\mathrm{total \\;  number \\;  of  \\; predictions}} = \\frac{58}{65} = 0.892\\]\n\nPrediction accuracy only tells us how often the classifier makes mistakes in general, but does not tell us anything about the kinds of mistakes the classifier makes.\nThe confusion matrix tells a more complete story.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#example-confusion-matrix-for-the-breast-cancer-data",
+    "href": "materials/slides/classification2.html#example-confusion-matrix-for-the-breast-cancer-data",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Example confusion matrix for the breast cancer data:",
+    "text": "Example confusion matrix for the breast cancer data:\n\n\n\n\n\n\n\n\n\nPredicted Malignant\nPredicted Benign\n\n\n\n\nActually Malignant\n1\n3\n\n\nActually Benign\n4\n57\n\n\n\n\nTrue Positive: A malignant observation that was classified as malignant (top left).\nFalse Positive: A benign observation that was classified as malignant (bottom left).\nTrue Negative: A benign observation that was classified as benign (bottom right).\nFalse Negative: A malignant observation that was classified as benign (top right).",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#precision-recall",
+    "href": "materials/slides/classification2.html#precision-recall",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Precision & recall",
+    "text": "Precision & recall\n\n\nPrecision quantifies how many of the positive predictions the classifier made were actually positive.\n\n\\[\\mathrm{precision} = \\frac{\\mathrm{number \\; of  \\; correct \\; positive \\; predictions}}{\\mathrm{total \\;  number \\;  of \\; positive  \\; predictions}}\\]\n\nRecall quantifies how many of the positive observations in the test set were identified as positive.\n\n\\[\\mathrm{recall} = \\frac{\\mathrm{number \\; of  \\; correct  \\; positive \\; predictions}}{\\mathrm{total \\;  number \\;  of  \\; positive \\; test \\; set \\; observations}}\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#precision-and-recall-for-the-breast-cancer-data-set-example",
+    "href": "materials/slides/classification2.html#precision-and-recall-for-the-breast-cancer-data-set-example",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Precision and recall for the breast cancer data set example",
+    "text": "Precision and recall for the breast cancer data set example\n\n\n\n\n\n\n\n\n\nPredicted Malignant\nPredicted Benign\n\n\n\n\nActually Malignant\n1\n3\n\n\nActually Benign\n4\n57\n\n\n\n\\[\\mathrm{precision} = \\frac{1}{1+4} = 0.20, \\quad \\mathrm{recall} = \\frac{1}{1+3} = 0.25\\]\n\nSo even with an accuracy of 89%, the precision and recall of the classifier were both relatively low. For this data analysis context, recall is particularly important: if someone has a malignant tumor, we certainly want to identify it. A recall of just 25% would likely be unacceptable!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#randomness-and-seeds",
+    "href": "materials/slides/classification2.html#randomness-and-seeds",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Randomness and seeds",
+    "text": "Randomness and seeds\n\nOur data analyses will often involve the use of randomness\nWe use randomness any time we need to make a decision in our analysis that needs to be fair, unbiased, and not influenced by human input (e.g., splitting into training and test sets).\nHowever, the use of randomness runs counter to one of the main tenets of good data analysis practice: reproducibility…\nThe trick is that in Python—and other programming languages—randomness is not actually random! Instead, Python uses a random number generator that produces a sequence of numbers that are completely determined by a seed value.\nOnce you set the seed value, everything after that point may look random, but is actually totally reproducible.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#setting-the-seed-in-python",
+    "href": "materials/slides/classification2.html#setting-the-seed-in-python",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Setting the seed in Python",
+    "text": "Setting the seed in Python\nLet’s say we want to make a series object containing the integers from 0 to 9. And then we want to randomly pick 10 numbers from that list, but we want it to be reproducible.\n\n\nimport numpy as np\nimport pandas as pd\n\nnp.random.seed(1)\n\nnums_0_to_9 = pd.Series([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])\n\nrandom_numbers1 = nums_0_to_9.sample(n=10).to_list()\nrandom_numbers1\n\n[2, 9, 6, 4, 0, 3, 1, 7, 8, 5]\n\n\n\n\nYou can see that random_numbers1 is a list of 10 numbers from 0 to 9 that, from all appearances, looks random. If we run the sample method again, we will get a fresh batch of 10 numbers that also look random.\n\n\n\nrandom_numbers2 = nums_0_to_9.sample(n=10).to_list()\nrandom_numbers2\n\n[9, 5, 3, 0, 8, 4, 2, 1, 6, 7]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#setting-the-seed-in-python-contd",
+    "href": "materials/slides/classification2.html#setting-the-seed-in-python-contd",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Setting the seed in Python (cont’d)",
+    "text": "Setting the seed in Python (cont’d)\nIf we choose a different value for the seed—say, 4235—we obtain a different sequence of random numbers:\n\n\n# seed was 1 on the last slide when we generated this list\nrandom_numbers1\n\n[2, 9, 6, 4, 0, 3, 1, 7, 8, 5]\n\n\n\n\n\nnp.random.seed(4235)\nrandom_numbers1_different = nums_0_to_9.sample(n=10).to_list()\n\nrandom_numbers1\nrandom_numbers1_different\n\n[6, 7, 2, 3, 5, 9, 1, 4, 0, 8]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#back-to-the-breast-cancer-data-set-example",
+    "href": "materials/slides/classification2.html#back-to-the-breast-cancer-data-set-example",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Back to the breast cancer data set example",
+    "text": "Back to the breast cancer data set example\n\n# load packages\nimport altair as alt\nimport pandas as pd\nfrom sklearn import set_config\n\n# Output dataframes instead of arrays\nset_config(transform_output=\"pandas\")\n\n# set the seed\nnp.random.seed(3)\n\n# load data\ncancer = pd.read_csv(\"data/wdbc_unscaled.csv\")\n# re-label Class \"M\" as \"Malignant\", and Class \"B\" as \"Benign\"\ncancer[\"Class\"] = cancer[\"Class\"].replace({\n    \"M\" : \"Malignant\",\n    \"B\" : \"Benign\"\n})",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#breast-cancer-data",
+    "href": "materials/slides/classification2.html#breast-cancer-data",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Breast cancer data",
+    "text": "Breast cancer data\n\n\n\nperim_concav = alt.Chart(cancer).mark_circle().encode(\n    x=alt.X(\"Smoothness\").scale(zero=False),\n    y=\"Concavity\",\n    color=alt.Color(\"Class\").title(\"Diagnosis\")\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#create-the-train-test-split",
+    "href": "materials/slides/classification2.html#create-the-train-test-split",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Create the train / test split",
+    "text": "Create the train / test split\n\nBefore fitting any models, or doing exploratory data analysis, it is critical that you split the data into training and test sets.\nTypically, the training set is between 50% and 95% of the data, while the test set is the remaining 5% to 50%.\nThe train_test_split function from scikit-learn handles the procedure of splitting the data for us.\nUse shuffle=True to remove the influence of order in the data set.\nSet the stratify parameter to be the response variable to ensure the same proportion of each class ends up in both the training and testing sets.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#splitting-the-breast-cancer-data-set",
+    "href": "materials/slides/classification2.html#splitting-the-breast-cancer-data-set",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Splitting the breast cancer data set",
+    "text": "Splitting the breast cancer data set\n\n\nSplit the data so 75% are in the training set, and 25% in the test set\nData are shuffled\nSplit is stratified on the Class variable\n\n\n\nfrom sklearn.model_selection import train_test_split\n\ncancer_train, cancer_test = train_test_split(\n    cancer, train_size=0.75, stratify=cancer[\"Class\"]\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#checking-the-splits",
+    "href": "materials/slides/classification2.html#checking-the-splits",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Checking the splits",
+    "text": "Checking the splits\n\n\nWe can use .info() to look at the splits\nLet’s look at the training split (in practice you look at both)\n\n\n\ncancer_train.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 426 entries, 196 to 296\nData columns (total 12 columns):\n #   Column             Non-Null Count  Dtype  \n---  ------             --------------  -----  \n 0   ID                 426 non-null    int64  \n 1   Class              426 non-null    object \n 2   Radius             426 non-null    float64\n 3   Texture            426 non-null    float64\n 4   Perimeter          426 non-null    float64\n 5   Area               426 non-null    float64\n 6   Smoothness         426 non-null    float64\n 7   Compactness        426 non-null    float64\n 8   Concavity          426 non-null    float64\n 9   Concave_Points     426 non-null    float64\n 10  Symmetry           426 non-null    float64\n 11  Fractal_Dimension  426 non-null    float64\ndtypes: float64(10), int64(1), object(1)\nmemory usage: 43.3+ KB",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#checking-the-splits-1",
+    "href": "materials/slides/classification2.html#checking-the-splits-1",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Checking the splits",
+    "text": "Checking the splits\n\n\nWe can use the value_counts method with the normalize argument set to True to find the percentage of malignant and benign classes in cancer_train.\nWe can see our class proportions were roughly preserved when we split the data.\n\n\n\ncancer_train[\"Class\"].value_counts(normalize=True)\n\nClass\nBenign       0.626761\nMalignant    0.373239\nName: proportion, dtype: float64",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#preprocessing-with-data-splitting",
+    "href": "materials/slides/classification2.html#preprocessing-with-data-splitting",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Preprocessing with data splitting",
+    "text": "Preprocessing with data splitting\n\nMany machine learning models are sensitive to the scale of the predictors, and even if not, comparison of importance of features for prediction after fitting requires scaling.\nWhen preprocessing the data (scaling is part of this), it is critical that we use only the training set in creating the mathematical function to do this.\nIf this is not done, we will get overly optimistic test accuracy, as our test data will have influenced our model.\nAfter creating the preprocessing function, we can then apply it separately to both the training and test data sets.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#preprocessing-with-scikit-learn",
+    "href": "materials/slides/classification2.html#preprocessing-with-scikit-learn",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Preprocessing with scikit-learn",
+    "text": "Preprocessing with scikit-learn\n\n\nscikit-learn helps us handle this properly as long as we wrap our analysis steps in a Pipeline.\nSpecifically, we construct and prepare the preprocessor using make_column_transformer:\n\n\n\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.compose import make_column_transformer, make_column_selector\n\ncancer_preprocessor = make_column_transformer(\n    (StandardScaler(), [\"Smoothness\", \"Concavity\"]),\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#train-the-classifier",
+    "href": "materials/slides/classification2.html#train-the-classifier",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Train the classifier",
+    "text": "Train the classifier\n\n\n\n\nNow we can create our K-nearest neighbors classifier with only the training set.\nFor simplicity, we will just choose \\(K\\) = 3, and use only the concavity and smoothness predictors.\n\n\n\n\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.pipeline import make_pipeline\n\nknn = KNeighborsClassifier(n_neighbors=3)\n\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\n\nknn_pipeline = make_pipeline(cancer_preprocessor, knn)\nknn_pipeline.fit(X, y)\n\nknn_pipeline\n\nPipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Smoothness',\n                                                   'Concavity'])])),\n                ('kneighborsclassifier', KNeighborsClassifier(n_neighbors=3))])In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.  Pipeline?Documentation for PipelineiFittedPipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Smoothness',\n                                                   'Concavity'])])),\n                ('kneighborsclassifier', KNeighborsClassifier(n_neighbors=3))])  columntransformer: ColumnTransformer?Documentation for columntransformer: ColumnTransformerColumnTransformer(transformers=[('standardscaler', StandardScaler(),\n                                 ['Smoothness', 'Concavity'])]) standardscaler['Smoothness', 'Concavity']  StandardScaler?Documentation for StandardScalerStandardScaler()  KNeighborsClassifier?Documentation for KNeighborsClassifierKNeighborsClassifier(n_neighbors=3)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#predict-the-labels-in-the-test-set",
+    "href": "materials/slides/classification2.html#predict-the-labels-in-the-test-set",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Predict the labels in the test set",
+    "text": "Predict the labels in the test set\nNow that we have a K-nearest neighbors classifier object, we can use it to predict the class labels for our test set:\n\ncancer_test[\"predicted\"] = knn_pipeline.predict(cancer_test[[\"Smoothness\", \"Concavity\"]])\nprint(cancer_test[[\"ID\", \"Class\", \"predicted\"]])\n\n           ID      Class  predicted\n116    864726     Benign  Malignant\n146    869691  Malignant  Malignant\n..        ...        ...        ...\n281   8912055     Benign     Benign\n15   84799002  Malignant  Malignant\n\n[143 rows x 3 columns]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#evaluate-performance",
+    "href": "materials/slides/classification2.html#evaluate-performance",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Evaluate performance",
+    "text": "Evaluate performance\nTo evaluate the model, we will look at:\n\n\naccuracy\nprecision\nrecall\nconfusion matrix\ncompare to baseline model (majority classifier)\n\n\nAll of these together, will help us develop a fuller picture of how the model is performing, as opposed to only evaluating the model based on a single metric or table.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#accuracy-precision-and-recall",
+    "href": "materials/slides/classification2.html#accuracy-precision-and-recall",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Accuracy, precision and recall",
+    "text": "Accuracy, precision and recall\n\nknn_pipeline.score(\n    cancer_test[[\"Smoothness\", \"Concavity\"]],\n    cancer_test[\"Class\"]\n)\n\n0.8951048951048951\n\n\n\nfrom sklearn.metrics import recall_score, precision_score\n\nprecision_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label=\"Malignant\"\n)\n\nnp.float64(0.8275862068965517)\n\n\n\nrecall_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label=\"Malignant\"\n)\n\nnp.float64(0.9056603773584906)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#confusion-matrix",
+    "href": "materials/slides/classification2.html#confusion-matrix",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Confusion matrix",
+    "text": "Confusion matrix\n\n\nWe can look at the confusion matrix for the classifier using the crosstab function from pandas.\nThe crosstab function takes two arguments: the actual labels first, then the predicted labels second.\nNote that crosstab orders its columns alphabetically, but the positive label is still Malignant, even if it is not in the top left corner as in the table shown earlier.\n\n\n\npd.crosstab(\n    cancer_test[\"Class\"],\n    cancer_test[\"predicted\"]\n)\n\n\n\n\n\n\n\npredicted\nBenign\nMalignant\n\n\nClass\n\n\n\n\n\n\nBenign\n80\n10\n\n\nMalignant\n5\n48",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#critically-analyze-performance",
+    "href": "materials/slides/classification2.html#critically-analyze-performance",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Critically analyze performance",
+    "text": "Critically analyze performance\n\n\nIs 90% accuracy, a precision of 83% and a recall of 91% good enough?\nTo get a sense of scale, we often compare our model to a baseline model. In the case of classification, this would be the majority classifier (always guesses the majority class label from the training data).\nFor the breast cancer training data, the baseline classifier’s accuracy would be 63%\n\n\ncancer_train[\"Class\"].value_counts(normalize=True)\n\nClass\nBenign       0.626761\nMalignant    0.373239\nName: proportion, dtype: float64\n\n\n\nSo we do see that our model is doing a LOT better than the baseline, which is great, but considering our application domain is in cancer diagnosis, we still have a ways to go…\nAnalyzing model performance really depends on your application!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#tuning-the-classifier",
+    "href": "materials/slides/classification2.html#tuning-the-classifier",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Tuning the classifier",
+    "text": "Tuning the classifier\n\nMost predictive models in statistics and machine learning have parameters (a number you have to pick in advance that determines some aspect of how the model behaves).\nFor our working example, \\(K\\)-nearest neighbors classification algorithm, \\(K\\) is a parameter that we have to pick that determines how many neighbors participate in the class vote.\nHow do we choose \\(K\\), or any parameter for other models?\nData splitting!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#validation-set",
+    "href": "materials/slides/classification2.html#validation-set",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Validation set",
+    "text": "Validation set\n\nCannot use the test set to choose the parameter!\nBut we can split the training set into two partitions, a traning set and a validation set.\nFor each parameter value we want to assess, we can fit on the training set, and evaluate on the validation set.\nThen after we find the best value for our parameter, we can refit the model with the best parameter on the entire training set and then evaluate our model on the test set.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#can-we-do-better",
+    "href": "materials/slides/classification2.html#can-we-do-better",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Can we do better?",
+    "text": "Can we do better?\n\nDepending on how we split the data into the training and validation sets, we might get a lucky split (or an unlucky one) that doesn’t give us a good estimate of the model’s true accuracy.\nIn many cases, we can do better by making many splits, and averaging the accuracy scores to get a better estimate.\nWe call this cross-validation.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#cross-validation",
+    "href": "materials/slides/classification2.html#cross-validation",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Cross-validation",
+    "text": "Cross-validation\nAn example of 5-fold cross-validation:",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
+    "href": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Cross-validation in scikit-learn",
+    "text": "Cross-validation in scikit-learn\n\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.004895    0.006746    0.860465\n1   0.004599    0.006195    0.837209\n..       ...         ...         ...\n8   0.003858    0.004570    0.904762\n9   0.003976    0.004621    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#parameter-value-selection",
+    "href": "materials/slides/classification2.html#parameter-value-selection",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Parameter value selection",
+    "text": "Parameter value selection\n\nSince cross-validation helps us evaluate the accuracy of our classifier, we can use cross-validation to calculate an accuracy for each value of our parameter, here \\(K\\), in a reasonable range,\nThen we pick the value of \\(K\\) that gives us the best accuracy, and refit the model with our parameter on the training data, and then evaluate on the test data.\nThe scikit-learn package collection provides built-in functionality, named GridSearchCV, to automatically handle the details for us.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#parameter-value-selection-1",
+    "href": "materials/slides/classification2.html#parameter-value-selection-1",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Parameter value selection",
+    "text": "Parameter value selection\n\nknn = KNeighborsClassifier() #don't specify the number of neighbours\ncancer_tune_pipe = make_pipeline(cancer_preprocessor, knn)\n\nparameter_grid = {\n    \"kneighborsclassifier__n_neighbors\": range(1, 100, 5),\n}\n\nfrom sklearn.model_selection import GridSearchCV\n\ncancer_tune_grid = GridSearchCV(\n    estimator=cancer_tune_pipe,\n    param_grid=parameter_grid,\n    cv=10\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#parameter-value-selection-2",
+    "href": "materials/slides/classification2.html#parameter-value-selection-2",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Parameter value selection",
+    "text": "Parameter value selection\n\n\nNow we use the fit method on the GridSearchCV object to begin the tuning process.\n\n\ncancer_tune_grid.fit(\n    cancer_train[[\"Smoothness\", \"Concavity\"]],\n    cancer_train[\"Class\"]\n)\naccuracies_grid = pd.DataFrame(cancer_tune_grid.cv_results_)\naccuracies_grid.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 20 entries, 0 to 19\nData columns (total 19 columns):\n #   Column                                   Non-Null Count  Dtype  \n---  ------                                   --------------  -----  \n 0   mean_fit_time                            20 non-null     float64\n 1   std_fit_time                             20 non-null     float64\n 2   mean_score_time                          20 non-null     float64\n 3   std_score_time                           20 non-null     float64\n 4   param_kneighborsclassifier__n_neighbors  20 non-null     int64  \n 5   params                                   20 non-null     object \n 6   split0_test_score                        20 non-null     float64\n 7   split1_test_score                        20 non-null     float64\n 8   split2_test_score                        20 non-null     float64\n 9   split3_test_score                        20 non-null     float64\n 10  split4_test_score                        20 non-null     float64\n 11  split5_test_score                        20 non-null     float64\n 12  split6_test_score                        20 non-null     float64\n 13  split7_test_score                        20 non-null     float64\n 14  split8_test_score                        20 non-null     float64\n 15  split9_test_score                        20 non-null     float64\n 16  mean_test_score                          20 non-null     float64\n 17  std_test_score                           20 non-null     float64\n 18  rank_test_score                          20 non-null     int32  \ndtypes: float64(16), int32(1), int64(1), object(1)\nmemory usage: 3.0+ KB",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#parameter-value-selection-3",
+    "href": "materials/slides/classification2.html#parameter-value-selection-3",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Parameter value selection",
+    "text": "Parameter value selection\n\naccuracies_grid[\"sem_test_score\"] = accuracies_grid[\"std_test_score\"] / 10**(1/2)\naccuracies_grid = (\n    accuracies_grid[[\n        \"param_kneighborsclassifier__n_neighbors\",\n        \"mean_test_score\",\n        \"sem_test_score\"\n    ]]\n    .rename(columns={\"param_kneighborsclassifier__n_neighbors\": \"n_neighbors\"})\n)\nprint(accuracies_grid)\n\n    n_neighbors  mean_test_score  sem_test_score\n0             1         0.845127        0.019966\n1             6         0.873200        0.015680\n..          ...              ...             ...\n18           91         0.875581        0.012967\n19           96         0.875581        0.008193\n\n[20 rows x 3 columns]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#visualize-paramter-value-selection",
+    "href": "materials/slides/classification2.html#visualize-paramter-value-selection",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Visualize paramter value selection",
+    "text": "Visualize paramter value selection\n\n\n\naccuracy_vs_k = (\n    alt.Chart(accuracies_grid)\n    .mark_line(point=True)\n    .encode(\n        x=alt.X(\"n_neighbors\")\n        .title(\"Neighbors\"),\n        y=alt.Y(\"mean_test_score\")\n        .scale(zero=False)\n        .title(\"Accuracy estimate\")\n    )\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#best-parameter-value",
+    "href": "materials/slides/classification2.html#best-parameter-value",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Best parameter value",
+    "text": "Best parameter value\nWe can also obtain the number of neighbours with the highest accuracy programmatically by accessing the best_params_ attribute of the fit GridSearchCV object.\n\ncancer_tune_grid.best_params_\n\n{'kneighborsclassifier__n_neighbors': 36}",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#best-parameter-value-1",
+    "href": "materials/slides/classification2.html#best-parameter-value-1",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Best parameter value",
+    "text": "Best parameter value\n\n\nDo we use \\(K\\) = 36?\nGenerally, when selecting a parameters, we are looking for a value where:\n\n\nwe get roughly optimal accuracy\nchanging the value to a nearby one doesn’t change the accuracy too much\nthe cost of training the model is not prohibitive",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#underoverfitting",
+    "href": "materials/slides/classification2.html#underoverfitting",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Under/Overfitting",
+    "text": "Under/Overfitting\n\n\nWhat happens if we keep increasing the number of neighbors \\(K\\)?\nThe cross-validation accuracy estimate actually starts to decrease!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#evaluating-on-the-test-set",
+    "href": "materials/slides/classification2.html#evaluating-on-the-test-set",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Evaluating on the test set",
+    "text": "Evaluating on the test set\n\n\n\n\nBefore we evaluate on the test set, we need to refit the model using the best parameter(s) on the entire training set\nLuckily, scikit-learn does it for us automatically!\nTo make predictions and assess the estimated accuracy of the best model on the test data, we can use the score and predict methods of the fit GridSearchCV object.\n\n\n\n\ncancer_test[\"predicted\"] = cancer_tune_grid.predict(\n    cancer_test[[\"Smoothness\", \"Concavity\"]]\n)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#evaluating-on-the-test-set-1",
+    "href": "materials/slides/classification2.html#evaluating-on-the-test-set-1",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Evaluating on the test set",
+    "text": "Evaluating on the test set\nWe can then pass those predictions to the precision, recall, and crosstab functions to assess the estimated precision and recall, and print a confusion matrix.\n\n\n\ncancer_tune_grid.score(\n    cancer_test[[\"Smoothness\", \"Concavity\"]],\n    cancer_test[\"Class\"]\n)\n\n0.9090909090909091\n\n\n\nprecision_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label='Malignant'\n)\n\nnp.float64(0.8846153846153846)\n\n\n\nrecall_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label='Malignant'\n)\n\nnp.float64(0.8679245283018868)\n\n\n\n\nconf_matrix = pd.crosstab(\n    cancer_test[\"Class\"],\n    cancer_test[\"predicted\"]\n)\nprint(conf_matrix)\n\npredicted  Benign  Malignant\nClass                       \nBenign         84          6\nMalignant       7         46",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#summary",
+    "href": "materials/slides/classification2.html#summary",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Summary",
+    "text": "Summary",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#k-nearest-neighbors-classification-algorithm",
+    "href": "materials/slides/classification2.html#k-nearest-neighbors-classification-algorithm",
+    "title": "Classification II: evaluation & tuning",
+    "section": "K-nearest neighbors classification algorithm",
+    "text": "K-nearest neighbors classification algorithm\nStrengths: K-nearest neighbors classification ::: {.nonincremental} 1. is a simple, intuitive algorithm, 2. requires few assumptions about what the data must look like, and 3. works for binary (two-class) and multi-class (more than 2 classes) classification problems. :::\nWeaknesses: K-nearest neighbors classification ::: {.nonincremental} 1. becomes very slow as the training data gets larger, 2. may not perform well with a large number of predictors, and 3. may not perform well when classes are imbalanced. :::",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#other-classification-algorithms",
+    "href": "materials/slides/classification2.html#other-classification-algorithms",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Other classification algorithms",
+    "text": "Other classification algorithms\n\nscikit-learn classification documentation: https://scikit-learn.org/stable/supervised_learning.html",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#additional-resources",
+    "href": "materials/slides/classification2.html#additional-resources",
+    "title": "Classification II: evaluation & tuning",
+    "section": "Additional resources",
+    "text": "Additional resources\n\nThe Classification II: evaluation & tuning chapter of Data Science: A First Introduction (Python Edition) by Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy contains all the content presented here with a detailed narrative.\nThe scikit-learn website is an excellent reference for more details on, and advanced usage of, the functions and packages in the past two chapters. Aside from that, it also offers many useful tutorials to get you started.\nAn Introduction to Statistical Learning {cite:p}james2013introduction provides a great next stop in the process of learning about classification. Chapter 4 discusses additional basic techniques for classification that we do not cover, such as logistic regression, linear discriminant analysis, and naive Bayes.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification2.html#references",
+    "href": "materials/slides/classification2.html#references",
+    "title": "Classification II: evaluation & tuning",
+    "section": "References",
+    "text": "References\nEvelyn Martin Lansdowne Beale, Maurice George Kendall, and David Mann. The discarding of variables in multivariate analysis. Biometrika, 54(3-4):357–366, 1967.\nNorman Draper and Harry Smith. Applied Regression Analysis. Wiley, 1966.\nM. Eforymson. Stepwise regression—a backward and forward look. In Eastern Regional Meetings of the Institute of Mathematical Statistics. 1966.\nRonald Hocking and R. N. Leslie. Selection of the best subset in regression analysis. Technometrics, 9(4):531–540, 1967.\nGareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. An Introduction to Statistical Learning. Springer, 1st edition, 2013. URL: https://www.statlearning.com/.\nWes McKinney. Python for data analysis: Data wrangling with Pandas, NumPy, and IPython. ” O’Reilly Media, Inc.”, 2012.\nWilliam Nick Street, William Wolberg, and Olvi Mangasarian. Nuclear feature extraction for breast tumor diagnosis. In International Symposium on Electronic Imaging: Science and Technology. 1993.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification II: evaluation & tuning"
+    ]
+  },
+  {
     "objectID": "materials/slides/ensembles.html#tree-based-methods",
     "href": "materials/slides/ensembles.html#tree-based-methods",
     "title": "Tree-based and ensemble models",
@@ -634,568 +1198,81 @@
     ]
   },
   {
-    "objectID": "materials/slides/classification2.html#session-learning-objectives",
-    "href": "materials/slides/classification2.html#session-learning-objectives",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Session learning objectives",
-    "text": "Session learning objectives\nBy the end of the session, learners will be able to do the following:\n\nDescribe what training, validation, and test data sets are and how they are used in classification.\nSplit data into training, validation, and test data sets.\nDescribe what a random seed is and its importance in reproducible data analysis.\nSet the random seed in Python using the numpy.random.seed function.\nDescribe and interpret accuracy, precision, recall, and confusion matrices.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#introductions",
+    "href": "materials/slides/intro.html#introductions",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Introductions",
+    "text": "Introductions\n\n\n\nTiffany Timbers\nUniversity of British Columbia\n\n\nDaniel Chen\nUniversity of British Columbia"
   },
   {
-    "objectID": "materials/slides/classification2.html#session-learning-objectives-contd",
-    "href": "materials/slides/classification2.html#session-learning-objectives-contd",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Session learning objectives cont’d",
-    "text": "Session learning objectives cont’d\nBy the end of the session, learners will be able to do the following:\n\nEvaluate classification accuracy, precision, and recall in Python using a test set, a single validation set, and cross-validation.\nProduce a confusion matrix in Python.\nChoose the number of neighbors in a K-nearest neighbors classifier by maximizing estimated cross-validation accuracy.\nDescribe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors classification.\nDescribe the advantages and disadvantages of the K-nearest neighbors classification algorithm.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#introduce-yourself",
+    "href": "materials/slides/intro.html#introduce-yourself",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Introduce yourself",
+    "text": "Introduce yourself\nWe wont go around the room, but take the next couple of minutes to introduce yourself to your neighbors.\nSome suggested topics:\n\nWhat is your name\nWhere you are coming from\nWhy you are interested in learning ML in Python"
   },
   {
-    "objectID": "materials/slides/classification2.html#evaluating-performance",
-    "href": "materials/slides/classification2.html#evaluating-performance",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Evaluating performance",
-    "text": "Evaluating performance\n\nSometimes our classifier might make the wrong prediction.\nA classifier does not need to be right 100% of the time to be useful, though we don’t want the classifier to make too many wrong predictions.\nHow do we measure how “good” our classifier is?",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#materials",
+    "href": "materials/slides/intro.html#materials",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Materials",
+    "text": "Materials\n\n\nWebsite:\n\nhttps://posit-conf-2024.github.io/ml-python/\n\n\nGitHub:\n\nhttps://github.com/posit-conf-2024/ml-python"
   },
   {
-    "objectID": "materials/slides/classification2.html#data-splitting",
-    "href": "materials/slides/classification2.html#data-splitting",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Data splitting",
-    "text": "Data splitting\n\nThe trick is to split the data into a training set and test set.\nOnly the training set when building the classifier.\nTo evaluate the performance of the classifier, we first set aside the labels from the test set, and then use the classifier to predict the labels in the test set.\nIf our predictions match the actual labels for the observations in the test set, then we have some confidence that our classifier might also accurately predict the class labels for new observations without known class labels.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#schedule",
+    "href": "materials/slides/intro.html#schedule",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Schedule",
+    "text": "Schedule\n\n\n\n\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification I)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification II\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Tree-based and ensemble methods"
   },
   {
-    "objectID": "materials/slides/classification2.html#splitting-the-data-into-training-and-testing-sets",
-    "href": "materials/slides/classification2.html#splitting-the-data-into-training-and-testing-sets",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Splitting the data into training and testing sets",
-    "text": "Splitting the data into training and testing sets",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#wifi",
+    "href": "materials/slides/intro.html#wifi",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "WiFi",
+    "text": "WiFi\n\n\nUsername:\n\nPosit Conf 2024\n\nPassword:\n\nconf2024\n\n\n\nIf you have any difficulty with your connection please let us (myself and or the TAs) know so we can escalate issues if needed."
   },
   {
-    "objectID": "materials/slides/classification2.html#prediction-accuracy",
-    "href": "materials/slides/classification2.html#prediction-accuracy",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Prediction accuracy",
-    "text": "Prediction accuracy\n\\[\\mathrm{accuracy} = \\frac{\\mathrm{number \\; of  \\; correct  \\; predictions}}{\\mathrm{total \\;  number \\;  of  \\; predictions}}\\]",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#code-of-conduct",
+    "href": "materials/slides/intro.html#code-of-conduct",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Code of Conduct",
+    "text": "Code of Conduct\nThe Code of Conduct can be found at posit.co/code-of-conduct.\nPlease review it carefully.\nYou can report Code of Conduct violations in person, by email, or by phone.\nPlease see the policy linked above for contact information."
   },
   {
-    "objectID": "materials/slides/classification2.html#is-knowing-accuracy-enough",
-    "href": "materials/slides/classification2.html#is-knowing-accuracy-enough",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Is knowing accuracy enough?",
-    "text": "Is knowing accuracy enough?\n\n\nExample accuracy calculation:\n\n\\[\\mathrm{accuracy} = \\frac{\\mathrm{number \\; of  \\; correct  \\; predictions}}{\\mathrm{total \\;  number \\;  of  \\; predictions}} = \\frac{58}{65} = 0.892\\]\n\nPrediction accuracy only tells us how often the classifier makes mistakes in general, but does not tell us anything about the kinds of mistakes the classifier makes.\nThe confusion matrix tells a more complete story.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#other-useful-info",
+    "href": "materials/slides/intro.html#other-useful-info",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Other useful info",
+    "text": "Other useful info\n\nThere are gender-neutral bathrooms located on floors 3, 4, 5, 6, and 7.\nThe meditation and prayer room is Room 503, it is available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.\nThe lactation room is located in 509, with the same timings as above.\nParticipants who do not wish to be photographed have red lanyards; please note everyone’s lanyard colors before taking a photo and respect their choices."
   },
   {
-    "objectID": "materials/slides/classification2.html#example-confusion-matrix-for-the-breast-cancer-data",
-    "href": "materials/slides/classification2.html#example-confusion-matrix-for-the-breast-cancer-data",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Example confusion matrix for the breast cancer data:",
-    "text": "Example confusion matrix for the breast cancer data:\n\n\n\n\n\n\n\n\n\nPredicted Malignant\nPredicted Benign\n\n\n\n\nActually Malignant\n1\n3\n\n\nActually Benign\n4\n57\n\n\n\n\nTrue Positive: A malignant observation that was classified as malignant (top left).\nFalse Positive: A benign observation that was classified as malignant (bottom left).\nTrue Negative: A benign observation that was classified as benign (bottom right).\nFalse Negative: A malignant observation that was classified as benign (top right).",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#asking-for-help-stickies",
+    "href": "materials/slides/intro.html#asking-for-help-stickies",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Asking for help (Stickies)",
+    "text": "Asking for help (Stickies)\n\n\n\n\n\nI’m working\n\n\n\n\n\nI’m stuck\n\n\n\n\n\nI’m done"
   },
   {
-    "objectID": "materials/slides/classification2.html#precision-recall",
-    "href": "materials/slides/classification2.html#precision-recall",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Precision & recall",
-    "text": "Precision & recall\n\n\nPrecision quantifies how many of the positive predictions the classifier made were actually positive.\n\n\\[\\mathrm{precision} = \\frac{\\mathrm{number \\; of  \\; correct \\; positive \\; predictions}}{\\mathrm{total \\;  number \\;  of \\; positive  \\; predictions}}\\]\n\nRecall quantifies how many of the positive observations in the test set were identified as positive.\n\n\\[\\mathrm{recall} = \\frac{\\mathrm{number \\; of  \\; correct  \\; positive \\; predictions}}{\\mathrm{total \\;  number \\;  of  \\; positive \\; test \\; set \\; observations}}\\]",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#other-communication-discord",
+    "href": "materials/slides/intro.html#other-communication-discord",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Other communication (Discord)",
+    "text": "Other communication (Discord)\nYou should have received an email with an invitation and instructions for joining the conference’s discord server.\nThis workshop has a private channel under Workshops,\n\n#workshop-ml-python\n\nThis is a great place to ask questions, post resources, memes, or most anything else before, during, and after the workshop."
   },
   {
-    "objectID": "materials/slides/classification2.html#precision-and-recall-for-the-breast-cancer-data-set-example",
-    "href": "materials/slides/classification2.html#precision-and-recall-for-the-breast-cancer-data-set-example",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Precision and recall for the breast cancer data set example",
-    "text": "Precision and recall for the breast cancer data set example\n\n\n\n\n\n\n\n\n\nPredicted Malignant\nPredicted Benign\n\n\n\n\nActually Malignant\n1\n3\n\n\nActually Benign\n4\n57\n\n\n\n\\[\\mathrm{precision} = \\frac{1}{1+4} = 0.20, \\quad \\mathrm{recall} = \\frac{1}{1+3} = 0.25\\]\n\nSo even with an accuracy of 89%, the precision and recall of the classifier were both relatively low. For this data analysis context, recall is particularly important: if someone has a malignant tumor, we certainly want to identify it. A recall of just 25% would likely be unacceptable!",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#rstudio-cloud",
+    "href": "materials/slides/intro.html#rstudio-cloud",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "RStudio Cloud",
+    "text": "RStudio Cloud\nLink in your welcome email (from last night!) and/or discord (pinned/first comment)\nOnce you have joined you’re ready to go! We will work with these at the end of each lecture component.\n\n\n\n\n\n\nwhich should then create a copy of all materials and launch a cloud session for you."
   },
   {
-    "objectID": "materials/slides/classification2.html#randomness-and-seeds",
-    "href": "materials/slides/classification2.html#randomness-and-seeds",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Randomness and seeds",
-    "text": "Randomness and seeds\n\nOur data analyses will often involve the use of randomness\nWe use randomness any time we need to make a decision in our analysis that needs to be fair, unbiased, and not influenced by human input (e.g., splitting into training and test sets).\nHowever, the use of randomness runs counter to one of the main tenets of good data analysis practice: reproducibility…\nThe trick is that in Python—and other programming languages—randomness is not actually random! Instead, Python uses a random number generator that produces a sequence of numbers that are completely determined by a seed value.\nOnce you set the seed value, everything after that point may look random, but is actually totally reproducible.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#setting-the-seed-in-python",
-    "href": "materials/slides/classification2.html#setting-the-seed-in-python",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Setting the seed in Python",
-    "text": "Setting the seed in Python\nLet’s say we want to make a series object containing the integers from 0 to 9. And then we want to randomly pick 10 numbers from that list, but we want it to be reproducible.\n\n\nimport numpy as np\nimport pandas as pd\n\nnp.random.seed(1)\n\nnums_0_to_9 = pd.Series([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])\n\nrandom_numbers1 = nums_0_to_9.sample(n=10).to_list()\nrandom_numbers1\n\n[2, 9, 6, 4, 0, 3, 1, 7, 8, 5]\n\n\n\n\nYou can see that random_numbers1 is a list of 10 numbers from 0 to 9 that, from all appearances, looks random. If we run the sample method again, we will get a fresh batch of 10 numbers that also look random.\n\n\n\nrandom_numbers2 = nums_0_to_9.sample(n=10).to_list()\nrandom_numbers2\n\n[9, 5, 3, 0, 8, 4, 2, 1, 6, 7]",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#setting-the-seed-in-python-contd",
-    "href": "materials/slides/classification2.html#setting-the-seed-in-python-contd",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Setting the seed in Python (cont’d)",
-    "text": "Setting the seed in Python (cont’d)\nIf we choose a different value for the seed—say, 4235—we obtain a different sequence of random numbers:\n\n\n# seed was 1 on the last slide when we generated this list\nrandom_numbers1\n\n[2, 9, 6, 4, 0, 3, 1, 7, 8, 5]\n\n\n\n\n\nnp.random.seed(4235)\nrandom_numbers1_different = nums_0_to_9.sample(n=10).to_list()\n\nrandom_numbers1\nrandom_numbers1_different\n\n[6, 7, 2, 3, 5, 9, 1, 4, 0, 8]",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#back-to-the-breast-cancer-data-set-example",
-    "href": "materials/slides/classification2.html#back-to-the-breast-cancer-data-set-example",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Back to the breast cancer data set example",
-    "text": "Back to the breast cancer data set example\n\n# load packages\nimport altair as alt\nimport pandas as pd\nfrom sklearn import set_config\n\n# Output dataframes instead of arrays\nset_config(transform_output=\"pandas\")\n\n# set the seed\nnp.random.seed(3)\n\n# load data\ncancer = pd.read_csv(\"data/wdbc_unscaled.csv\")\n# re-label Class \"M\" as \"Malignant\", and Class \"B\" as \"Benign\"\ncancer[\"Class\"] = cancer[\"Class\"].replace({\n    \"M\" : \"Malignant\",\n    \"B\" : \"Benign\"\n})",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#breast-cancer-data",
-    "href": "materials/slides/classification2.html#breast-cancer-data",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Breast cancer data",
-    "text": "Breast cancer data\n\n\n\nperim_concav = alt.Chart(cancer).mark_circle().encode(\n    x=alt.X(\"Smoothness\").scale(zero=False),\n    y=\"Concavity\",\n    color=alt.Color(\"Class\").title(\"Diagnosis\")\n)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#create-the-train-test-split",
-    "href": "materials/slides/classification2.html#create-the-train-test-split",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Create the train / test split",
-    "text": "Create the train / test split\n\nBefore fitting any models, or doing exploratory data analysis, it is critical that you split the data into training and test sets.\nTypically, the training set is between 50% and 95% of the data, while the test set is the remaining 5% to 50%.\nThe train_test_split function from scikit-learn handles the procedure of splitting the data for us.\nUse shuffle=True to remove the influence of order in the data set.\nSet the stratify parameter to be the response variable to ensure the same proportion of each class ends up in both the training and testing sets.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#splitting-the-breast-cancer-data-set",
-    "href": "materials/slides/classification2.html#splitting-the-breast-cancer-data-set",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Splitting the breast cancer data set",
-    "text": "Splitting the breast cancer data set\n\n\nSplit the data so 75% are in the training set, and 25% in the test set\nData are shuffled\nSplit is stratified on the Class variable\n\n\n\nfrom sklearn.model_selection import train_test_split\n\ncancer_train, cancer_test = train_test_split(\n    cancer, train_size=0.75, stratify=cancer[\"Class\"]\n)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#checking-the-splits",
-    "href": "materials/slides/classification2.html#checking-the-splits",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Checking the splits",
-    "text": "Checking the splits\n\n\nWe can use .info() to look at the splits\nLet’s look at the training split (in practice you look at both)\n\n\n\ncancer_train.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 426 entries, 196 to 296\nData columns (total 12 columns):\n #   Column             Non-Null Count  Dtype  \n---  ------             --------------  -----  \n 0   ID                 426 non-null    int64  \n 1   Class              426 non-null    object \n 2   Radius             426 non-null    float64\n 3   Texture            426 non-null    float64\n 4   Perimeter          426 non-null    float64\n 5   Area               426 non-null    float64\n 6   Smoothness         426 non-null    float64\n 7   Compactness        426 non-null    float64\n 8   Concavity          426 non-null    float64\n 9   Concave_Points     426 non-null    float64\n 10  Symmetry           426 non-null    float64\n 11  Fractal_Dimension  426 non-null    float64\ndtypes: float64(10), int64(1), object(1)\nmemory usage: 43.3+ KB",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#checking-the-splits-1",
-    "href": "materials/slides/classification2.html#checking-the-splits-1",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Checking the splits",
-    "text": "Checking the splits\n\n\nWe can use the value_counts method with the normalize argument set to True to find the percentage of malignant and benign classes in cancer_train.\nWe can see our class proportions were roughly preserved when we split the data.\n\n\n\ncancer_train[\"Class\"].value_counts(normalize=True)\n\nClass\nBenign       0.626761\nMalignant    0.373239\nName: proportion, dtype: float64",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#preprocessing-with-data-splitting",
-    "href": "materials/slides/classification2.html#preprocessing-with-data-splitting",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Preprocessing with data splitting",
-    "text": "Preprocessing with data splitting\n\nMany machine learning models are sensitive to the scale of the predictors, and even if not, comparison of importance of features for prediction after fitting requires scaling.\nWhen preprocessing the data (scaling is part of this), it is critical that we use only the training set in creating the mathematical function to do this.\nIf this is not done, we will get overly optimistic test accuracy, as our test data will have influenced our model.\nAfter creating the preprocessing function, we can then apply it separately to both the training and test data sets.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#preprocessing-with-scikit-learn",
-    "href": "materials/slides/classification2.html#preprocessing-with-scikit-learn",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Preprocessing with scikit-learn",
-    "text": "Preprocessing with scikit-learn\n\n\nscikit-learn helps us handle this properly as long as we wrap our analysis steps in a Pipeline.\nSpecifically, we construct and prepare the preprocessor using make_column_transformer:\n\n\n\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.compose import make_column_transformer, make_column_selector\n\ncancer_preprocessor = make_column_transformer(\n    (StandardScaler(), [\"Smoothness\", \"Concavity\"]),\n)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#train-the-classifier",
-    "href": "materials/slides/classification2.html#train-the-classifier",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Train the classifier",
-    "text": "Train the classifier\n\n\n\n\nNow we can create our K-nearest neighbors classifier with only the training set.\nFor simplicity, we will just choose \\(K\\) = 3, and use only the concavity and smoothness predictors.\n\n\n\n\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.pipeline import make_pipeline\n\nknn = KNeighborsClassifier(n_neighbors=3)\n\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\n\nknn_pipeline = make_pipeline(cancer_preprocessor, knn)\nknn_pipeline.fit(X, y)\n\nknn_pipeline\n\nPipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Smoothness',\n                                                   'Concavity'])])),\n                ('kneighborsclassifier', KNeighborsClassifier(n_neighbors=3))])In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.  Pipeline?Documentation for PipelineiFittedPipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Smoothness',\n                                                   'Concavity'])])),\n                ('kneighborsclassifier', KNeighborsClassifier(n_neighbors=3))])  columntransformer: ColumnTransformer?Documentation for columntransformer: ColumnTransformerColumnTransformer(transformers=[('standardscaler', StandardScaler(),\n                                 ['Smoothness', 'Concavity'])]) standardscaler['Smoothness', 'Concavity']  StandardScaler?Documentation for StandardScalerStandardScaler()  KNeighborsClassifier?Documentation for KNeighborsClassifierKNeighborsClassifier(n_neighbors=3)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#predict-the-labels-in-the-test-set",
-    "href": "materials/slides/classification2.html#predict-the-labels-in-the-test-set",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Predict the labels in the test set",
-    "text": "Predict the labels in the test set\nNow that we have a K-nearest neighbors classifier object, we can use it to predict the class labels for our test set:\n\ncancer_test[\"predicted\"] = knn_pipeline.predict(cancer_test[[\"Smoothness\", \"Concavity\"]])\nprint(cancer_test[[\"ID\", \"Class\", \"predicted\"]])\n\n           ID      Class  predicted\n116    864726     Benign  Malignant\n146    869691  Malignant  Malignant\n..        ...        ...        ...\n281   8912055     Benign     Benign\n15   84799002  Malignant  Malignant\n\n[143 rows x 3 columns]",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#evaluate-performance",
-    "href": "materials/slides/classification2.html#evaluate-performance",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Evaluate performance",
-    "text": "Evaluate performance\nTo evaluate the model, we will look at:\n\n\naccuracy\nprecision\nrecall\nconfusion matrix\ncompare to baseline model (majority classifier)\n\n\nAll of these together, will help us develop a fuller picture of how the model is performing, as opposed to only evaluating the model based on a single metric or table.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#accuracy-precision-and-recall",
-    "href": "materials/slides/classification2.html#accuracy-precision-and-recall",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Accuracy, precision and recall",
-    "text": "Accuracy, precision and recall\n\nknn_pipeline.score(\n    cancer_test[[\"Smoothness\", \"Concavity\"]],\n    cancer_test[\"Class\"]\n)\n\n0.8951048951048951\n\n\n\nfrom sklearn.metrics import recall_score, precision_score\n\nprecision_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label=\"Malignant\"\n)\n\nnp.float64(0.8275862068965517)\n\n\n\nrecall_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label=\"Malignant\"\n)\n\nnp.float64(0.9056603773584906)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#confusion-matrix",
-    "href": "materials/slides/classification2.html#confusion-matrix",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Confusion matrix",
-    "text": "Confusion matrix\n\n\nWe can look at the confusion matrix for the classifier using the crosstab function from pandas.\nThe crosstab function takes two arguments: the actual labels first, then the predicted labels second.\nNote that crosstab orders its columns alphabetically, but the positive label is still Malignant, even if it is not in the top left corner as in the table shown earlier.\n\n\n\npd.crosstab(\n    cancer_test[\"Class\"],\n    cancer_test[\"predicted\"]\n)\n\n\n\n\n\n\n\npredicted\nBenign\nMalignant\n\n\nClass\n\n\n\n\n\n\nBenign\n80\n10\n\n\nMalignant\n5\n48",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#critically-analyze-performance",
-    "href": "materials/slides/classification2.html#critically-analyze-performance",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Critically analyze performance",
-    "text": "Critically analyze performance\n\n\nIs 90% accuracy, a precision of 83% and a recall of 91% good enough?\nTo get a sense of scale, we often compare our model to a baseline model. In the case of classification, this would be the majority classifier (always guesses the majority class label from the training data).\nFor the breast cancer training data, the baseline classifier’s accuracy would be 63%\n\n\ncancer_train[\"Class\"].value_counts(normalize=True)\n\nClass\nBenign       0.626761\nMalignant    0.373239\nName: proportion, dtype: float64\n\n\n\nSo we do see that our model is doing a LOT better than the baseline, which is great, but considering our application domain is in cancer diagnosis, we still have a ways to go…\nAnalyzing model performance really depends on your application!",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#tuning-the-classifier",
-    "href": "materials/slides/classification2.html#tuning-the-classifier",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Tuning the classifier",
-    "text": "Tuning the classifier\n\nMost predictive models in statistics and machine learning have parameters (a number you have to pick in advance that determines some aspect of how the model behaves).\nFor our working example, \\(K\\)-nearest neighbors classification algorithm, \\(K\\) is a parameter that we have to pick that determines how many neighbors participate in the class vote.\nHow do we choose \\(K\\), or any parameter for other models?\nData splitting!",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#validation-set",
-    "href": "materials/slides/classification2.html#validation-set",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Validation set",
-    "text": "Validation set\n\nCannot use the test set to choose the parameter!\nBut we can split the training set into two partitions, a traning set and a validation set.\nFor each parameter value we want to assess, we can fit on the training set, and evaluate on the validation set.\nThen after we find the best value for our parameter, we can refit the model with the best parameter on the entire training set and then evaluate our model on the test set.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#can-we-do-better",
-    "href": "materials/slides/classification2.html#can-we-do-better",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Can we do better?",
-    "text": "Can we do better?\n\nDepending on how we split the data into the training and validation sets, we might get a lucky split (or an unlucky one) that doesn’t give us a good estimate of the model’s true accuracy.\nIn many cases, we can do better by making many splits, and averaging the accuracy scores to get a better estimate.\nWe call this cross-validation.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#cross-validation",
-    "href": "materials/slides/classification2.html#cross-validation",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Cross-validation",
-    "text": "Cross-validation\nAn example of 5-fold cross-validation:",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
-    "href": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Cross-validation in scikit-learn",
-    "text": "Cross-validation in scikit-learn\n\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.005132    0.007560    0.860465\n1   0.004673    0.005067    0.837209\n..       ...         ...         ...\n8   0.003894    0.004599    0.904762\n9   0.003947    0.004582    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#parameter-value-selection",
-    "href": "materials/slides/classification2.html#parameter-value-selection",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Parameter value selection",
-    "text": "Parameter value selection\n\nSince cross-validation helps us evaluate the accuracy of our classifier, we can use cross-validation to calculate an accuracy for each value of our parameter, here \\(K\\), in a reasonable range,\nThen we pick the value of \\(K\\) that gives us the best accuracy, and refit the model with our parameter on the training data, and then evaluate on the test data.\nThe scikit-learn package collection provides built-in functionality, named GridSearchCV, to automatically handle the details for us.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#parameter-value-selection-1",
-    "href": "materials/slides/classification2.html#parameter-value-selection-1",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Parameter value selection",
-    "text": "Parameter value selection\n\nknn = KNeighborsClassifier() #don't specify the number of neighbours\ncancer_tune_pipe = make_pipeline(cancer_preprocessor, knn)\n\nparameter_grid = {\n    \"kneighborsclassifier__n_neighbors\": range(1, 100, 5),\n}\n\nfrom sklearn.model_selection import GridSearchCV\n\ncancer_tune_grid = GridSearchCV(\n    estimator=cancer_tune_pipe,\n    param_grid=parameter_grid,\n    cv=10\n)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#parameter-value-selection-2",
-    "href": "materials/slides/classification2.html#parameter-value-selection-2",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Parameter value selection",
-    "text": "Parameter value selection\n\n\nNow we use the fit method on the GridSearchCV object to begin the tuning process.\n\n\ncancer_tune_grid.fit(\n    cancer_train[[\"Smoothness\", \"Concavity\"]],\n    cancer_train[\"Class\"]\n)\naccuracies_grid = pd.DataFrame(cancer_tune_grid.cv_results_)\naccuracies_grid.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 20 entries, 0 to 19\nData columns (total 19 columns):\n #   Column                                   Non-Null Count  Dtype  \n---  ------                                   --------------  -----  \n 0   mean_fit_time                            20 non-null     float64\n 1   std_fit_time                             20 non-null     float64\n 2   mean_score_time                          20 non-null     float64\n 3   std_score_time                           20 non-null     float64\n 4   param_kneighborsclassifier__n_neighbors  20 non-null     int64  \n 5   params                                   20 non-null     object \n 6   split0_test_score                        20 non-null     float64\n 7   split1_test_score                        20 non-null     float64\n 8   split2_test_score                        20 non-null     float64\n 9   split3_test_score                        20 non-null     float64\n 10  split4_test_score                        20 non-null     float64\n 11  split5_test_score                        20 non-null     float64\n 12  split6_test_score                        20 non-null     float64\n 13  split7_test_score                        20 non-null     float64\n 14  split8_test_score                        20 non-null     float64\n 15  split9_test_score                        20 non-null     float64\n 16  mean_test_score                          20 non-null     float64\n 17  std_test_score                           20 non-null     float64\n 18  rank_test_score                          20 non-null     int32  \ndtypes: float64(16), int32(1), int64(1), object(1)\nmemory usage: 3.0+ KB",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#parameter-value-selection-3",
-    "href": "materials/slides/classification2.html#parameter-value-selection-3",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Parameter value selection",
-    "text": "Parameter value selection\n\naccuracies_grid[\"sem_test_score\"] = accuracies_grid[\"std_test_score\"] / 10**(1/2)\naccuracies_grid = (\n    accuracies_grid[[\n        \"param_kneighborsclassifier__n_neighbors\",\n        \"mean_test_score\",\n        \"sem_test_score\"\n    ]]\n    .rename(columns={\"param_kneighborsclassifier__n_neighbors\": \"n_neighbors\"})\n)\nprint(accuracies_grid)\n\n    n_neighbors  mean_test_score  sem_test_score\n0             1         0.845127        0.019966\n1             6         0.873200        0.015680\n..          ...              ...             ...\n18           91         0.875581        0.012967\n19           96         0.875581        0.008193\n\n[20 rows x 3 columns]",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#visualize-paramter-value-selection",
-    "href": "materials/slides/classification2.html#visualize-paramter-value-selection",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Visualize paramter value selection",
-    "text": "Visualize paramter value selection\n\n\n\naccuracy_vs_k = (\n    alt.Chart(accuracies_grid)\n    .mark_line(point=True)\n    .encode(\n        x=alt.X(\"n_neighbors\")\n        .title(\"Neighbors\"),\n        y=alt.Y(\"mean_test_score\")\n        .scale(zero=False)\n        .title(\"Accuracy estimate\")\n    )\n)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#best-parameter-value",
-    "href": "materials/slides/classification2.html#best-parameter-value",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Best parameter value",
-    "text": "Best parameter value\nWe can also obtain the number of neighbours with the highest accuracy programmatically by accessing the best_params_ attribute of the fit GridSearchCV object.\n\ncancer_tune_grid.best_params_\n\n{'kneighborsclassifier__n_neighbors': 36}",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#best-parameter-value-1",
-    "href": "materials/slides/classification2.html#best-parameter-value-1",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Best parameter value",
-    "text": "Best parameter value\n\n\nDo we use \\(K\\) = 36?\nGenerally, when selecting a parameters, we are looking for a value where:\n\n\nwe get roughly optimal accuracy\nchanging the value to a nearby one doesn’t change the accuracy too much\nthe cost of training the model is not prohibitive",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#underoverfitting",
-    "href": "materials/slides/classification2.html#underoverfitting",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Under/Overfitting",
-    "text": "Under/Overfitting\n\n\nWhat happens if we keep increasing the number of neighbors \\(K\\)?\nThe cross-validation accuracy estimate actually starts to decrease!",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#evaluating-on-the-test-set",
-    "href": "materials/slides/classification2.html#evaluating-on-the-test-set",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Evaluating on the test set",
-    "text": "Evaluating on the test set\n\n\n\n\nBefore we evaluate on the test set, we need to refit the model using the best parameter(s) on the entire training set\nLuckily, scikit-learn does it for us automatically!\nTo make predictions and assess the estimated accuracy of the best model on the test data, we can use the score and predict methods of the fit GridSearchCV object.\n\n\n\n\ncancer_test[\"predicted\"] = cancer_tune_grid.predict(\n    cancer_test[[\"Smoothness\", \"Concavity\"]]\n)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#evaluating-on-the-test-set-1",
-    "href": "materials/slides/classification2.html#evaluating-on-the-test-set-1",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Evaluating on the test set",
-    "text": "Evaluating on the test set\nWe can then pass those predictions to the precision, recall, and crosstab functions to assess the estimated precision and recall, and print a confusion matrix.\n\n\n\ncancer_tune_grid.score(\n    cancer_test[[\"Smoothness\", \"Concavity\"]],\n    cancer_test[\"Class\"]\n)\n\n0.9090909090909091\n\n\n\nprecision_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label='Malignant'\n)\n\nnp.float64(0.8846153846153846)\n\n\n\nrecall_score(\n    y_true=cancer_test[\"Class\"],\n    y_pred=cancer_test[\"predicted\"],\n    pos_label='Malignant'\n)\n\nnp.float64(0.8679245283018868)\n\n\n\n\nconf_matrix = pd.crosstab(\n    cancer_test[\"Class\"],\n    cancer_test[\"predicted\"]\n)\nprint(conf_matrix)\n\npredicted  Benign  Malignant\nClass                       \nBenign         84          6\nMalignant       7         46",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#summary",
-    "href": "materials/slides/classification2.html#summary",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Summary",
-    "text": "Summary",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#k-nearest-neighbors-classification-algorithm",
-    "href": "materials/slides/classification2.html#k-nearest-neighbors-classification-algorithm",
-    "title": "Classification II: evaluation & tuning",
-    "section": "K-nearest neighbors classification algorithm",
-    "text": "K-nearest neighbors classification algorithm\nStrengths: K-nearest neighbors classification ::: {.nonincremental} 1. is a simple, intuitive algorithm, 2. requires few assumptions about what the data must look like, and 3. works for binary (two-class) and multi-class (more than 2 classes) classification problems. :::\nWeaknesses: K-nearest neighbors classification ::: {.nonincremental} 1. becomes very slow as the training data gets larger, 2. may not perform well with a large number of predictors, and 3. may not perform well when classes are imbalanced. :::",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#other-classification-algorithms",
-    "href": "materials/slides/classification2.html#other-classification-algorithms",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Other classification algorithms",
-    "text": "Other classification algorithms\n\nscikit-learn classification documentation: https://scikit-learn.org/stable/supervised_learning.html",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#additional-resources",
-    "href": "materials/slides/classification2.html#additional-resources",
-    "title": "Classification II: evaluation & tuning",
-    "section": "Additional resources",
-    "text": "Additional resources\n\nThe Classification II: evaluation & tuning chapter of Data Science: A First Introduction (Python Edition) by Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy contains all the content presented here with a detailed narrative.\nThe scikit-learn website is an excellent reference for more details on, and advanced usage of, the functions and packages in the past two chapters. Aside from that, it also offers many useful tutorials to get you started.\nAn Introduction to Statistical Learning {cite:p}james2013introduction provides a great next stop in the process of learning about classification. Chapter 4 discusses additional basic techniques for classification that we do not cover, such as logistic regression, linear discriminant analysis, and naive Bayes.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
-  },
-  {
-    "objectID": "materials/slides/classification2.html#references",
-    "href": "materials/slides/classification2.html#references",
-    "title": "Classification II: evaluation & tuning",
-    "section": "References",
-    "text": "References\nEvelyn Martin Lansdowne Beale, Maurice George Kendall, and David Mann. The discarding of variables in multivariate analysis. Biometrika, 54(3-4):357–366, 1967.\nNorman Draper and Harry Smith. Applied Regression Analysis. Wiley, 1966.\nM. Eforymson. Stepwise regression—a backward and forward look. In Eastern Regional Meetings of the Institute of Mathematical Statistics. 1966.\nRonald Hocking and R. N. Leslie. Selection of the best subset in regression analysis. Technometrics, 9(4):531–540, 1967.\nGareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. An Introduction to Statistical Learning. Springer, 1st edition, 2013. URL: https://www.statlearning.com/.\nWes McKinney. Python for data analysis: Data wrangling with Pandas, NumPy, and IPython. ” O’Reilly Media, Inc.”, 2012.\nWilliam Nick Street, William Wolberg, and Olvi Mangasarian. Nuclear feature extraction for breast tumor diagnosis. In International Symposium on Electronic Imaging: Science and Technology. 1993.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Classification II: evaluation & tuning"
-    ]
+    "objectID": "materials/slides/intro.html#cloud-session",
+    "href": "materials/slides/intro.html#cloud-session",
+    "title": "Welcome &Introduction to Introduction to machine learning in Python",
+    "section": "Cloud session",
+    "text": "Cloud session\nIf everything is working you should see something very close to the following,"
   },
   {
     "objectID": "materials/slides/regression.html#session-learning-objectives-knn",
