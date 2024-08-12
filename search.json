@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Introduction to machine learning in Python with Scikit-learn",
-    "section": "",
-    "text": "by Tiffany Timbers, Daniel Chen\n\n🗓️ August 12, 2024 ⏰ 09:00 - 17:00 🏨 ROOM TBD ✍️ pos.it/conf\n\n\n\n\n\n\n\n\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification continued\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression I & II\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Introduction to ensemble models (e.g., random forest and gradient boosted classifiers)"
-  },
-  {
     "objectID": "index.html#schedule",
     "href": "index.html#schedule",
     "title": "Introduction to machine learning in Python with Scikit-learn",
-    "section": "",
-    "text": "Time\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification continued\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression I & II\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Introduction to ensemble models (e.g., random forest and gradient boosted classifiers)"
+    "section": "Schedule",
+    "text": "Schedule\n\n\n\n\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification I)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification II\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Tree-based and ensemble methods"
   },
   {
     "objectID": "materials/worksheets/py_worksheet_regression2/py_worksheet_regression2.html",
@@ -631,7 +624,7 @@
     "href": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
     "title": "Classification II: evaluation & tuning",
     "section": "Cross-validation in scikit-learn",
-    "text": "Cross-validation in scikit-learn\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.005015    0.007298    0.860465\n1   0.004715    0.005407    0.837209\n..       ...         ...         ...\n8   0.003959    0.004643    0.904762\n9   0.004019    0.004736    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
+    "text": "Cross-validation in scikit-learn\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.004627    0.005095    0.860465\n1   0.004086    0.004947    0.837209\n..       ...         ...         ...\n8   0.003822    0.004510    0.904762\n9   0.003926    0.005299    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
     "crumbs": [
       "Home",
       "Slides",
@@ -891,18 +884,6 @@
     ]
   },
   {
-    "objectID": "materials/slides/ensembles.html#categorical-variables",
-    "href": "materials/slides/ensembles.html#categorical-variables",
-    "title": "Tree-based and ensemble models",
-    "section": "Categorical variables",
-    "text": "Categorical variables\n\n\n\nThis is our first case of seeing categorical predictor variables, can we treat them the same as numerical ones? No!\nIn scikit-learn we must perform one-hot encoding\n\n\n\nSource: https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Tree-based and ensemble models"
-    ]
-  },
-  {
     "objectID": "materials/slides/ensembles.html#data-splitting",
     "href": "materials/slides/ensembles.html#data-splitting",
     "title": "Tree-based and ensemble models",
@@ -915,11 +896,35 @@
     ]
   },
   {
+    "objectID": "materials/slides/ensembles.html#categorical-variables",
+    "href": "materials/slides/ensembles.html#categorical-variables",
+    "title": "Tree-based and ensemble models",
+    "section": "Categorical variables",
+    "text": "Categorical variables\n\n\n\nThis is our first case of seeing categorical predictor variables, can we treat them the same as numerical ones? No!\nIn scikit-learn we must perform one-hot encoding\n\n\n\nSource: https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#look-at-the-data-again",
+    "href": "materials/slides/ensembles.html#look-at-the-data-again",
+    "title": "Tree-based and ensemble models",
+    "section": "Look at the data again",
+    "text": "Look at the data again\nWhich columns do we need to standardize?\nWhich do we need to one-hot encode?\n\nheart.head()\n\n\n\n\n\n\n\n\nAge\nSex\nChestPain\nRestBP\nChol\nFbs\nRestECG\nMaxHR\nExAng\nOldpeak\nSlope\nCa\nThal\nAHD\n\n\n\n\n1\n63\n1\ntypical\n145\n233\n1\n2\n150\n0\n2.3\n3\n0.0\nfixed\nNo\n\n\n2\n67\n1\nasymptomatic\n160\n286\n0\n2\n108\n1\n1.5\n2\n3.0\nnormal\nYes\n\n\n3\n67\n1\nasymptomatic\n120\n229\n0\n2\n129\n1\n2.6\n2\n2.0\nreversable\nYes\n\n\n4\n37\n1\nnonanginal\n130\n250\n0\n0\n187\n0\n3.5\n3\n0.0\nnormal\nNo\n\n\n5\n41\n0\nnontypical\n130\n204\n0\n2\n172\n0\n1.4\n1\n0.0\nnormal\nNo",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
     "objectID": "materials/slides/ensembles.html#one-hot-encoding-pre-processing",
     "href": "materials/slides/ensembles.html#one-hot-encoding-pre-processing",
     "title": "Tree-based and ensemble models",
     "section": "One hot encoding & pre-processing",
-    "text": "One hot encoding & pre-processing\n\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nfrom sklearn.compose import make_column_transformer, make_column_selector\n\nnumeric_feats = ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak','Slope', 'Ca']\npassthrough_feats = ['Sex', 'Fbs', 'ExAng']\ncategorical_feats = ['ChestPain', 'Thal']\n\nheart_preprocessor = make_column_transformer(\n    (StandardScaler(), numeric_feats), \n    (\"passthrough\", passthrough_feats),     \n    (OneHotEncoder(handle_unknown = \"ignore\"), categorical_feats),     \n)",
+    "text": "One hot encoding & pre-processing\n\nfrom sklearn.preprocessing import StandardScaler, OneHotEncoder\nfrom sklearn.compose import make_column_transformer, make_column_selector\n\nnumeric_feats = ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak','Slope', 'Ca']\npassthrough_feats = ['Sex', 'Fbs', 'ExAng']\ncategorical_feats = ['ChestPain', 'Thal']\n\nheart_preprocessor = make_column_transformer(\n    (StandardScaler(), numeric_feats), \n    (\"passthrough\", passthrough_feats),     \n    (OneHotEncoder(handle_unknown = \"ignore\"), categorical_feats),     \n)\n\n\nhandle_unknown = \"ignore\" handles the case where categories exist in the test data, which were missing in the training set. Specifically, it sets the value for those to 0 for all cases of the category.",
     "crumbs": [
       "Home",
       "Slides",
@@ -979,7 +984,7 @@
     "href": "materials/slides/ensembles.html#random-forest-in-scikit-learn-missing-values",
     "title": "Tree-based and ensemble models",
     "section": "Random forest in scikit-learn & missing values",
-    "text": "Random forest in scikit-learn & missing values\n\n\n\nDoes not accept missing values, we need to deal with these somehow…\nWe can either drop the observations with missing values, or we can somehow impute them.\nFor the purposes of this demo we will drop them, but if you are interested in imputation, see the imputation tutorial in scikit-learn\n\n\nHow many rows have missing observations:\n\nheart.isna().any(axis=1).sum()\n\nnp.int64(6)\n\n\nDrop rows with missing observations:\n\nheart_train_drop_na = heart_train.dropna()\n\nX_train_drop_na = heart_train_drop_na.drop(columns=['AHD'])\ny_train_drop_na = heart_train_drop_na['AHD']",
+    "text": "Random forest in scikit-learn & missing values\n\n\n\nDoes not accept missing values, we need to deal with these somehow…\nWe can either drop the observations with missing values, or we can somehow impute them.\nFor the purposes of this demo we will drop them, but if you are interested in imputation, see the imputation tutorial in scikit-learn\n\n\nHow many rows have missing observations:\n\nheart.isna().any(axis=1).sum()\n\nnp.int64(6)\n\n\nDrop rows with missing observations:\n\nheart_train_drop_na = heart_train.dropna()\n\nX_train_drop_na = heart_train_drop_na.drop(\n    columns=['AHD']\n)\ny_train_drop_na = heart_train_drop_na['AHD']",
     "crumbs": [
       "Home",
       "Slides",
@@ -1027,7 +1032,7 @@
     "href": "materials/slides/ensembles.html#random-forest-results",
     "title": "Tree-based and ensemble models",
     "section": "Random Forest results",
-    "text": "Random Forest results\nHow did the Random Forest compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813\n\n\nRandom forest tuned\n0.864855\n0.020858",
+    "text": "Random Forest results\nHow did the Random Forest compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813\n\n\nRandom forest tuned\n0.864855\n0.018907",
     "crumbs": [
       "Home",
       "Slides",
@@ -1075,7 +1080,7 @@
     "href": "materials/slides/ensembles.html#gradientboostingclassifier-results",
     "title": "Tree-based and ensemble models",
     "section": "GradientBoostingClassifier results",
-    "text": "GradientBoostingClassifier results\nHow did the GradientBoostingClassifier compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813\n\n\nRandom forest tuned\n0.864855\n0.020858\n\n\nGradient boosted classifier tuned\n0.851993\n0.027695",
+    "text": "GradientBoostingClassifier results\nHow did the GradientBoostingClassifier compare against the other models we tried?\n\nresults\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\nDummy classifier\n0.541333\n0.002990\n\n\nDecision tree\n0.760833\n0.027661\n\n\nRandom forest\n0.813768\n0.017813\n\n\nRandom forest tuned\n0.864855\n0.018907\n\n\nGradient boosted classifier tuned\n0.851993\n0.027695",
     "crumbs": [
       "Home",
       "Slides",
@@ -1099,7 +1104,7 @@
     "href": "materials/slides/ensembles.html#precision-and-recall-on-the-tuned-random-forest-model",
     "title": "Tree-based and ensemble models",
     "section": "Precision and recall on the tuned random forest model",
-    "text": "Precision and recall on the tuned random forest model\n\nfrom sklearn.metrics import make_scorer, precision_score, recall_score\n\nscoring = {\n    'accuracy': 'accuracy',\n    'precision': make_scorer(precision_score, pos_label='Yes'),  # Assuming 'Yes' is the positive class\n    'recall': make_scorer(recall_score, pos_label='Yes')         # Assuming 'Yes' is the positive class\n}\n\nrf_tune_grid = GridSearchCV(\n    estimator=rf_pipeline,\n    param_grid=rf_param_grid,\n    cv=10,\n    n_jobs=-1,\n    scoring=scoring,\n    refit='accuracy'\n)\n\nrf_tune_grid.fit(X_train_drop_na, y_train_drop_na)\n\nGridSearchCV(cv=10,\n             estimator=Pipeline(steps=[('columntransformer',\n                                        ColumnTransformer(transformers=[('standardscaler',\n                                                                         StandardScaler(),\n                                                                         ['Age',\n                                                                          'RestBP',\n                                                                          'Chol',\n                                                                          'RestECG',\n                                                                          'MaxHR',\n                                                                          'Oldpeak',\n                                                                          'Slope',\n                                                                          'Ca']),\n                                                                        ('passthrough',\n                                                                         'passthrough',\n                                                                         ['Sex',\n                                                                          'Fbs',\n                                                                          'ExAng']),\n                                                                        ('onehotencoder',\n                                                                         OneHotEncoder(handle_unknown='ignore'),\n                                                                         ['ChestPain',\n                                                                          'Thal'])])),\n                                       ('randomforestclas...\n             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,\n                                                                  6, 7],\n                         'randomforestclassifier__n_estimators': [200, 400, 600,\n                                                                  800, 1000]},\n             refit='accuracy',\n             scoring={'accuracy': 'accuracy',\n                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),\n                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)})In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.  GridSearchCV?Documentation for GridSearchCViFittedGridSearchCV(cv=10,\n             estimator=Pipeline(steps=[('columntransformer',\n                                        ColumnTransformer(transformers=[('standardscaler',\n                                                                         StandardScaler(),\n                                                                         ['Age',\n                                                                          'RestBP',\n                                                                          'Chol',\n                                                                          'RestECG',\n                                                                          'MaxHR',\n                                                                          'Oldpeak',\n                                                                          'Slope',\n                                                                          'Ca']),\n                                                                        ('passthrough',\n                                                                         'passthrough',\n                                                                         ['Sex',\n                                                                          'Fbs',\n                                                                          'ExAng']),\n                                                                        ('onehotencoder',\n                                                                         OneHotEncoder(handle_unknown='ignore'),\n                                                                         ['ChestPain',\n                                                                          'Thal'])])),\n                                       ('randomforestclas...\n             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,\n                                                                  6, 7],\n                         'randomforestclassifier__n_estimators': [200, 400, 600,\n                                                                  800, 1000]},\n             refit='accuracy',\n             scoring={'accuracy': 'accuracy',\n                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),\n                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)}) best_estimator_: PipelinePipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Age', 'RestBP', 'Chol',\n                                                   'RestECG', 'MaxHR',\n                                                   'Oldpeak', 'Slope', 'Ca']),\n                                                 ('passthrough', 'passthrough',\n                                                  ['Sex', 'Fbs', 'ExAng']),\n                                                 ('onehotencoder',\n                                                  OneHotEncoder(handle_unknown='ignore'),\n                                                  ['ChestPain', 'Thal'])])),\n                ('randomforestclassifier',\n                 RandomForestClassifier(max_depth=5, max_features=1,\n                                        n_estimators=1000))])  columntransformer: ColumnTransformer?Documentation for columntransformer: ColumnTransformerColumnTransformer(transformers=[('standardscaler', StandardScaler(),\n                                 ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR',\n                                  'Oldpeak', 'Slope', 'Ca']),\n                                ('passthrough', 'passthrough',\n                                 ['Sex', 'Fbs', 'ExAng']),\n                                ('onehotencoder',\n                                 OneHotEncoder(handle_unknown='ignore'),\n                                 ['ChestPain', 'Thal'])]) standardscaler['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak', 'Slope', 'Ca']  StandardScaler?Documentation for StandardScalerStandardScaler() passthrough['Sex', 'Fbs', 'ExAng'] passthroughpassthrough onehotencoder['ChestPain', 'Thal']  OneHotEncoder?Documentation for OneHotEncoderOneHotEncoder(handle_unknown='ignore')  RandomForestClassifier?Documentation for RandomForestClassifierRandomForestClassifier(max_depth=5, max_features=1, n_estimators=1000)",
+    "text": "Precision and recall on the tuned random forest model\n\nfrom sklearn.metrics import make_scorer, precision_score, recall_score\n\nscoring = {\n    'accuracy': 'accuracy',\n    'precision': make_scorer(precision_score, pos_label='Yes'),\n    'recall': make_scorer(recall_score, pos_label='Yes')\n}\n\nrf_tune_grid = GridSearchCV(\n    estimator=rf_pipeline,\n    param_grid=rf_param_grid,\n    cv=10,\n    n_jobs=-1,\n    scoring=scoring,\n    refit='accuracy'\n)\n\nrf_tune_grid.fit(X_train_drop_na, y_train_drop_na)\n\nGridSearchCV(cv=10,\n             estimator=Pipeline(steps=[('columntransformer',\n                                        ColumnTransformer(transformers=[('standardscaler',\n                                                                         StandardScaler(),\n                                                                         ['Age',\n                                                                          'RestBP',\n                                                                          'Chol',\n                                                                          'RestECG',\n                                                                          'MaxHR',\n                                                                          'Oldpeak',\n                                                                          'Slope',\n                                                                          'Ca']),\n                                                                        ('passthrough',\n                                                                         'passthrough',\n                                                                         ['Sex',\n                                                                          'Fbs',\n                                                                          'ExAng']),\n                                                                        ('onehotencoder',\n                                                                         OneHotEncoder(handle_unknown='ignore'),\n                                                                         ['ChestPain',\n                                                                          'Thal'])])),\n                                       ('randomforestclas...\n             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,\n                                                                  6, 7],\n                         'randomforestclassifier__n_estimators': [200, 400, 600,\n                                                                  800, 1000]},\n             refit='accuracy',\n             scoring={'accuracy': 'accuracy',\n                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),\n                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)})In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.  GridSearchCV?Documentation for GridSearchCViFittedGridSearchCV(cv=10,\n             estimator=Pipeline(steps=[('columntransformer',\n                                        ColumnTransformer(transformers=[('standardscaler',\n                                                                         StandardScaler(),\n                                                                         ['Age',\n                                                                          'RestBP',\n                                                                          'Chol',\n                                                                          'RestECG',\n                                                                          'MaxHR',\n                                                                          'Oldpeak',\n                                                                          'Slope',\n                                                                          'Ca']),\n                                                                        ('passthrough',\n                                                                         'passthrough',\n                                                                         ['Sex',\n                                                                          'Fbs',\n                                                                          'ExAng']),\n                                                                        ('onehotencoder',\n                                                                         OneHotEncoder(handle_unknown='ignore'),\n                                                                         ['ChestPain',\n                                                                          'Thal'])])),\n                                       ('randomforestclas...\n             param_grid={'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],\n                         'randomforestclassifier__max_features': [1, 2, 3, 4, 5,\n                                                                  6, 7],\n                         'randomforestclassifier__n_estimators': [200, 400, 600,\n                                                                  800, 1000]},\n             refit='accuracy',\n             scoring={'accuracy': 'accuracy',\n                      'precision': make_scorer(precision_score, response_method='predict', pos_label=Yes),\n                      'recall': make_scorer(recall_score, response_method='predict', pos_label=Yes)}) best_estimator_: PipelinePipeline(steps=[('columntransformer',\n                 ColumnTransformer(transformers=[('standardscaler',\n                                                  StandardScaler(),\n                                                  ['Age', 'RestBP', 'Chol',\n                                                   'RestECG', 'MaxHR',\n                                                   'Oldpeak', 'Slope', 'Ca']),\n                                                 ('passthrough', 'passthrough',\n                                                  ['Sex', 'Fbs', 'ExAng']),\n                                                 ('onehotencoder',\n                                                  OneHotEncoder(handle_unknown='ignore'),\n                                                  ['ChestPain', 'Thal'])])),\n                ('randomforestclassifier',\n                 RandomForestClassifier(max_depth=3, max_features=1,\n                                        n_estimators=400))])  columntransformer: ColumnTransformer?Documentation for columntransformer: ColumnTransformerColumnTransformer(transformers=[('standardscaler', StandardScaler(),\n                                 ['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR',\n                                  'Oldpeak', 'Slope', 'Ca']),\n                                ('passthrough', 'passthrough',\n                                 ['Sex', 'Fbs', 'ExAng']),\n                                ('onehotencoder',\n                                 OneHotEncoder(handle_unknown='ignore'),\n                                 ['ChestPain', 'Thal'])]) standardscaler['Age', 'RestBP', 'Chol', 'RestECG', 'MaxHR', 'Oldpeak', 'Slope', 'Ca']  StandardScaler?Documentation for StandardScalerStandardScaler() passthrough['Sex', 'Fbs', 'ExAng'] passthroughpassthrough onehotencoder['ChestPain', 'Thal']  OneHotEncoder?Documentation for OneHotEncoderOneHotEncoder(handle_unknown='ignore')  RandomForestClassifier?Documentation for RandomForestClassifierRandomForestClassifier(max_depth=3, max_features=1, n_estimators=400)",
     "crumbs": [
       "Home",
       "Slides",
@@ -1111,7 +1116,7 @@
     "href": "materials/slides/ensembles.html#precision-and-recall-contd",
     "title": "Tree-based and ensemble models",
     "section": "Precision and recall cont’d",
-    "text": "Precision and recall cont’d\n\nWhat do we think? Is this model ready for production in a diagnostic setting?\nHow could we improve it further?\n\n\ncv_results = pd.DataFrame(rf_tune_grid.cv_results_)\n\nmean_precision = cv_results['mean_test_precision'].iloc[rf_tune_grid.best_index_]\nsem_precision = cv_results['std_test_precision'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)\nmean_recall = cv_results['mean_test_recall'].iloc[rf_tune_grid.best_index_]\nsem_recall = cv_results['std_test_recall'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)\n\nresults_rf_tuned = pd.DataFrame({\n    'mean': [rf_tune_grid.best_score_, mean_precision, mean_recall],\n    'sem': [cv_results['std_test_accuracy'].iloc[rf_tune_grid.best_index_] / np.sqrt(10), sem_precision, sem_recall],\n}, index=['accuracy', 'precision', 'recall'])\n\nresults_rf_tuned\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\naccuracy\n0.864855\n0.016385\n\n\nprecision\n0.910505\n0.021429\n\n\nrecall\n0.789091\n0.031513",
+    "text": "Precision and recall cont’d\n\nWhat do we think? Is this model ready for production in a diagnostic setting?\nHow could we improve it further?\n\n\ncv_results = pd.DataFrame(rf_tune_grid.cv_results_)\n\nmean_precision = cv_results['mean_test_precision'].iloc[rf_tune_grid.best_index_]\nsem_precision = cv_results['std_test_precision'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)\nmean_recall = cv_results['mean_test_recall'].iloc[rf_tune_grid.best_index_]\nsem_recall = cv_results['std_test_recall'].iloc[rf_tune_grid.best_index_] / np.sqrt(10)\n\nresults_rf_tuned = pd.DataFrame({\n    'mean': [rf_tune_grid.best_score_, mean_precision, mean_recall],\n    'sem': [cv_results['std_test_accuracy'].iloc[rf_tune_grid.best_index_] / np.sqrt(10), sem_precision, sem_recall],\n}, index=['accuracy', 'precision', 'recall'])\n\nresults_rf_tuned\n\n\n\n\n\n\n\n\nmean\nsem\n\n\n\n\naccuracy\n0.860326\n0.016945\n\n\nprecision\n0.913889\n0.026588\n\n\nrecall\n0.780000\n0.029142",
     "crumbs": [
       "Home",
       "Slides",
@@ -1147,7 +1152,7 @@
     "href": "materials/slides/ensembles.html#visualizing-the-results",
     "title": "Tree-based and ensemble models",
     "section": "Visualizing the results",
-    "text": "Visualizing the results\n\n\n\nimport altair as alt\n\nbar_chart = alt.Chart(importances_df).mark_bar().encode(\n    x=alt.X('Importance:Q', title='Feature Importance'),\n    y=alt.Y('Feature:N', sort='-x', title='Feature'),\n    tooltip=['Feature', 'Importance']\n).properties(\n    title='Feature Importances from Random Forest Model',\n    width=350,\n    height=400\n)\n\n\n\nbar_chart",
+    "text": "Visualizing the results",
     "crumbs": [
       "Home",
       "Slides",
@@ -1159,7 +1164,7 @@
     "href": "materials/slides/ensembles.html#evaluating-on-the-test-set",
     "title": "Tree-based and ensemble models",
     "section": "Evaluating on the test set",
-    "text": "Evaluating on the test set\n\nPredict on the test set:\n\n\nheart_test_drop_na = heart_test.dropna()\nX_test_drop_na = heart_test_drop_na.drop(columns=['AHD'])\ny_test_drop_na = heart_test_drop_na['AHD']\n\nheart_test_drop_na[\"predicted\"] = rf_tune_grid.predict(\n    X_test_drop_na\n)",
+    "text": "Evaluating on the test set\nPredict on the test set:\n\nheart_test_drop_na = heart_test.dropna()\nX_test_drop_na = heart_test_drop_na.drop(columns=['AHD'])\ny_test_drop_na = heart_test_drop_na['AHD']\n\nheart_test_drop_na[\"predicted\"] = rf_tune_grid.predict(\n    X_test_drop_na\n)",
     "crumbs": [
       "Home",
       "Slides",
@@ -1171,7 +1176,7 @@
     "href": "materials/slides/ensembles.html#evaluating-on-the-test-set-1",
     "title": "Tree-based and ensemble models",
     "section": "Evaluating on the test set",
-    "text": "Evaluating on the test set\n\nExamine accuracy, precision and recall:\n\n\n\n\nrf_tune_grid.score(\n    X_test_drop_na,\n    y_test_drop_na\n)\n\n0.7704918032786885\n\n\n\nprecision_score(\n    y_true=heart_test_drop_na[\"AHD\"],\n    y_pred=heart_test_drop_na[\"predicted\"],\n    pos_label='Yes'\n)\n\nnp.float64(0.75)\n\n\n\nrecall_score(\n    y_true=heart_test_drop_na[\"AHD\"],\n    y_pred=heart_test_drop_na[\"predicted\"],\n    pos_label='Yes'\n)\n\nnp.float64(0.75)\n\n\n\n\nconf_matrix = pd.crosstab(\n    heart_test_drop_na[\"AHD\"],\n    heart_test_drop_na[\"predicted\"]\n)\nprint(conf_matrix)\n\npredicted  No  Yes\nAHD               \nNo         26    7\nYes         7   21",
+    "text": "Evaluating on the test set\nExamine accuracy, precision and recall:\n\n\n\nrf_tune_grid.score(\n    X_test_drop_na,\n    y_test_drop_na\n)\n\n0.7868852459016393\n\n\n\nprecision_score(\n    y_true=heart_test_drop_na[\"AHD\"],\n    y_pred=heart_test_drop_na[\"predicted\"],\n    pos_label='Yes'\n)\n\nnp.float64(0.7777777777777778)\n\n\n\nrecall_score(\n    y_true=heart_test_drop_na[\"AHD\"],\n    y_pred=heart_test_drop_na[\"predicted\"],\n    pos_label='Yes'\n)\n\nnp.float64(0.75)\n\n\n\n\nconf_matrix = pd.crosstab(\n    heart_test_drop_na[\"AHD\"],\n    heart_test_drop_na[\"predicted\"]\n)\nprint(conf_matrix)\n\npredicted  No  Yes\nAHD               \nNo         27    6\nYes         7   21",
     "crumbs": [
       "Home",
       "Slides",
@@ -1183,7 +1188,31 @@
     "href": "materials/slides/ensembles.html#other-boosting-models",
     "title": "Tree-based and ensemble models",
     "section": "Other boosting models:",
-    "text": "Other boosting models:\n\n\nXGBoost\n\nNot part of sklearn but has similar interface.\nSupports missing values\nGPU training, networked parallel training\nSupports sparse data\nTypically better scores than random forests\n\n\nLightGBM\n\nNot part of sklearn but has similar interface.\nSmall model size\nFaster\nTypically better scores than random forests\n\nCatBoost - Not part of sklearn but has similar interface. - Usually better scores but slower compared to XGBoost and LightGBM",
+    "text": "Other boosting models:\n\n\nXGBoost\n\nNot part of sklearn but has similar interface.\nSupports missing values\nGPU training, networked parallel training\nSupports sparse data\nTypically better scores than random forests\n\n\nLightGBM\n\nNot part of sklearn but has similar interface.\nSmall model size\nFaster\nTypically better scores than random forests\n\nCatBoost\n\nNot part of sklearn but has similar interface.\nUsually better scores but slower compared to XGBoost and LightGBM",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#keep-learning",
+    "href": "materials/slides/ensembles.html#keep-learning",
+    "title": "Tree-based and ensemble models",
+    "section": "Keep learning!",
+    "text": "Keep learning!\n\n\n https://python.datasciencebook.ca/\n\n https://www.statlearning.com/",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Tree-based and ensemble models"
+    ]
+  },
+  {
+    "objectID": "materials/slides/ensembles.html#local-installation",
+    "href": "materials/slides/ensembles.html#local-installation",
+    "title": "Tree-based and ensemble models",
+    "section": "Local installation",
+    "text": "Local installation\n\nUsing Docker: Data Science: A First Introduction (Python Edition) Installation Instructions\nUsing conda: UBC MDS Installation Instructions",
     "crumbs": [
       "Home",
       "Slides",
@@ -1316,6 +1345,18 @@
     "title": "Classification I: training & predicting",
     "section": "Reference Code",
     "text": "Reference Code\n\n\n\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.compose import (\n    make_column_transformer,\n)\n\n\n# load the unscaled cancer data\nunscaled_cancer = pd.read_csv(\n    \"data/wdbc_unscaled.csv\"\n)\n\n# make Class readable\nunscaled_cancer[\"Class\"] = unscaled_cancer[\n    \"Class\"\n].replace({\"M\": \"Malignant\", \"B\": \"Benign\"})\n\n\n\n# create the K-NN model\nknn = KNeighborsClassifier(n_neighbors=7)\n\n# create the centering / scaling preprocessor\npreprocessor = make_column_transformer(\n    (StandardScaler(), ['Area', 'Smoothness']),\n    # more column transformers here\n)\n\nknn_pipeline = make_pipeline(preprocessor, knn)\nknn_pipeline.fit(X=unscaled_cancer, y=unscaled_cancer['Class'])\nknn_pipeline\n\nnew_observation = pd.DataFrame(\n    {\n        'Area': [500, 1500],\n        'Smoothness': [0.075, 0.1],\n    }\n)\nprediction = knn_pipeline.predict(new_observation)\nprediction\n\narray(['Benign', 'Malignant'], dtype=object)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Classification I: training & predicting"
+    ]
+  },
+  {
+    "objectID": "materials/slides/classification1.html#additional-resources",
+    "href": "materials/slides/classification1.html#additional-resources",
+    "title": "Classification I: training & predicting",
+    "section": "Additional resources",
+    "text": "Additional resources\n\nThe Classification I: training & predicting chapter of Data Science: A First Introduction (Python Edition) by Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy contains all the content presented here with a detailed narrative.\nThe scikit-learn website is an excellent reference for more details on, and advanced usage of, the functions and packages in this lesson. Aside from that, it also offers many useful tutorials to get you started.\nAn Introduction to Statistical Learning by Gareth James Daniela Witten Trevor Hastie, and Robert Tibshirani provides a great next stop in the process of learning about classification. Chapter 4 discusses additional basic techniques for classification that we do not cover, such as logistic regression, linear discriminant analysis, and naive Bayes.",
     "crumbs": [
       "Home",
       "Slides",
