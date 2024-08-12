@@ -6,6 +6,7 @@ format:
     slide-level: 4
     smaller: true
     theme: simple
+    incremental: true
 jupyter: python3
 execute:
   echo: true
