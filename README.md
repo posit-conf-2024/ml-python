@@ -11,7 +11,7 @@ by Tiffany Timbers, Daniel Chen
 
 🗓️ August 12, 2024<br>
 ⏰ 09:00 - 17:00<br>
-🏨 ROOM TBD<br>
+🏨 ROOM Clearwater 702<br>
 ✍️ [pos.it/conf](http://pos.it/conf)<br>
 
 -----
