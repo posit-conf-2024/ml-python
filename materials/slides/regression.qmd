@@ -1444,6 +1444,8 @@ lm_plot_multicol_1 = (
 lm_plot_multicol_1
 ```
 
+## Additional Resources
+
 - The [Regression I: K-nearest neighbors](https://python.datasciencebook.ca/regression1.html)
   and [Regression II: linear regression](https://python.datasciencebook.ca/regression2.html)
   chapters of Data Science: A First Introduction (Python Edition) by
