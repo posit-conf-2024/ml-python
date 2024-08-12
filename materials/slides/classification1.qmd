@@ -1349,6 +1349,24 @@ prediction
 :::
 :::
 
+## Additional resources
+
+- The [Classification I: training & predicting](https://python.datasciencebook.ca/classification1.html)
+  chapter of Data Science: A First Introduction (Python Edition) by
+  Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy
+  contains all the content presented here with a detailed narrative.
+- The [`scikit-learn` website](https://scikit-learn.org/stable/) is an excellent
+  reference for more details on, and advanced usage of, the functions and
+  packages in this lesson. Aside from that, it also offers many
+  useful [tutorials](https://scikit-learn.org/stable/tutorial/index.html)
+  to get you started.
+- [*An Introduction to Statistical Learning*](https://www.statlearning.com/) by
+  Gareth James Daniela Witten Trevor Hastie, and Robert Tibshirani provides
+  a great next stop in the process of
+  learning about classification. Chapter 4 discusses additional basic techniques
+  for classification that we do not cover, such as logistic regression, linear
+  discriminant analysis, and naive Bayes.
+
 
 ## References
 
