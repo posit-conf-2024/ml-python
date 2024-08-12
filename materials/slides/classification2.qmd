@@ -883,18 +883,16 @@ print(conf_matrix)
 ## K-nearest neighbors classification algorithm
 
 **Strengths:** K-nearest neighbors classification
-::: {.nonincremental}
+
 1. is a simple, intuitive algorithm,
 2. requires few assumptions about what the data must look like, and
 3. works for binary (two-class) and multi-class (more than 2 classes) classification problems.
-:::
 
 **Weaknesses:** K-nearest neighbors classification
-::: {.nonincremental}
+
 1. becomes very slow as the training data gets larger,
 2. may not perform well with a large number of predictors, and
 3. may not perform well when classes are imbalanced.
-:::
 
 ## Other classification algorithms
 
