@@ -403,11 +403,11 @@
 <h2>Session learning objectives</h2>
 <p>By the end of the session, learners will be able to do the following:</p>
 <ul>
-<li>Describe what training, validation, and test data sets are and how they are used in classification.</li>
-<li>Split data into training, validation, and test data sets.</li>
-<li>Describe what a random seed is and its importance in reproducible data analysis.</li>
-<li>Set the random seed in Python using the <code>numpy.random.seed</code> function.</li>
-<li>Describe and interpret accuracy, precision, recall, and confusion matrices.</li>
+<li class="fragment">Describe what training, validation, and test data sets are and how they are used in classification.</li>
+<li class="fragment">Split data into training, validation, and test data sets.</li>
+<li class="fragment">Describe what a random seed is and its importance in reproducible data analysis.</li>
+<li class="fragment">Set the random seed in Python using the <code>numpy.random.seed</code> function.</li>
+<li class="fragment">Describe and interpret accuracy, precision, recall, and confusion matrices.</li>
 </ul>
 </section>
 
@@ -415,30 +415,30 @@
 <h2>Session learning objectives cont’d</h2>
 <p>By the end of the session, learners will be able to do the following:</p>
 <ul>
-<li>Evaluate classification accuracy, precision, and recall in Python using a test set, a single validation set, and cross-validation.</li>
-<li>Produce a confusion matrix in Python.</li>
-<li>Choose the number of neighbors in a K-nearest neighbors classifier by maximizing estimated cross-validation accuracy.</li>
-<li>Describe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors classification.</li>
-<li>Describe the advantages and disadvantages of the K-nearest neighbors classification algorithm.</li>
+<li class="fragment">Evaluate classification accuracy, precision, and recall in Python using a test set, a single validation set, and cross-validation.</li>
+<li class="fragment">Produce a confusion matrix in Python.</li>
+<li class="fragment">Choose the number of neighbors in a K-nearest neighbors classifier by maximizing estimated cross-validation accuracy.</li>
+<li class="fragment">Describe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors classification.</li>
+<li class="fragment">Describe the advantages and disadvantages of the K-nearest neighbors classification algorithm.</li>
 </ul>
 </section>
 
 <section id="evaluating-performance" class="title-slide slide level2 center">
 <h2>Evaluating performance</h2>
 <ul>
-<li><p>Sometimes our classifier might make the wrong prediction.</p></li>
-<li><p>A classifier does not need to be right 100% of the time to be useful, though we don’t want the classifier to make too many wrong predictions.</p></li>
-<li><p>How do we measure how “good” our classifier is?</p></li>
+<li class="fragment"><p>Sometimes our classifier might make the wrong prediction.</p></li>
+<li class="fragment"><p>A classifier does not need to be right 100% of the time to be useful, though we don’t want the classifier to make too many wrong predictions.</p></li>
+<li class="fragment"><p>How do we measure how “good” our classifier is?</p></li>
 </ul>
 </section>
 
 <section id="data-splitting" class="title-slide slide level2 center">
 <h2>Data splitting</h2>
 <ul>
-<li>The trick is to split the data into a <strong>training set</strong> and <strong>test set</strong>.</li>
-<li>Only the <strong>training set</strong> when building the classifier.</li>
-<li>To evaluate the performance of the classifier, we first set aside the labels from the <strong>test set</strong>, and then use the classifier to predict the labels in the <strong>test set</strong>.</li>
-<li>If our predictions match the actual labels for the observations in the <strong>test set</strong>, then we have some confidence that our classifier might also accurately predict the class labels for new observations without known class labels.</li>
+<li class="fragment">The trick is to split the data into a <strong>training set</strong> and <strong>test set</strong>.</li>
+<li class="fragment">Only the <strong>training set</strong> when building the classifier.</li>
+<li class="fragment">To evaluate the performance of the classifier, we first set aside the labels from the <strong>test set</strong>, and then use the classifier to predict the labels in the <strong>test set</strong>.</li>
+<li class="fragment">If our predictions match the actual labels for the observations in the <strong>test set</strong>, then we have some confidence that our classifier might also accurately predict the class labels for new observations without known class labels.</li>
 </ul>
 </section>
 
@@ -456,12 +456,12 @@
 <section id="is-knowing-accuracy-enough" class="title-slide slide level2 center">
 <h2>Is knowing accuracy enough?</h2>
 <ul>
-<li>Example accuracy calculation:</li>
+<li class="fragment">Example accuracy calculation:</li>
 </ul>
 <p><span class="math display">\[\mathrm{accuracy} = \frac{\mathrm{number \; of  \; correct  \; predictions}}{\mathrm{total \;  number \;  of  \; predictions}} = \frac{58}{65} = 0.892\]</span></p>
 <ul>
-<li><p>Prediction accuracy only tells us how often the classifier makes mistakes in general, but does not tell us anything about the <em>kinds</em> of mistakes the classifier makes.</p></li>
-<li><p>The <strong>confusion matrix</strong> tells a more complete story.</p></li>
+<li class="fragment"><p>Prediction accuracy only tells us how often the classifier makes mistakes in general, but does not tell us anything about the <em>kinds</em> of mistakes the classifier makes.</p></li>
+<li class="fragment"><p>The <strong>confusion matrix</strong> tells a more complete story.</p></li>
 </ul>
 </section>
 
@@ -494,21 +494,21 @@
 </tbody>
 </table>
 <ul>
-<li><strong>True Positive:</strong> A malignant observation that was classified as malignant (top left).</li>
-<li><strong>False Positive:</strong> A benign observation that was classified as malignant (bottom left).</li>
-<li><strong>True Negative:</strong> A benign observation that was classified as benign (bottom right).</li>
-<li><strong>False Negative:</strong> A malignant observation that was classified as benign (top right).</li>
+<li class="fragment"><strong>True Positive:</strong> A malignant observation that was classified as malignant (top left).</li>
+<li class="fragment"><strong>False Positive:</strong> A benign observation that was classified as malignant (bottom left).</li>
+<li class="fragment"><strong>True Negative:</strong> A benign observation that was classified as benign (bottom right).</li>
+<li class="fragment"><strong>False Negative:</strong> A malignant observation that was classified as benign (top right).</li>
 </ul>
 </section>
 
 <section id="precision-recall" class="title-slide slide level2 center">
 <h2>Precision &amp; recall</h2>
 <ul>
-<li><em>Precision</em> quantifies how many of the positive predictions the classifier made were actually positive.</li>
+<li class="fragment"><em>Precision</em> quantifies how many of the positive predictions the classifier made were actually positive.</li>
 </ul>
 <p><span class="math display">\[\mathrm{precision} = \frac{\mathrm{number \; of  \; correct \; positive \; predictions}}{\mathrm{total \;  number \;  of \; positive  \; predictions}}\]</span></p>
 <ul>
-<li><em>Recall</em> quantifies how many of the positive observations in the test set were identified as positive.</li>
+<li class="fragment"><em>Recall</em> quantifies how many of the positive observations in the test set were identified as positive.</li>
 </ul>
 <p><span class="math display">\[\mathrm{recall} = \frac{\mathrm{number \; of  \; correct  \; positive \; predictions}}{\mathrm{total \;  number \;  of  \; positive \; test \; set \; observations}}\]</span></p>
 </section>
@@ -550,18 +550,18 @@
 <section id="randomness-and-seeds" class="title-slide slide level2 center">
 <h2>Randomness and seeds</h2>
 <ul>
-<li><p>Our data analyses will often involve the use of randomness</p></li>
-<li><p>We use randomness any time we need to make a decision in our analysis that needs to be fair, unbiased, and not influenced by human input (e.g., splitting into training and test sets).</p></li>
-<li><p>However, the use of randomness runs counter to one of the main tenets of good data analysis practice: reproducibility…</p></li>
-<li><p>The trick is that in Python—and other programming languages—randomness is not actually random! Instead, Python uses a random number generator that produces a sequence of numbers that are completely determined by a seed value.</p></li>
-<li><p>Once you set the seed value, everything after that point may look random, but is actually totally reproducible.</p></li>
+<li class="fragment"><p>Our data analyses will often involve the use of randomness</p></li>
+<li class="fragment"><p>We use randomness any time we need to make a decision in our analysis that needs to be fair, unbiased, and not influenced by human input (e.g., splitting into training and test sets).</p></li>
+<li class="fragment"><p>However, the use of randomness runs counter to one of the main tenets of good data analysis practice: reproducibility…</p></li>
+<li class="fragment"><p>The trick is that in Python—and other programming languages—randomness is not actually random! Instead, Python uses a random number generator that produces a sequence of numbers that are completely determined by a seed value.</p></li>
+<li class="fragment"><p>Once you set the seed value, everything after that point may look random, but is actually totally reproducible.</p></li>
 </ul>
 </section>
 
 <section id="setting-the-seed-in-python" class="title-slide slide level2 center">
 <h2>Setting the seed in Python</h2>
 <p>Let’s say we want to make a series object containing the integers from 0 to 9. And then we want to randomly pick 10 numbers from that list, but we want it to be reproducible.</p>
-<div id="4baab703" class="cell" data-execution_count="2">
+<div id="bbc02c9a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a></span>
@@ -576,7 +576,7 @@
 </div>
 </div>
 <p>You can see that <code>random_numbers1</code> is a list of 10 numbers from 0 to 9 that, from all appearances, looks random. If we run the <code>sample</code> method again, we will get a fresh batch of 10 numbers that also look random.</p>
-<div id="5c4cb5ec" class="cell" data-execution_count="3">
+<div id="a149d71b" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>random_numbers2 <span class="op">=</span> nums_0_to_9.sample(n<span class="op">=</span><span class="dv">10</span>).to_list()</span>
 <span id="cb3-2"><a></a>random_numbers2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -588,14 +588,14 @@
 <section id="setting-the-seed-in-python-contd" class="title-slide slide level2 center">
 <h2>Setting the seed in Python (cont’d)</h2>
 <p>If we choose a different value for the seed—say, 4235—we obtain a different sequence of random numbers:</p>
-<div id="3e839026" class="cell" data-execution_count="4">
+<div id="34436ceb" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># seed was 1 on the last slide when we generated this list</span></span>
 <span id="cb5-2"><a></a>random_numbers1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>[2, 9, 6, 4, 0, 3, 1, 7, 8, 5]</code></pre>
 </div>
 </div>
-<div id="e025320f" class="cell" data-execution_count="5">
+<div id="163e88d8" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>np.random.seed(<span class="dv">4235</span>)</span>
 <span id="cb7-2"><a></a>random_numbers1_different <span class="op">=</span> nums_0_to_9.sample(n<span class="op">=</span><span class="dv">10</span>).to_list()</span>
 <span id="cb7-3"><a></a></span>
@@ -609,7 +609,7 @@
 
 <section id="back-to-the-breast-cancer-data-set-example" class="title-slide slide level2 center">
 <h2>Back to the breast cancer data set example</h2>
-<div id="2d7b8d05" class="cell" data-execution_count="6">
+<div id="ab6de507" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># load packages</span></span>
 <span id="cb9-2"><a></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
 <span id="cb9-3"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -635,7 +635,7 @@
 <h2>Breast cancer data</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="5d80363a" class="cell" data-execution_count="7">
+<div id="d1472e3b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>perim_concav <span class="op">=</span> alt.Chart(cancer).mark_circle().encode(</span>
 <span id="cb10-2"><a></a>    x<span class="op">=</span>alt.X(<span class="st">"Smoothness"</span>).scale(zero<span class="op">=</span><span class="va">False</span>),</span>
 <span id="cb10-3"><a></a>    y<span class="op">=</span><span class="st">"Concavity"</span>,</span>
@@ -643,27 +643,27 @@
 <span id="cb10-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="d358e626" class="cell" data-execution_count="8">
+<div id="114c666c" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display" data-execution_count="8">
 
 <style>
-  #altair-viz-9a1bb32cda2146f5b4199c81a06a7061.vega-embed {
+  #altair-viz-14bc72b6e28b4652ac8ae714c183bcb9.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-9a1bb32cda2146f5b4199c81a06a7061.vega-embed details,
-  #altair-viz-9a1bb32cda2146f5b4199c81a06a7061.vega-embed details summary {
+  #altair-viz-14bc72b6e28b4652ac8ae714c183bcb9.vega-embed details,
+  #altair-viz-14bc72b6e28b4652ac8ae714c183bcb9.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-9a1bb32cda2146f5b4199c81a06a7061"></div>
+<div id="altair-viz-14bc72b6e28b4652ac8ae714c183bcb9"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-9a1bb32cda2146f5b4199c81a06a7061") {
-      outputDiv = document.getElementById("altair-viz-9a1bb32cda2146f5b4199c81a06a7061");
+    if (outputDiv.id !== "altair-viz-14bc72b6e28b4652ac8ae714c183bcb9") {
+      outputDiv = document.getElementById("altair-viz-14bc72b6e28b4652ac8ae714c183bcb9");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -719,22 +719,22 @@
 <section id="create-the-train-test-split" class="title-slide slide level2 center">
 <h2>Create the train / test split</h2>
 <ul>
-<li><p><strong>Before</strong> fitting any models, or doing exploratory data analysis, it is critical that you split the data into training and test sets.</p></li>
-<li><p>Typically, the training set is between 50% and 95% of the data, while the test set is the remaining 5% to 50%.</p></li>
-<li><p>The <code>train_test_split</code> function from <code>scikit-learn</code> handles the procedure of splitting the data for us.</p></li>
-<li><p>Use <code>shuffle=True</code> to remove the influence of order in the data set.</p></li>
-<li><p>Set the <code>stratify</code> parameter to be the response variable to ensure the same proportion of each class ends up in both the training and testing sets.</p></li>
+<li class="fragment"><p><strong>Before</strong> fitting any models, or doing exploratory data analysis, it is critical that you split the data into training and test sets.</p></li>
+<li class="fragment"><p>Typically, the training set is between 50% and 95% of the data, while the test set is the remaining 5% to 50%.</p></li>
+<li class="fragment"><p>The <code>train_test_split</code> function from <code>scikit-learn</code> handles the procedure of splitting the data for us.</p></li>
+<li class="fragment"><p>Use <code>shuffle=True</code> to remove the influence of order in the data set.</p></li>
+<li class="fragment"><p>Set the <code>stratify</code> parameter to be the response variable to ensure the same proportion of each class ends up in both the training and testing sets.</p></li>
 </ul>
 </section>
 
 <section id="splitting-the-breast-cancer-data-set" class="title-slide slide level2 center">
 <h2>Splitting the breast cancer data set</h2>
 <ul>
-<li>Split the data so 75% are in the training set, and 25% in the test set</li>
-<li>Data are shuffled</li>
-<li>Split is stratified on the <code>Class</code> variable</li>
+<li class="fragment">Split the data so 75% are in the training set, and 25% in the test set</li>
+<li class="fragment">Data are shuffled</li>
+<li class="fragment">Split is stratified on the <code>Class</code> variable</li>
 </ul>
-<div id="2a85c1ba" class="cell" data-execution_count="9">
+<div id="c3a9d0f0" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb11-2"><a></a></span>
 <span id="cb11-3"><a></a>cancer_train, cancer_test <span class="op">=</span> train_test_split(</span>
@@ -746,10 +746,10 @@
 <section id="checking-the-splits" class="title-slide slide level2 center">
 <h2>Checking the splits</h2>
 <ul>
-<li><p>We can use <code>.info()</code> to look at the splits</p></li>
-<li><p>Let’s look at the training split (in practice you look at both)</p></li>
+<li class="fragment"><p>We can use <code>.info()</code> to look at the splits</p></li>
+<li class="fragment"><p>Let’s look at the training split (in practice you look at both)</p></li>
 </ul>
-<div id="2d08333e" class="cell" data-execution_count="10">
+<div id="0eddbe3d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>cancer_train.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -778,10 +778,10 @@ memory usage: 43.3+ KB</code></pre>
 <section id="checking-the-splits-1" class="title-slide slide level2 center">
 <h2>Checking the splits</h2>
 <ul>
-<li><p>We can use the <code>value_counts</code> method with the <code>normalize</code> argument set to <code>True</code> to find the percentage of malignant and benign classes in <code>cancer_train</code>.</p></li>
-<li><p>We can see our class proportions were roughly preserved when we split the data.</p></li>
+<li class="fragment"><p>We can use the <code>value_counts</code> method with the <code>normalize</code> argument set to <code>True</code> to find the percentage of malignant and benign classes in <code>cancer_train</code>.</p></li>
+<li class="fragment"><p>We can see our class proportions were roughly preserved when we split the data.</p></li>
 </ul>
-<div id="1f425897" class="cell" data-execution_count="11">
+<div id="a14e669b" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>cancer_train[<span class="st">"Class"</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>Class
@@ -795,20 +795,20 @@ Name: proportion, dtype: float64</code></pre>
 <section id="preprocessing-with-data-splitting" class="title-slide slide level2 center">
 <h2>Preprocessing with data splitting</h2>
 <ul>
-<li><p>Many machine learning models are sensitive to the scale of the predictors, and even if not, comparison of importance of features for prediction after fitting requires scaling.</p></li>
-<li><p>When preprocessing the data (scaling is part of this), it is critical that we use <strong>only the training set</strong> in creating the mathematical function to do this.</p></li>
-<li><p>If this is not done, we will get overly optimistic test accuracy, as our test data will have influenced our model.</p></li>
-<li><p>After creating the preprocessing function, we can then apply it separately to both the training and test data sets.</p></li>
+<li class="fragment"><p>Many machine learning models are sensitive to the scale of the predictors, and even if not, comparison of importance of features for prediction after fitting requires scaling.</p></li>
+<li class="fragment"><p>When preprocessing the data (scaling is part of this), it is critical that we use <strong>only the training set</strong> in creating the mathematical function to do this.</p></li>
+<li class="fragment"><p>If this is not done, we will get overly optimistic test accuracy, as our test data will have influenced our model.</p></li>
+<li class="fragment"><p>After creating the preprocessing function, we can then apply it separately to both the training and test data sets.</p></li>
 </ul>
 </section>
 
 <section id="preprocessing-with-scikit-learn" class="title-slide slide level2 center">
 <h2>Preprocessing with <code>scikit-learn</code></h2>
 <ul>
-<li><p><code>scikit-learn</code> helps us handle this properly as long as we wrap our analysis steps in a <code>Pipeline</code>.</p></li>
-<li><p>Specifically, we construct and prepare the preprocessor using <code>make_column_transformer</code>:</p></li>
+<li class="fragment"><p><code>scikit-learn</code> helps us handle this properly as long as we wrap our analysis steps in a <code>Pipeline</code>.</p></li>
+<li class="fragment"><p>Specifically, we construct and prepare the preprocessor using <code>make_column_transformer</code>:</p></li>
 </ul>
-<div id="fab7a4e0" class="cell" data-execution_count="12">
+<div id="528122df" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb16-2"><a></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_transformer, make_column_selector</span>
 <span id="cb16-3"><a></a></span>
@@ -823,11 +823,11 @@ Name: proportion, dtype: float64</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li><p>Now we can create our K-nearest neighbors classifier with only the training set.</p></li>
-<li><p>For simplicity, we will just choose <span class="math inline">\(K\)</span> = 3, and use only the concavity and smoothness predictors.</p></li>
+<li class="fragment"><p>Now we can create our K-nearest neighbors classifier with only the training set.</p></li>
+<li class="fragment"><p>For simplicity, we will just choose <span class="math inline">\(K\)</span> = 3, and use only the concavity and smoothness predictors.</p></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="1f4e6f41" class="cell" data-execution_count="13">
+<div id="8f1852b0" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
 <span id="cb17-2"><a></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
 <span id="cb17-3"><a></a></span>
@@ -1265,7 +1265,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="predict-the-labels-in-the-test-set" class="title-slide slide level2 center">
 <h2>Predict the labels in the test set</h2>
 <p>Now that we have a K-nearest neighbors classifier object, we can use it to predict the class labels for our test set:</p>
-<div id="c4d261d2" class="cell" data-execution_count="14">
+<div id="ed155cc7" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>cancer_test[<span class="st">"predicted"</span>] <span class="op">=</span> knn_pipeline.predict(cancer_test[[<span class="st">"Smoothness"</span>, <span class="st">"Concavity"</span>]])</span>
 <span id="cb18-2"><a></a><span class="bu">print</span>(cancer_test[[<span class="st">"ID"</span>, <span class="st">"Class"</span>, <span class="st">"predicted"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1285,18 +1285,18 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <h2>Evaluate performance</h2>
 <p>To evaluate the model, we will look at:</p>
 <ul>
-<li>accuracy</li>
-<li>precision</li>
-<li>recall</li>
-<li>confusion matrix</li>
-<li>compare to baseline model (majority classifier)</li>
+<li class="fragment">accuracy</li>
+<li class="fragment">precision</li>
+<li class="fragment">recall</li>
+<li class="fragment">confusion matrix</li>
+<li class="fragment">compare to baseline model (majority classifier)</li>
 </ul>
 <p>All of these together, will help us develop a fuller picture of how the model is performing, as opposed to only evaluating the model based on a single metric or table.</p>
 </section>
 
 <section id="accuracy-precision-and-recall" class="title-slide slide level2 center">
 <h2>Accuracy, precision and recall</h2>
-<div id="8d69f984" class="cell" data-execution_count="15">
+<div id="e2789963" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>knn_pipeline.score(</span>
 <span id="cb20-2"><a></a>    cancer_test[[<span class="st">"Smoothness"</span>, <span class="st">"Concavity"</span>]],</span>
 <span id="cb20-3"><a></a>    cancer_test[<span class="st">"Class"</span>]</span>
@@ -1305,7 +1305,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <pre><code>0.8951048951048951</code></pre>
 </div>
 </div>
-<div id="c600aa54" class="cell" data-execution_count="16">
+<div id="e0e14cbe" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> recall_score, precision_score</span>
 <span id="cb22-2"><a></a></span>
 <span id="cb22-3"><a></a>precision_score(</span>
@@ -1317,7 +1317,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <pre><code>np.float64(0.8275862068965517)</code></pre>
 </div>
 </div>
-<div id="d8c26609" class="cell" data-execution_count="17">
+<div id="ef84e0b4" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>recall_score(</span>
 <span id="cb24-2"><a></a>    y_true<span class="op">=</span>cancer_test[<span class="st">"Class"</span>],</span>
 <span id="cb24-3"><a></a>    y_pred<span class="op">=</span>cancer_test[<span class="st">"predicted"</span>],</span>
@@ -1332,11 +1332,11 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="confusion-matrix" class="title-slide slide level2 center">
 <h2>Confusion matrix</h2>
 <ul>
-<li><p>We can look at the <em>confusion matrix</em> for the classifier using the <code>crosstab</code> function from <code>pandas</code>.</p></li>
-<li><p>The <code>crosstab</code> function takes two arguments: the actual labels first, then the predicted labels second.</p></li>
-<li><p>Note that <code>crosstab</code> orders its columns alphabetically, but the positive label is still <code>Malignant</code>, even if it is not in the top left corner as in the table shown earlier.</p></li>
+<li class="fragment"><p>We can look at the <em>confusion matrix</em> for the classifier using the <code>crosstab</code> function from <code>pandas</code>.</p></li>
+<li class="fragment"><p>The <code>crosstab</code> function takes two arguments: the actual labels first, then the predicted labels second.</p></li>
+<li class="fragment"><p>Note that <code>crosstab</code> orders its columns alphabetically, but the positive label is still <code>Malignant</code>, even if it is not in the top left corner as in the table shown earlier.</p></li>
 </ul>
-<div id="0b1e1577" class="cell" data-execution_count="18">
+<div id="cbd5a71b" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>pd.crosstab(</span>
 <span id="cb26-2"><a></a>    cancer_test[<span class="st">"Class"</span>],</span>
 <span id="cb26-3"><a></a>    cancer_test[<span class="st">"predicted"</span>]</span>
@@ -1392,11 +1392,11 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="critically-analyze-performance" class="title-slide slide level2 center">
 <h2>Critically analyze performance</h2>
 <ul>
-<li><p>Is 90% accuracy, a precision of 83% and a recall of 91% good enough?</p></li>
-<li><p>To get a sense of scale, we often compare our model to a baseline model. In the case of classification, this would be the majority classifier (<em>always</em> guesses the majority class label from the training data).</p></li>
-<li><p>For the breast cancer training data, the baseline classifier’s accuracy would be 63%</p></li>
+<li class="fragment"><p>Is 90% accuracy, a precision of 83% and a recall of 91% good enough?</p></li>
+<li class="fragment"><p>To get a sense of scale, we often compare our model to a baseline model. In the case of classification, this would be the majority classifier (<em>always</em> guesses the majority class label from the training data).</p></li>
+<li class="fragment"><p>For the breast cancer training data, the baseline classifier’s accuracy would be 63%</p></li>
 </ul>
-<div id="7a66189d" class="cell" data-execution_count="19">
+<div id="c6853266" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>cancer_train[<span class="st">"Class"</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>Class
@@ -1406,37 +1406,37 @@ Name: proportion, dtype: float64</code></pre>
 </div>
 </div>
 <ul>
-<li><p>So we do see that our model is doing a LOT better than the baseline, which is great, but considering our application domain is in cancer diagnosis, we still have a ways to go…</p></li>
-<li><p>Analyzing model performance really depends on your application!</p></li>
+<li class="fragment"><p>So we do see that our model is doing a LOT better than the baseline, which is great, but considering our application domain is in cancer diagnosis, we still have a ways to go…</p></li>
+<li class="fragment"><p>Analyzing model performance really depends on your application!</p></li>
 </ul>
 </section>
 
 <section id="tuning-the-classifier" class="title-slide slide level2 center">
 <h2>Tuning the classifier</h2>
 <ul>
-<li><p>Most predictive models in statistics and machine learning have parameters (a number you have to pick in advance that determines some aspect of how the model behaves).</p></li>
-<li><p>For our working example, <span class="math inline">\(K\)</span>-nearest neighbors classification algorithm, <span class="math inline">\(K\)</span> is a parameter that we have to pick that determines how many neighbors participate in the class vote.</p></li>
-<li><p>How do we choose <span class="math inline">\(K\)</span>, or any parameter for other models?</p></li>
-<li><p><strong>Data splitting</strong>!</p></li>
+<li class="fragment"><p>Most predictive models in statistics and machine learning have parameters (a number you have to pick in advance that determines some aspect of how the model behaves).</p></li>
+<li class="fragment"><p>For our working example, <span class="math inline">\(K\)</span>-nearest neighbors classification algorithm, <span class="math inline">\(K\)</span> is a parameter that we have to pick that determines how many neighbors participate in the class vote.</p></li>
+<li class="fragment"><p>How do we choose <span class="math inline">\(K\)</span>, or any parameter for other models?</p></li>
+<li class="fragment"><p><strong>Data splitting</strong>!</p></li>
 </ul>
 </section>
 
 <section id="validation-set" class="title-slide slide level2 center">
 <h2>Validation set</h2>
 <ul>
-<li><p>Cannot use the test set to choose the parameter!</p></li>
-<li><p>But we can split the training set into two partitions, a traning set and a validation set.</p></li>
-<li><p>For each parameter value we want to assess, we can fit on the training set, and evaluate on the validation set.</p></li>
-<li><p>Then after we find the best value for our parameter, we can refit the model with the best parameter on the entire training set and then evaluate our model on the test set.</p></li>
+<li class="fragment"><p>Cannot use the test set to choose the parameter!</p></li>
+<li class="fragment"><p>But we can split the training set into two partitions, a traning set and a validation set.</p></li>
+<li class="fragment"><p>For each parameter value we want to assess, we can fit on the training set, and evaluate on the validation set.</p></li>
+<li class="fragment"><p>Then after we find the best value for our parameter, we can refit the model with the best parameter on the entire training set and then evaluate our model on the test set.</p></li>
 </ul>
 </section>
 
 <section id="can-we-do-better" class="title-slide slide level2 center">
 <h2>Can we do better?</h2>
 <ul>
-<li><p>Depending on how we split the data into the training and validation sets, we might get a lucky split (or an unlucky one) that doesn’t give us a good estimate of the model’s true accuracy.</p></li>
-<li><p>In many cases, we can do better by making many splits, and averaging the accuracy scores to get a better estimate.</p></li>
-<li><p>We call this cross-validation.</p></li>
+<li class="fragment"><p>Depending on how we split the data into the training and validation sets, we might get a lucky split (or an unlucky one) that doesn’t give us a good estimate of the model’s true accuracy.</p></li>
+<li class="fragment"><p>In many cases, we can do better by making many splits, and averaging the accuracy scores to get a better estimate.</p></li>
+<li class="fragment"><p>We call this cross-validation.</p></li>
 </ul>
 </section>
 
@@ -1451,18 +1451,18 @@ Name: proportion, dtype: float64</code></pre>
 <div class="columns">
 <div class="column" style="width:40%;">
 <ul>
-<li><p>Use the <code>scikit-learn</code> <code>cross_validate</code> function.</p></li>
-<li><p>Need to specify:</p>
+<li class="fragment"><p>Use the <code>scikit-learn</code> <code>cross_validate</code> function.</p></li>
+<li class="fragment"><p>Need to specify:</p>
 <ul>
-<li>a modelling <code>Pipeline</code> as the <code>estimator</code> argument,</li>
-<li>the number of folds as the <code>cv</code> argument,</li>
-<li>the training data predictors as the <code>X</code> argument</li>
-<li>the labels as the <code>y</code> arguments.</li>
+<li class="fragment">a modelling <code>Pipeline</code> as the <code>estimator</code> argument,</li>
+<li class="fragment">the number of folds as the <code>cv</code> argument,</li>
+<li class="fragment">the training data predictors as the <code>X</code> argument</li>
+<li class="fragment">the labels as the <code>y</code> arguments.</li>
 </ul></li>
-<li><p>Note that the <code>cross_validate</code> function handles stratifying the classes in each train and validate fold automatically.</p></li>
+<li class="fragment"><p>Note that the <code>cross_validate</code> function handles stratifying the classes in each train and validate fold automatically.</p></li>
 </ul>
 </div><div class="column" style="width:60%;">
-<div id="087aacde" class="cell" data-execution_count="20">
+<div id="a1dacdee" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_validate</span>
 <span id="cb29-2"><a></a></span>
 <span id="cb29-3"><a></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>)</span>
@@ -1481,16 +1481,16 @@ Name: proportion, dtype: float64</code></pre>
 <span id="cb29-16"><a></a><span class="bu">print</span>(cv_10_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    fit_time  score_time  test_score
-0   0.005083    0.007450    0.860465
-1   0.004717    0.004954    0.837209
+0   0.004684    0.006370    0.860465
+1   0.004858    0.005101    0.837209
 ..       ...         ...         ...
-8   0.003990    0.004693    0.904762
-9   0.004039    0.004698    0.880952
+8   0.003927    0.004565    0.904762
+9   0.004060    0.004545    0.880952
 
 [10 rows x 3 columns]</code></pre>
 </div>
 </div>
-<div id="9f438d46" class="cell" data-execution_count="21">
+<div id="c9007f81" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>cv_10_metrics <span class="op">=</span> cv_10_df.agg([<span class="st">"mean"</span>, <span class="st">"sem"</span>])</span>
 <span id="cb31-2"><a></a>cv_10_metrics[<span class="st">'test_score'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
@@ -1505,15 +1505,15 @@ Name: test_score, dtype: float64</code></pre>
 <section id="parameter-value-selection" class="title-slide slide level2 center">
 <h2>Parameter value selection</h2>
 <ul>
-<li><p>Since cross-validation helps us evaluate the accuracy of our classifier, we can use cross-validation to calculate an accuracy for each value of our parameter, here <span class="math inline">\(K\)</span>, in a reasonable range,</p></li>
-<li><p>Then we pick the value of <span class="math inline">\(K\)</span> that gives us the best accuracy, and refit the model with our parameter on the training data, and then evaluate on the test data.</p></li>
-<li><p>The <code>scikit-learn</code> package collection provides built-in functionality, named <code>GridSearchCV</code>, to automatically handle the details for us.</p></li>
+<li class="fragment"><p>Since cross-validation helps us evaluate the accuracy of our classifier, we can use cross-validation to calculate an accuracy for each value of our parameter, here <span class="math inline">\(K\)</span>, in a reasonable range,</p></li>
+<li class="fragment"><p>Then we pick the value of <span class="math inline">\(K\)</span> that gives us the best accuracy, and refit the model with our parameter on the training data, and then evaluate on the test data.</p></li>
+<li class="fragment"><p>The <code>scikit-learn</code> package collection provides built-in functionality, named <code>GridSearchCV</code>, to automatically handle the details for us.</p></li>
 </ul>
 </section>
 
 <section id="parameter-value-selection-1" class="title-slide slide level2 center">
 <h2>Parameter value selection</h2>
-<div id="3941426a" class="cell" data-execution_count="22">
+<div id="6c71f5f6" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a>knn <span class="op">=</span> KNeighborsClassifier() <span class="co">#don't specify the number of neighbours</span></span>
 <span id="cb33-2"><a></a>cancer_tune_pipe <span class="op">=</span> make_pipeline(cancer_preprocessor, knn)</span>
 <span id="cb33-3"><a></a></span>
@@ -1536,10 +1536,10 @@ Name: test_score, dtype: float64</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li>Now we use the fit method on the <code>GridSearchCV</code> object to begin the tuning process.</li>
+<li class="fragment">Now we use the fit method on the <code>GridSearchCV</code> object to begin the tuning process.</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="eaa50cd1" class="cell" data-execution_count="23">
+<div id="52b7c3bf" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>cancer_tune_grid.fit(</span>
 <span id="cb34-2"><a></a>    cancer_train[[<span class="st">"Smoothness"</span>, <span class="st">"Concavity"</span>]],</span>
 <span id="cb34-3"><a></a>    cancer_train[<span class="st">"Class"</span>]</span>
@@ -1580,7 +1580,7 @@ memory usage: 3.0+ KB</code></pre>
 
 <section id="parameter-value-selection-3" class="title-slide slide level2 center">
 <h2>Parameter value selection</h2>
-<div id="a182d3ea" class="cell" data-execution_count="24">
+<div id="88116f47" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a></a>accuracies_grid[<span class="st">"sem_test_score"</span>] <span class="op">=</span> accuracies_grid[<span class="st">"std_test_score"</span>] <span class="op">/</span> <span class="dv">10</span><span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
 <span id="cb36-2"><a></a>accuracies_grid <span class="op">=</span> (</span>
 <span id="cb36-3"><a></a>    accuracies_grid[[</span>
@@ -1608,7 +1608,7 @@ memory usage: 3.0+ KB</code></pre>
 <h2>Visualize paramter value selection</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
-<div id="bdfe0ca0" class="cell" data-execution_count="25">
+<div id="f87a8fd7" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>accuracy_vs_k <span class="op">=</span> (</span>
 <span id="cb38-2"><a></a>    alt.Chart(accuracies_grid)</span>
 <span id="cb38-3"><a></a>    .mark_line(point<span class="op">=</span><span class="va">True</span>)</span>
@@ -1622,27 +1622,27 @@ memory usage: 3.0+ KB</code></pre>
 <span id="cb38-11"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:40%;">
-<div id="6eea995f" class="cell" data-execution_count="26">
+<div id="34472d49" class="cell" data-execution_count="26">
 <div class="cell-output cell-output-display" data-execution_count="26">
 
 <style>
-  #altair-viz-4d5ad65075314e0d8b673e34f62d32ed.vega-embed {
+  #altair-viz-def2db8907df493ba2b6b34e97f819e1.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-4d5ad65075314e0d8b673e34f62d32ed.vega-embed details,
-  #altair-viz-4d5ad65075314e0d8b673e34f62d32ed.vega-embed details summary {
+  #altair-viz-def2db8907df493ba2b6b34e97f819e1.vega-embed details,
+  #altair-viz-def2db8907df493ba2b6b34e97f819e1.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-4d5ad65075314e0d8b673e34f62d32ed"></div>
+<div id="altair-viz-def2db8907df493ba2b6b34e97f819e1"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-4d5ad65075314e0d8b673e34f62d32ed") {
-      outputDiv = document.getElementById("altair-viz-4d5ad65075314e0d8b673e34f62d32ed");
+    if (outputDiv.id !== "altair-viz-def2db8907df493ba2b6b34e97f819e1") {
+      outputDiv = document.getElementById("altair-viz-def2db8907df493ba2b6b34e97f819e1");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -1698,9 +1698,9 @@ memory usage: 3.0+ KB</code></pre>
 <section id="best-parameter-value" class="title-slide slide level2 center">
 <h2>Best parameter value</h2>
 <ul>
-<li>We can also obtain the number of neighbours with the highest accuracy programmatically by accessing the <code>best_params_</code> attribute of the fit <code>GridSearchCV</code> object.</li>
+<li class="fragment">We can also obtain the number of neighbours with the highest accuracy programmatically by accessing the <code>best_params_</code> attribute of the fit <code>GridSearchCV</code> object.</li>
 </ul>
-<div id="cd40f2aa" class="cell" data-execution_count="27">
+<div id="dff791f2" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a>cancer_tune_grid.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>{'kneighborsclassifier__n_neighbors': 36}</code></pre>
@@ -1715,32 +1715,32 @@ memory usage: 3.0+ KB</code></pre>
 <p>Do we use <span class="math inline">\(K\)</span> = 36?</p>
 <p>Generally, when selecting a parameters, we are looking for a value where:</p>
 <ul>
-<li>we get roughly optimal accuracy</li>
-<li>changing the value to a nearby one doesn’t change the accuracy too much</li>
-<li>the cost of training the model is not prohibitive</li>
+<li class="fragment">we get roughly optimal accuracy</li>
+<li class="fragment">changing the value to a nearby one doesn’t change the accuracy too much</li>
+<li class="fragment">the cost of training the model is not prohibitive</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="d93a8bed" class="cell" data-execution_count="28">
+<div id="916b3984" class="cell" data-execution_count="28">
 <div class="cell-output cell-output-display" data-execution_count="28">
 
 <style>
-  #altair-viz-f5234000bfc34919ad30ca759b7b671f.vega-embed {
+  #altair-viz-798133e600bc46e58b34c8d5666ced18.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-f5234000bfc34919ad30ca759b7b671f.vega-embed details,
-  #altair-viz-f5234000bfc34919ad30ca759b7b671f.vega-embed details summary {
+  #altair-viz-798133e600bc46e58b34c8d5666ced18.vega-embed details,
+  #altair-viz-798133e600bc46e58b34c8d5666ced18.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-f5234000bfc34919ad30ca759b7b671f"></div>
+<div id="altair-viz-798133e600bc46e58b34c8d5666ced18"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-f5234000bfc34919ad30ca759b7b671f") {
-      outputDiv = document.getElementById("altair-viz-f5234000bfc34919ad30ca759b7b671f");
+    if (outputDiv.id !== "altair-viz-798133e600bc46e58b34c8d5666ced18") {
+      outputDiv = document.getElementById("altair-viz-798133e600bc46e58b34c8d5666ced18");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -1797,30 +1797,30 @@ memory usage: 3.0+ KB</code></pre>
 <section id="underoverfitting" class="title-slide slide level2 center">
 <h2>Under/Overfitting</h2>
 <ul>
-<li>What happens if we keep increasing the number of neighbors <span class="math inline">\(K\)</span>?</li>
-<li>The cross-validation accuracy estimate actually starts to decrease!</li>
+<li class="fragment">What happens if we keep increasing the number of neighbors <span class="math inline">\(K\)</span>?</li>
+<li class="fragment">The cross-validation accuracy estimate actually starts to decrease!</li>
 </ul>
-<div id="21e71b2e" class="cell" data-execution_count="29">
+<div id="fd390a62" class="cell" data-execution_count="29">
 <div class="cell-output cell-output-display" data-execution_count="29">
 
 <style>
-  #altair-viz-bb53af296a28480ea1e9d552702f01d1.vega-embed {
+  #altair-viz-2595c255313b4276bfbbaf3be4c6b14d.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-bb53af296a28480ea1e9d552702f01d1.vega-embed details,
-  #altair-viz-bb53af296a28480ea1e9d552702f01d1.vega-embed details summary {
+  #altair-viz-2595c255313b4276bfbbaf3be4c6b14d.vega-embed details,
+  #altair-viz-2595c255313b4276bfbbaf3be4c6b14d.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-bb53af296a28480ea1e9d552702f01d1"></div>
+<div id="altair-viz-2595c255313b4276bfbbaf3be4c6b14d"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-bb53af296a28480ea1e9d552702f01d1") {
-      outputDiv = document.getElementById("altair-viz-bb53af296a28480ea1e9d552702f01d1");
+    if (outputDiv.id !== "altair-viz-2595c255313b4276bfbbaf3be4c6b14d") {
+      outputDiv = document.getElementById("altair-viz-2595c255313b4276bfbbaf3be4c6b14d");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -1866,34 +1866,34 @@ memory usage: 3.0+ KB</code></pre>
         .catch(showError)
         .then(() => displayChart(vegaEmbed));
     }
-  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-58fa0c22a413a9dda042246d569df452"}, "mark": {"type": "line", "point": true}, "encoding": {"x": {"field": "param_kneighborsclassifier__n_neighbors", "title": "Neighbors", "type": "quantitative"}, "y": {"field": "mean_test_score", "scale": {"zero": false}, "title": "Accuracy estimate", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-58fa0c22a413a9dda042246d569df452": [{"mean_fit_time": 0.004167294502258301, "std_fit_time": 0.0002575043712871983, "mean_score_time": 0.00480349063873291, "std_score_time": 0.0003293779558064423, "param_kneighborsclassifier__n_neighbors": 1, "params": {"kneighborsclassifier__n_neighbors": 1}, "split0_test_score": 0.9069767441860465, "split1_test_score": 0.813953488372093, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.9302325581395349, "split4_test_score": 0.813953488372093, "split5_test_score": 0.813953488372093, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.8809523809523809, "split9_test_score": 0.8571428571428571, "mean_test_score": 0.8451273532668881, "std_test_score": 0.06313897427610296, "rank_test_score": 18}, {"mean_fit_time": 0.00398859977722168, "std_fit_time": 0.00010903625840347191, "mean_score_time": 0.004857611656188965, "std_score_time": 0.00023455968422072087, "param_kneighborsclassifier__n_neighbors": 11, "params": {"kneighborsclassifier__n_neighbors": 11}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.813953488372093, "split2_test_score": 0.8604651162790697, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.7906976744186046, "split5_test_score": 0.9534883720930233, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.8809523809523809, "split9_test_score": 0.9047619047619048, "mean_test_score": 0.8615171650055371, "std_test_score": 0.06181319338007603, "rank_test_score": 11}, {"mean_fit_time": 0.0038950443267822266, "std_fit_time": 0.00010280110386019533, "mean_score_time": 0.004726290702819824, "std_score_time": 3.546387206487561e-05, "param_kneighborsclassifier__n_neighbors": 21, "params": {"kneighborsclassifier__n_neighbors": 21}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.813953488372093, "split2_test_score": 0.813953488372093, "split3_test_score": 0.8372093023255814, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9534883720930233, "split6_test_score": 0.7619047619047619, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9047619047619048, "mean_test_score": 0.8662790697674418, "std_test_score": 0.05656912458683699, "rank_test_score": 9}, {"mean_fit_time": 0.003901052474975586, "std_fit_time": 5.358955993427254e-05, "mean_score_time": 0.004808282852172852, "std_score_time": 6.90572489781615e-05, "param_kneighborsclassifier__n_neighbors": 31, "params": {"kneighborsclassifier__n_neighbors": 31}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8604651162790697, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9534883720930233, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9285714285714286, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.8850498338870432, "std_test_score": 0.04871841270384948, "rank_test_score": 2}, {"mean_fit_time": 0.003917050361633301, "std_fit_time": 9.055676539647621e-05, "mean_score_time": 0.004826951026916504, "std_score_time": 6.356706569894183e-05, "param_kneighborsclassifier__n_neighbors": 41, "params": {"kneighborsclassifier__n_neighbors": 41}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.8604651162790697, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9285714285714286, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.887375415282392, "std_test_score": 0.04330294292482565, "rank_test_score": 1}, {"mean_fit_time": 0.003861856460571289, "std_fit_time": 5.363896662489701e-05, "mean_score_time": 0.004850053787231445, "std_score_time": 2.362755785875362e-05, "param_kneighborsclassifier__n_neighbors": 51, "params": {"kneighborsclassifier__n_neighbors": 51}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.9069767441860465, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.8826688815060908, "std_test_score": 0.04592485034319382, "rank_test_score": 3}, {"mean_fit_time": 0.003938055038452149, "std_fit_time": 7.442939273053127e-05, "mean_score_time": 0.004956626892089843, "std_score_time": 5.165504548199386e-05, "param_kneighborsclassifier__n_neighbors": 61, "params": {"kneighborsclassifier__n_neighbors": 61}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.880343300110742, "std_test_score": 0.04521843663887424, "rank_test_score": 4}, {"mean_fit_time": 0.003865480422973633, "std_fit_time": 5.203919021225978e-05, "mean_score_time": 0.004954934120178223, "std_score_time": 5.1508594539628435e-05, "param_kneighborsclassifier__n_neighbors": 71, "params": {"kneighborsclassifier__n_neighbors": 71}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9047619047619048, "mean_test_score": 0.8779623477297896, "std_test_score": 0.04319802849265753, "rank_test_score": 5}, {"mean_fit_time": 0.003976082801818848, "std_fit_time": 0.0001124434418343036, "mean_score_time": 0.00502309799194336, "std_score_time": 6.881837370603751e-05, "param_kneighborsclassifier__n_neighbors": 81, "params": {"kneighborsclassifier__n_neighbors": 81}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7619047619047619, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8809523809523809, "mean_test_score": 0.8732004429678849, "std_test_score": 0.04647865730107047, "rank_test_score": 8}, {"mean_fit_time": 0.0038951635360717773, "std_fit_time": 6.280202885665303e-05, "mean_score_time": 0.005072975158691406, "std_score_time": 5.7780111794228144e-05, "param_kneighborsclassifier__n_neighbors": 91, "params": {"kneighborsclassifier__n_neighbors": 91}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8809523809523809, "mean_test_score": 0.8755813953488373, "std_test_score": 0.041003738354443944, "rank_test_score": 6}, {"mean_fit_time": 0.0039402484893798825, "std_fit_time": 8.648307871044257e-05, "mean_score_time": 0.00509955883026123, "std_score_time": 7.117978194069904e-05, "param_kneighborsclassifier__n_neighbors": 101, "params": {"kneighborsclassifier__n_neighbors": 101}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8732558139534884, "std_test_score": 0.028112378883933576, "rank_test_score": 7}, {"mean_fit_time": 0.003904914855957031, "std_fit_time": 8.29055280632438e-05, "mean_score_time": 0.005169296264648437, "std_score_time": 6.0397614486917016e-05, "param_kneighborsclassifier__n_neighbors": 111, "params": {"kneighborsclassifier__n_neighbors": 111}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.813953488372093, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8662236987818384, "std_test_score": 0.03318768930798758, "rank_test_score": 10}, {"mean_fit_time": 0.003944134712219239, "std_fit_time": 9.853257222720606e-05, "mean_score_time": 0.005250358581542968, "std_score_time": 0.00013871024915268387, "param_kneighborsclassifier__n_neighbors": 121, "params": {"kneighborsclassifier__n_neighbors": 121}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7906976744186046, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8591915836101883, "std_test_score": 0.034569459296202934, "rank_test_score": 12}, {"mean_fit_time": 0.0038932085037231444, "std_fit_time": 5.083786900623171e-05, "mean_score_time": 0.005240106582641601, "std_score_time": 6.340116225942815e-05, "param_kneighborsclassifier__n_neighbors": 131, "params": {"kneighborsclassifier__n_neighbors": 131}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7906976744186046, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8568106312292357, "std_test_score": 0.030260332286575313, "rank_test_score": 13}, {"mean_fit_time": 0.0039078712463378905, "std_fit_time": 5.722252524142047e-05, "mean_score_time": 0.0052899599075317385, "std_score_time": 5.1532183497677726e-05, "param_kneighborsclassifier__n_neighbors": 141, "params": {"kneighborsclassifier__n_neighbors": 141}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8809523809523809, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8568106312292357, "std_test_score": 0.03823261305499035, "rank_test_score": 13}, {"mean_fit_time": 0.003903985023498535, "std_fit_time": 6.315259928366334e-05, "mean_score_time": 0.005318927764892578, "std_score_time": 4.287649091294881e-05, "param_kneighborsclassifier__n_neighbors": 151, "params": {"kneighborsclassifier__n_neighbors": 151}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.8372093023255814, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8544850498338871, "std_test_score": 0.037148773475849085, "rank_test_score": 15}, {"mean_fit_time": 0.00391385555267334, "std_fit_time": 6.992459247388547e-05, "mean_score_time": 0.005360054969787598, "std_score_time": 4.2882754614371695e-05, "param_kneighborsclassifier__n_neighbors": 161, "params": {"kneighborsclassifier__n_neighbors": 161}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.813953488372093, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8427464008859358, "std_test_score": 0.036068576719064924, "rank_test_score": 19}, {"mean_fit_time": 0.003923964500427246, "std_fit_time": 6.159225022422077e-05, "mean_score_time": 0.005451869964599609, "std_score_time": 5.108090097936186e-05, "param_kneighborsclassifier__n_neighbors": 171, "params": {"kneighborsclassifier__n_neighbors": 171}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8451827242524917, "std_test_score": 0.04525012344311953, "rank_test_score": 17}, {"mean_fit_time": 0.0038772344589233397, "std_fit_time": 6.710083681790938e-05, "mean_score_time": 0.005456709861755371, "std_score_time": 8.885815663553685e-05, "param_kneighborsclassifier__n_neighbors": 181, "params": {"kneighborsclassifier__n_neighbors": 181}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8452380952380952, "std_test_score": 0.04518031527897283, "rank_test_score": 16}, {"mean_fit_time": 0.003936672210693359, "std_fit_time": 0.00025601693427045817, "mean_score_time": 0.007543587684631347, "std_score_time": 0.006169094234442567, "param_kneighborsclassifier__n_neighbors": 191, "params": {"kneighborsclassifier__n_neighbors": 191}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.8095238095238095, "mean_test_score": 0.8357142857142857, "std_test_score": 0.042862329102071946, "rank_test_score": 20}, {"mean_fit_time": 0.003786659240722656, "std_fit_time": 9.613788051263221e-05, "mean_score_time": 0.005390691757202149, "std_score_time": 7.668186452415376e-05, "param_kneighborsclassifier__n_neighbors": 201, "params": {"kneighborsclassifier__n_neighbors": 201}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8095238095238095, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.833388704318937, "std_test_score": 0.04721716764947364, "rank_test_score": 21}, {"mean_fit_time": 0.0038261890411376955, "std_fit_time": 0.00010013522420443296, "mean_score_time": 0.005498766899108887, "std_score_time": 0.00012310113677896622, "param_kneighborsclassifier__n_neighbors": 211, "params": {"kneighborsclassifier__n_neighbors": 211}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8372093023255814, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.833388704318937, "std_test_score": 0.044693304229432226, "rank_test_score": 21}, {"mean_fit_time": 0.0038208961486816406, "std_fit_time": 0.00011707318493341298, "mean_score_time": 0.005634307861328125, "std_score_time": 0.00056461359470177, "param_kneighborsclassifier__n_neighbors": 221, "params": {"kneighborsclassifier__n_neighbors": 221}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.813953488372093, "split5_test_score": 0.8604651162790697, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.8571428571428571, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.821594684385382, "std_test_score": 0.0420971004955672, "rank_test_score": 24}, {"mean_fit_time": 0.003765439987182617, "std_fit_time": 6.572722420053085e-05, "mean_score_time": 0.005458974838256836, "std_score_time": 5.57438953771096e-05, "param_kneighborsclassifier__n_neighbors": 231, "params": {"kneighborsclassifier__n_neighbors": 231}, "split0_test_score": 0.9069767441860465, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.8372093023255814, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.8571428571428571, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.8238648947951273, "std_test_score": 0.04489999729472931, "rank_test_score": 23}, {"mean_fit_time": 0.0037958621978759766, "std_fit_time": 7.036006554376465e-05, "mean_score_time": 0.005510354042053222, "std_score_time": 0.00010313991314274081, "param_kneighborsclassifier__n_neighbors": 241, "params": {"kneighborsclassifier__n_neighbors": 241}, "split0_test_score": 0.9069767441860465, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.7906976744186046, "split6_test_score": 0.7619047619047619, "split7_test_score": 0.8571428571428571, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.819158361018826, "std_test_score": 0.044809600866032674, "rank_test_score": 25}, {"mean_fit_time": 0.0038069725036621095, "std_fit_time": 7.262921816952944e-05, "mean_score_time": 0.005552864074707032, "std_score_time": 7.245816375842322e-05, "param_kneighborsclassifier__n_neighbors": 251, "params": {"kneighborsclassifier__n_neighbors": 251}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7209302325581395, "split3_test_score": 0.7674418604651163, "split4_test_score": 0.813953488372093, "split5_test_score": 0.7906976744186046, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.8333333333333334, "split8_test_score": 0.7857142857142857, "split9_test_score": 0.7619047619047619, "mean_test_score": 0.7933001107419712, "std_test_score": 0.04704973358681268, "rank_test_score": 26}, {"mean_fit_time": 0.003793001174926758, "std_fit_time": 4.857318511195729e-05, "mean_score_time": 0.005529332160949707, "std_score_time": 8.986186017679042e-05, "param_kneighborsclassifier__n_neighbors": 261, "params": {"kneighborsclassifier__n_neighbors": 261}, "split0_test_score": 0.8372093023255814, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.6976744186046512, "split3_test_score": 0.7441860465116279, "split4_test_score": 0.7906976744186046, "split5_test_score": 0.7674418604651163, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.8095238095238095, "split8_test_score": 0.7619047619047619, "split9_test_score": 0.7380952380952381, "mean_test_score": 0.7745293466223698, "std_test_score": 0.047425370384222516, "rank_test_score": 27}, {"mean_fit_time": 0.003795146942138672, "std_fit_time": 8.829602813036122e-05, "mean_score_time": 0.005546116828918457, "std_score_time": 6.54588575338388e-05, "param_kneighborsclassifier__n_neighbors": 271, "params": {"kneighborsclassifier__n_neighbors": 271}, "split0_test_score": 0.7906976744186046, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.6744186046511628, "split3_test_score": 0.7209302325581395, "split4_test_score": 0.7209302325581395, "split5_test_score": 0.7441860465116279, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.7857142857142857, "split8_test_score": 0.6904761904761905, "split9_test_score": 0.6666666666666666, "mean_test_score": 0.7369324473975637, "std_test_score": 0.051860744157864534, "rank_test_score": 28}, {"mean_fit_time": 0.003817248344421387, "std_fit_time": 8.047430916651093e-05, "mean_score_time": 0.005552339553833008, "std_score_time": 7.998016249689161e-05, "param_kneighborsclassifier__n_neighbors": 281, "params": {"kneighborsclassifier__n_neighbors": 281}, "split0_test_score": 0.6744186046511628, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6313953488372094, "std_test_score": 0.015813336950673586, "rank_test_score": 29}, {"mean_fit_time": 0.0037933111190795897, "std_fit_time": 4.901367027368182e-05, "mean_score_time": 0.00559077262878418, "std_score_time": 5.067078600346826e-05, "param_kneighborsclassifier__n_neighbors": 291, "params": {"kneighborsclassifier__n_neighbors": 291}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.003977394104003907, "std_fit_time": 0.00025263463556426035, "mean_score_time": 0.005915307998657226, "std_score_time": 0.0008387632583884291, "param_kneighborsclassifier__n_neighbors": 301, "params": {"kneighborsclassifier__n_neighbors": 301}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0038930416107177735, "std_fit_time": 9.404887387776325e-05, "mean_score_time": 0.00574042797088623, "std_score_time": 0.00014130445669007264, "param_kneighborsclassifier__n_neighbors": 311, "params": {"kneighborsclassifier__n_neighbors": 311}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0038573503494262694, "std_fit_time": 0.0001164656798069038, "mean_score_time": 0.005649352073669433, "std_score_time": 0.0001240270520825711, "param_kneighborsclassifier__n_neighbors": 321, "params": {"kneighborsclassifier__n_neighbors": 321}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.003808474540710449, "std_fit_time": 7.846923391441825e-05, "mean_score_time": 0.005626797676086426, "std_score_time": 6.807167760664136e-05, "param_kneighborsclassifier__n_neighbors": 331, "params": {"kneighborsclassifier__n_neighbors": 331}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.003912520408630371, "std_fit_time": 0.00015252253690023904, "mean_score_time": 0.005695605278015136, "std_score_time": 6.576010145301794e-05, "param_kneighborsclassifier__n_neighbors": 341, "params": {"kneighborsclassifier__n_neighbors": 341}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037638664245605467, "std_fit_time": 2.19157906147492e-05, "mean_score_time": 0.0056365013122558595, "std_score_time": 5.003346666824031e-05, "param_kneighborsclassifier__n_neighbors": 351, "params": {"kneighborsclassifier__n_neighbors": 351}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.003844022750854492, "std_fit_time": 9.208823098620423e-05, "mean_score_time": 0.005683779716491699, "std_score_time": 6.41775032024743e-05, "param_kneighborsclassifier__n_neighbors": 361, "params": {"kneighborsclassifier__n_neighbors": 361}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.004011392593383789, "std_fit_time": 0.0005863785209332734, "mean_score_time": 0.0057125091552734375, "std_score_time": 8.062765045088381e-05, "param_kneighborsclassifier__n_neighbors": 371, "params": {"kneighborsclassifier__n_neighbors": 371}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0038350582122802734, "std_fit_time": 9.953592772742811e-05, "mean_score_time": 0.005719733238220215, "std_score_time": 6.346101126915309e-05, "param_kneighborsclassifier__n_neighbors": 381, "params": {"kneighborsclassifier__n_neighbors": 381}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}]}}, {"mode": "vega-lite"});
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-9e2fbf034511bb840cc24a76a19715c1"}, "mark": {"type": "line", "point": true}, "encoding": {"x": {"field": "param_kneighborsclassifier__n_neighbors", "title": "Neighbors", "type": "quantitative"}, "y": {"field": "mean_test_score", "scale": {"zero": false}, "title": "Accuracy estimate", "type": "quantitative"}}, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-9e2fbf034511bb840cc24a76a19715c1": [{"mean_fit_time": 0.004085421562194824, "std_fit_time": 0.00023962495889345376, "mean_score_time": 0.004763746261596679, "std_score_time": 0.000370373362797792, "param_kneighborsclassifier__n_neighbors": 1, "params": {"kneighborsclassifier__n_neighbors": 1}, "split0_test_score": 0.9069767441860465, "split1_test_score": 0.813953488372093, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.9302325581395349, "split4_test_score": 0.813953488372093, "split5_test_score": 0.813953488372093, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.8809523809523809, "split9_test_score": 0.8571428571428571, "mean_test_score": 0.8451273532668881, "std_test_score": 0.06313897427610296, "rank_test_score": 18}, {"mean_fit_time": 0.0039931535720825195, "std_fit_time": 0.00019825582939466072, "mean_score_time": 0.0047051429748535155, "std_score_time": 6.468747299348434e-05, "param_kneighborsclassifier__n_neighbors": 11, "params": {"kneighborsclassifier__n_neighbors": 11}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.813953488372093, "split2_test_score": 0.8604651162790697, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.7906976744186046, "split5_test_score": 0.9534883720930233, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.8809523809523809, "split9_test_score": 0.9047619047619048, "mean_test_score": 0.8615171650055371, "std_test_score": 0.06181319338007603, "rank_test_score": 11}, {"mean_fit_time": 0.003914284706115723, "std_fit_time": 5.218851994898909e-05, "mean_score_time": 0.004703950881958008, "std_score_time": 2.8992483479784172e-05, "param_kneighborsclassifier__n_neighbors": 21, "params": {"kneighborsclassifier__n_neighbors": 21}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.813953488372093, "split2_test_score": 0.813953488372093, "split3_test_score": 0.8372093023255814, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9534883720930233, "split6_test_score": 0.7619047619047619, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9047619047619048, "mean_test_score": 0.8662790697674418, "std_test_score": 0.05656912458683699, "rank_test_score": 9}, {"mean_fit_time": 0.003891754150390625, "std_fit_time": 6.212593468802536e-05, "mean_score_time": 0.004732704162597657, "std_score_time": 3.252962683281215e-05, "param_kneighborsclassifier__n_neighbors": 31, "params": {"kneighborsclassifier__n_neighbors": 31}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8604651162790697, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9534883720930233, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9285714285714286, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.8850498338870432, "std_test_score": 0.04871841270384948, "rank_test_score": 2}, {"mean_fit_time": 0.0038712263107299806, "std_fit_time": 5.019223012662039e-05, "mean_score_time": 0.00476369857788086, "std_score_time": 4.8589238472464356e-05, "param_kneighborsclassifier__n_neighbors": 41, "params": {"kneighborsclassifier__n_neighbors": 41}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.8604651162790697, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9285714285714286, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.887375415282392, "std_test_score": 0.04330294292482565, "rank_test_score": 1}, {"mean_fit_time": 0.003876352310180664, "std_fit_time": 5.940462884926013e-05, "mean_score_time": 0.00483243465423584, "std_score_time": 9.504962957552362e-05, "param_kneighborsclassifier__n_neighbors": 51, "params": {"kneighborsclassifier__n_neighbors": 51}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.9069767441860465, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.8826688815060908, "std_test_score": 0.04592485034319382, "rank_test_score": 3}, {"mean_fit_time": 0.0038718700408935545, "std_fit_time": 5.353023295036507e-05, "mean_score_time": 0.004831695556640625, "std_score_time": 3.19826238362837e-05, "param_kneighborsclassifier__n_neighbors": 61, "params": {"kneighborsclassifier__n_neighbors": 61}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9285714285714286, "mean_test_score": 0.880343300110742, "std_test_score": 0.04521843663887424, "rank_test_score": 4}, {"mean_fit_time": 0.003868699073791504, "std_fit_time": 6.328145162785429e-05, "mean_score_time": 0.004903197288513184, "std_score_time": 8.935413389014189e-05, "param_kneighborsclassifier__n_neighbors": 71, "params": {"kneighborsclassifier__n_neighbors": 71}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.9047619047619048, "mean_test_score": 0.8779623477297896, "std_test_score": 0.04319802849265753, "rank_test_score": 5}, {"mean_fit_time": 0.0038620710372924806, "std_fit_time": 6.102044423683018e-05, "mean_score_time": 0.004935145378112793, "std_score_time": 4.6701842431456624e-05, "param_kneighborsclassifier__n_neighbors": 81, "params": {"kneighborsclassifier__n_neighbors": 81}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7619047619047619, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8809523809523809, "mean_test_score": 0.8732004429678849, "std_test_score": 0.04647865730107047, "rank_test_score": 8}, {"mean_fit_time": 0.004133248329162597, "std_fit_time": 0.00041867235855981664, "mean_score_time": 0.005098724365234375, "std_score_time": 0.0001707384079218296, "param_kneighborsclassifier__n_neighbors": 91, "params": {"kneighborsclassifier__n_neighbors": 91}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9302325581395349, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.9285714285714286, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8809523809523809, "mean_test_score": 0.8755813953488373, "std_test_score": 0.041003738354443944, "rank_test_score": 6}, {"mean_fit_time": 0.0038751602172851563, "std_fit_time": 5.456902854927416e-05, "mean_score_time": 0.005003285408020019, "std_score_time": 3.260622285324421e-05, "param_kneighborsclassifier__n_neighbors": 101, "params": {"kneighborsclassifier__n_neighbors": 101}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.8372093023255814, "split3_test_score": 0.8837209302325582, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8732558139534884, "std_test_score": 0.028112378883933576, "rank_test_score": 7}, {"mean_fit_time": 0.0038827180862426756, "std_fit_time": 6.282382038338814e-05, "mean_score_time": 0.005048155784606934, "std_score_time": 4.306716687026863e-05, "param_kneighborsclassifier__n_neighbors": 111, "params": {"kneighborsclassifier__n_neighbors": 111}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.813953488372093, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8662236987818384, "std_test_score": 0.03318768930798758, "rank_test_score": 10}, {"mean_fit_time": 0.0038625001907348633, "std_fit_time": 4.580681131207399e-05, "mean_score_time": 0.005078506469726562, "std_score_time": 3.689943276306805e-05, "param_kneighborsclassifier__n_neighbors": 121, "params": {"kneighborsclassifier__n_neighbors": 121}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7906976744186046, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.9047619047619048, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8591915836101883, "std_test_score": 0.034569459296202934, "rank_test_score": 12}, {"mean_fit_time": 0.0038530826568603516, "std_fit_time": 5.204650823792591e-05, "mean_score_time": 0.00515279769897461, "std_score_time": 5.7862985745409265e-05, "param_kneighborsclassifier__n_neighbors": 131, "params": {"kneighborsclassifier__n_neighbors": 131}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7906976744186046, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8568106312292357, "std_test_score": 0.030260332286575313, "rank_test_score": 13}, {"mean_fit_time": 0.0038429737091064454, "std_fit_time": 4.0694384920925477e-05, "mean_score_time": 0.005177640914916992, "std_score_time": 5.3134638730602036e-05, "param_kneighborsclassifier__n_neighbors": 141, "params": {"kneighborsclassifier__n_neighbors": 141}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.8604651162790697, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8809523809523809, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8568106312292357, "std_test_score": 0.03823261305499035, "rank_test_score": 13}, {"mean_fit_time": 0.003885769844055176, "std_fit_time": 6.2888245784753e-05, "mean_score_time": 0.005234980583190918, "std_score_time": 3.748550468465243e-05, "param_kneighborsclassifier__n_neighbors": 151, "params": {"kneighborsclassifier__n_neighbors": 151}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.8372093023255814, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8544850498338871, "std_test_score": 0.037148773475849085, "rank_test_score": 15}, {"mean_fit_time": 0.0038404941558837892, "std_fit_time": 4.2072982965795565e-05, "mean_score_time": 0.0052650213241577145, "std_score_time": 4.76561049153713e-05, "param_kneighborsclassifier__n_neighbors": 161, "params": {"kneighborsclassifier__n_neighbors": 161}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.813953488372093, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8427464008859358, "std_test_score": 0.036068576719064924, "rank_test_score": 19}, {"mean_fit_time": 0.003847837448120117, "std_fit_time": 4.734515159292558e-05, "mean_score_time": 0.0053282976150512695, "std_score_time": 9.313773806658415e-05, "param_kneighborsclassifier__n_neighbors": 171, "params": {"kneighborsclassifier__n_neighbors": 171}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.9069767441860465, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8451827242524917, "std_test_score": 0.04525012344311953, "rank_test_score": 17}, {"mean_fit_time": 0.0038733482360839844, "std_fit_time": 4.1992950701085036e-05, "mean_score_time": 0.00534670352935791, "std_score_time": 3.461851725537037e-05, "param_kneighborsclassifier__n_neighbors": 181, "params": {"kneighborsclassifier__n_neighbors": 181}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8837209302325582, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8571428571428571, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.8333333333333334, "mean_test_score": 0.8452380952380952, "std_test_score": 0.04518031527897283, "rank_test_score": 16}, {"mean_fit_time": 0.003826761245727539, "std_fit_time": 8.161908966448335e-05, "mean_score_time": 0.007373666763305664, "std_score_time": 0.005920186152803008, "param_kneighborsclassifier__n_neighbors": 191, "params": {"kneighborsclassifier__n_neighbors": 191}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.8095238095238095, "mean_test_score": 0.8357142857142857, "std_test_score": 0.042862329102071946, "rank_test_score": 20}, {"mean_fit_time": 0.0037608623504638674, "std_fit_time": 5.7990711309409545e-05, "mean_score_time": 0.005297112464904785, "std_score_time": 8.527863307612298e-05, "param_kneighborsclassifier__n_neighbors": 201, "params": {"kneighborsclassifier__n_neighbors": 201}, "split0_test_score": 0.8604651162790697, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8095238095238095, "split7_test_score": 0.9047619047619048, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.833388704318937, "std_test_score": 0.04721716764947364, "rank_test_score": 21}, {"mean_fit_time": 0.003787326812744141, "std_fit_time": 0.0001688613552388541, "mean_score_time": 0.005339765548706054, "std_score_time": 0.00012203683617642757, "param_kneighborsclassifier__n_neighbors": 211, "params": {"kneighborsclassifier__n_neighbors": 211}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8372093023255814, "split5_test_score": 0.8837209302325582, "split6_test_score": 0.8333333333333334, "split7_test_score": 0.8809523809523809, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.833388704318937, "std_test_score": 0.044693304229432226, "rank_test_score": 21}, {"mean_fit_time": 0.0038412332534790037, "std_fit_time": 9.75046906105459e-05, "mean_score_time": 0.005483293533325195, "std_score_time": 0.00010327181047389216, "param_kneighborsclassifier__n_neighbors": 221, "params": {"kneighborsclassifier__n_neighbors": 221}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.813953488372093, "split5_test_score": 0.8604651162790697, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.8571428571428571, "split8_test_score": 0.8571428571428571, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.821594684385382, "std_test_score": 0.0420971004955672, "rank_test_score": 24}, {"mean_fit_time": 0.0039033889770507812, "std_fit_time": 9.627028106356504e-05, "mean_score_time": 0.005523085594177246, "std_score_time": 9.64467985994095e-05, "param_kneighborsclassifier__n_neighbors": 231, "params": {"kneighborsclassifier__n_neighbors": 231}, "split0_test_score": 0.9069767441860465, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7441860465116279, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.8372093023255814, "split6_test_score": 0.7857142857142857, "split7_test_score": 0.8571428571428571, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.8238648947951273, "std_test_score": 0.04489999729472931, "rank_test_score": 23}, {"mean_fit_time": 0.003774690628051758, "std_fit_time": 8.746022837176156e-05, "mean_score_time": 0.0054375648498535155, "std_score_time": 0.00013393615628873342, "param_kneighborsclassifier__n_neighbors": 241, "params": {"kneighborsclassifier__n_neighbors": 241}, "split0_test_score": 0.9069767441860465, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7674418604651163, "split3_test_score": 0.7906976744186046, "split4_test_score": 0.8604651162790697, "split5_test_score": 0.7906976744186046, "split6_test_score": 0.7619047619047619, "split7_test_score": 0.8571428571428571, "split8_test_score": 0.8333333333333334, "split9_test_score": 0.7857142857142857, "mean_test_score": 0.819158361018826, "std_test_score": 0.044809600866032674, "rank_test_score": 25}, {"mean_fit_time": 0.003763628005981445, "std_fit_time": 5.0019263302955526e-05, "mean_score_time": 0.005406928062438965, "std_score_time": 6.70755027205598e-05, "param_kneighborsclassifier__n_neighbors": 251, "params": {"kneighborsclassifier__n_neighbors": 251}, "split0_test_score": 0.8837209302325582, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.7209302325581395, "split3_test_score": 0.7674418604651163, "split4_test_score": 0.813953488372093, "split5_test_score": 0.7906976744186046, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.8333333333333334, "split8_test_score": 0.7857142857142857, "split9_test_score": 0.7619047619047619, "mean_test_score": 0.7933001107419712, "std_test_score": 0.04704973358681268, "rank_test_score": 26}, {"mean_fit_time": 0.003728961944580078, "std_fit_time": 6.355053375368537e-05, "mean_score_time": 0.005406785011291504, "std_score_time": 4.4979426354284726e-05, "param_kneighborsclassifier__n_neighbors": 261, "params": {"kneighborsclassifier__n_neighbors": 261}, "split0_test_score": 0.8372093023255814, "split1_test_score": 0.8604651162790697, "split2_test_score": 0.6976744186046512, "split3_test_score": 0.7441860465116279, "split4_test_score": 0.7906976744186046, "split5_test_score": 0.7674418604651163, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.8095238095238095, "split8_test_score": 0.7619047619047619, "split9_test_score": 0.7380952380952381, "mean_test_score": 0.7745293466223698, "std_test_score": 0.047425370384222516, "rank_test_score": 27}, {"mean_fit_time": 0.003764963150024414, "std_fit_time": 7.693152451848123e-05, "mean_score_time": 0.0054661273956298825, "std_score_time": 5.752415332606793e-05, "param_kneighborsclassifier__n_neighbors": 271, "params": {"kneighborsclassifier__n_neighbors": 271}, "split0_test_score": 0.7906976744186046, "split1_test_score": 0.8372093023255814, "split2_test_score": 0.6744186046511628, "split3_test_score": 0.7209302325581395, "split4_test_score": 0.7209302325581395, "split5_test_score": 0.7441860465116279, "split6_test_score": 0.7380952380952381, "split7_test_score": 0.7857142857142857, "split8_test_score": 0.6904761904761905, "split9_test_score": 0.6666666666666666, "mean_test_score": 0.7369324473975637, "std_test_score": 0.051860744157864534, "rank_test_score": 28}, {"mean_fit_time": 0.003847074508666992, "std_fit_time": 0.0002247339597095277, "mean_score_time": 0.005579710006713867, "std_score_time": 0.00048686382685225944, "param_kneighborsclassifier__n_neighbors": 281, "params": {"kneighborsclassifier__n_neighbors": 281}, "split0_test_score": 0.6744186046511628, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6313953488372094, "std_test_score": 0.015813336950673586, "rank_test_score": 29}, {"mean_fit_time": 0.003810477256774902, "std_fit_time": 7.651847716339703e-05, "mean_score_time": 0.00550994873046875, "std_score_time": 3.93609072999067e-05, "param_kneighborsclassifier__n_neighbors": 291, "params": {"kneighborsclassifier__n_neighbors": 291}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0039778947830200195, "std_fit_time": 0.0003781620095698868, "mean_score_time": 0.005638933181762696, "std_score_time": 6.242709024212695e-05, "param_kneighborsclassifier__n_neighbors": 301, "params": {"kneighborsclassifier__n_neighbors": 301}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037674188613891603, "std_fit_time": 7.025326583507717e-05, "mean_score_time": 0.005515193939208985, "std_score_time": 6.668164882423195e-05, "param_kneighborsclassifier__n_neighbors": 311, "params": {"kneighborsclassifier__n_neighbors": 311}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.003751325607299805, "std_fit_time": 6.606008783153493e-05, "mean_score_time": 0.005474376678466797, "std_score_time": 8.270656316399607e-05, "param_kneighborsclassifier__n_neighbors": 321, "params": {"kneighborsclassifier__n_neighbors": 321}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037391185760498047, "std_fit_time": 5.0793789928044884e-05, "mean_score_time": 0.00549921989440918, "std_score_time": 6.673286198617039e-05, "param_kneighborsclassifier__n_neighbors": 331, "params": {"kneighborsclassifier__n_neighbors": 331}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037852048873901365, "std_fit_time": 5.901329908046535e-05, "mean_score_time": 0.0055361509323120115, "std_score_time": 6.986608620449027e-05, "param_kneighborsclassifier__n_neighbors": 341, "params": {"kneighborsclassifier__n_neighbors": 341}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037542343139648437, "std_fit_time": 4.984444754002057e-05, "mean_score_time": 0.005503726005554199, "std_score_time": 7.220533729749392e-05, "param_kneighborsclassifier__n_neighbors": 351, "params": {"kneighborsclassifier__n_neighbors": 351}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.003717041015625, "std_fit_time": 2.742626235632655e-05, "mean_score_time": 0.005533814430236816, "std_score_time": 6.862838524512556e-05, "param_kneighborsclassifier__n_neighbors": 361, "params": {"kneighborsclassifier__n_neighbors": 361}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037363290786743162, "std_fit_time": 6.1308265580609e-05, "mean_score_time": 0.005556654930114746, "std_score_time": 4.662995056109616e-05, "param_kneighborsclassifier__n_neighbors": 371, "params": {"kneighborsclassifier__n_neighbors": 371}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}, {"mean_fit_time": 0.0037389516830444334, "std_fit_time": 4.996801243956069e-05, "mean_score_time": 0.005592489242553711, "std_score_time": 8.112569743414348e-05, "param_kneighborsclassifier__n_neighbors": 381, "params": {"kneighborsclassifier__n_neighbors": 381}, "split0_test_score": 0.627906976744186, "split1_test_score": 0.627906976744186, "split2_test_score": 0.627906976744186, "split3_test_score": 0.627906976744186, "split4_test_score": 0.627906976744186, "split5_test_score": 0.627906976744186, "split6_test_score": 0.6190476190476191, "split7_test_score": 0.6190476190476191, "split8_test_score": 0.6190476190476191, "split9_test_score": 0.6428571428571429, "mean_test_score": 0.6267441860465117, "std_test_score": 0.006674213819815664, "rank_test_score": 30}]}}, {"mode": "vega-lite"});
 </script>
 </div>
 </div>
 </section>
 <section class="slide level4">
 
-<div id="7ed132d0" class="cell" data-execution_count="30">
+<div id="eb1fec0e" class="cell" data-execution_count="30">
 <div class="cell-output cell-output-display" data-execution_count="30">
 
 <style>
-  #altair-viz-30a5be7e70e3411984dca52eb12bc5a7.vega-embed {
+  #altair-viz-350ab59acb284e838ae9ef0e8e5216f0.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-30a5be7e70e3411984dca52eb12bc5a7.vega-embed details,
-  #altair-viz-30a5be7e70e3411984dca52eb12bc5a7.vega-embed details summary {
+  #altair-viz-350ab59acb284e838ae9ef0e8e5216f0.vega-embed details,
+  #altair-viz-350ab59acb284e838ae9ef0e8e5216f0.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-30a5be7e70e3411984dca52eb12bc5a7"></div>
+<div id="altair-viz-350ab59acb284e838ae9ef0e8e5216f0"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-30a5be7e70e3411984dca52eb12bc5a7") {
-      outputDiv = document.getElementById("altair-viz-30a5be7e70e3411984dca52eb12bc5a7");
+    if (outputDiv.id !== "altair-viz-350ab59acb284e838ae9ef0e8e5216f0") {
+      outputDiv = document.getElementById("altair-viz-350ab59acb284e838ae9ef0e8e5216f0");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -1949,12 +1949,12 @@ memory usage: 3.0+ KB</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li><p>Before we evaluate on the test set, we need to refit the model using the best parameter(s) on the entire training set</p></li>
-<li><p>Luckily, <code>scikit-learn</code> does it for us automatically!</p></li>
-<li><p>To make predictions and assess the estimated accuracy of the best model on the test data, we can use the <code>score</code> and <code>predict</code> methods of the fit <code>GridSearchCV</code> object.</p></li>
+<li class="fragment"><p>Before we evaluate on the test set, we need to refit the model using the best parameter(s) on the entire training set</p></li>
+<li class="fragment"><p>Luckily, <code>scikit-learn</code> does it for us automatically!</p></li>
+<li class="fragment"><p>To make predictions and assess the estimated accuracy of the best model on the test data, we can use the <code>score</code> and <code>predict</code> methods of the fit <code>GridSearchCV</code> object.</p></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="a9de3d49" class="cell" data-execution_count="31">
+<div id="c2abfe75" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a></a>cancer_test[<span class="st">"predicted"</span>] <span class="op">=</span> cancer_tune_grid.predict(</span>
 <span id="cb41-2"><a></a>    cancer_test[[<span class="st">"Smoothness"</span>, <span class="st">"Concavity"</span>]]</span>
 <span id="cb41-3"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1965,11 +1965,11 @@ memory usage: 3.0+ KB</code></pre>
 <section id="evaluating-on-the-test-set-1" class="title-slide slide level2 center">
 <h2>Evaluating on the test set</h2>
 <ul>
-<li>We can then pass those predictions to the <code>precision</code>, <code>recall</code>, and <code>crosstab</code> functions to assess the estimated precision and recall, and print a confusion matrix.</li>
+<li class="fragment">We can then pass those predictions to the <code>precision</code>, <code>recall</code>, and <code>crosstab</code> functions to assess the estimated precision and recall, and print a confusion matrix.</li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="2e7b445a" class="cell" data-execution_count="32">
+<div id="f77f0438" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a></a>cancer_tune_grid.score(</span>
 <span id="cb42-2"><a></a>    cancer_test[[<span class="st">"Smoothness"</span>, <span class="st">"Concavity"</span>]],</span>
 <span id="cb42-3"><a></a>    cancer_test[<span class="st">"Class"</span>]</span>
@@ -1978,7 +1978,7 @@ memory usage: 3.0+ KB</code></pre>
 <pre><code>0.9090909090909091</code></pre>
 </div>
 </div>
-<div id="38b4120c" class="cell" data-execution_count="33">
+<div id="c51e42c1" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>precision_score(</span>
 <span id="cb44-2"><a></a>    y_true<span class="op">=</span>cancer_test[<span class="st">"Class"</span>],</span>
 <span id="cb44-3"><a></a>    y_pred<span class="op">=</span>cancer_test[<span class="st">"predicted"</span>],</span>
@@ -1988,7 +1988,7 @@ memory usage: 3.0+ KB</code></pre>
 <pre><code>np.float64(0.8846153846153846)</code></pre>
 </div>
 </div>
-<div id="23502113" class="cell" data-execution_count="34">
+<div id="03281868" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a>recall_score(</span>
 <span id="cb46-2"><a></a>    y_true<span class="op">=</span>cancer_test[<span class="st">"Class"</span>],</span>
 <span id="cb46-3"><a></a>    y_pred<span class="op">=</span>cancer_test[<span class="st">"predicted"</span>],</span>
@@ -1999,7 +1999,7 @@ memory usage: 3.0+ KB</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="58df2fd3" class="cell" data-execution_count="35">
+<div id="ea1ce98c" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a></a>conf_matrix <span class="op">=</span> pd.crosstab(</span>
 <span id="cb48-2"><a></a>    cancer_test[<span class="st">"Class"</span>],</span>
 <span id="cb48-3"><a></a>    cancer_test[<span class="st">"predicted"</span>]</span>
@@ -2024,15 +2024,15 @@ Malignant       7         46</code></pre>
 <h2>K-nearest neighbors classification algorithm</h2>
 <p><strong>Strengths:</strong> K-nearest neighbors classification</p>
 <ol type="1">
-<li>is a simple, intuitive algorithm,</li>
-<li>requires few assumptions about what the data must look like, and</li>
-<li>works for binary (two-class) and multi-class (more than 2 classes) classification problems.</li>
+<li class="fragment">is a simple, intuitive algorithm,</li>
+<li class="fragment">requires few assumptions about what the data must look like, and</li>
+<li class="fragment">works for binary (two-class) and multi-class (more than 2 classes) classification problems.</li>
 </ol>
 <p><strong>Weaknesses:</strong> K-nearest neighbors classification</p>
 <ol type="1">
-<li>becomes very slow as the training data gets larger,</li>
-<li>may not perform well with a large number of predictors, and</li>
-<li>may not perform well when classes are imbalanced.</li>
+<li class="fragment">becomes very slow as the training data gets larger,</li>
+<li class="fragment">may not perform well with a large number of predictors, and</li>
+<li class="fragment">may not perform well when classes are imbalanced.</li>
 </ol>
 </section>
 
@@ -2045,9 +2045,9 @@ Malignant       7         46</code></pre>
 <section id="additional-resources" class="title-slide slide level2 center">
 <h2>Additional resources</h2>
 <ul>
-<li>The <a href="https://python.datasciencebook.ca/classification2.html">Classification II: evaluation &amp; tuning</a> chapter of Data Science: A First Introduction (Python Edition) by Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy contains all the content presented here with a detailed narrative.</li>
-<li>The <a href="https://scikit-learn.org/stable/"><code>scikit-learn</code> website</a> is an excellent reference for more details on, and advanced usage of, the functions and packages in the past two chapters. Aside from that, it also offers many useful <a href="https://scikit-learn.org/stable/tutorial/index.html">tutorials</a> to get you started.</li>
-<li><a href="https://www.statlearning.com/"><em>An Introduction to Statistical Learning</em></a> {cite:p}<code>james2013introduction</code> provides a great next stop in the process of learning about classification. Chapter 4 discusses additional basic techniques for classification that we do not cover, such as logistic regression, linear discriminant analysis, and naive Bayes.</li>
+<li class="fragment">The <a href="https://python.datasciencebook.ca/classification2.html">Classification II: evaluation &amp; tuning</a> chapter of Data Science: A First Introduction (Python Edition) by Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy contains all the content presented here with a detailed narrative.</li>
+<li class="fragment">The <a href="https://scikit-learn.org/stable/"><code>scikit-learn</code> website</a> is an excellent reference for more details on, and advanced usage of, the functions and packages in the past two chapters. Aside from that, it also offers many useful <a href="https://scikit-learn.org/stable/tutorial/index.html">tutorials</a> to get you started.</li>
+<li class="fragment"><a href="https://www.statlearning.com/"><em>An Introduction to Statistical Learning</em></a> {cite:p}<code>james2013introduction</code> provides a great next stop in the process of learning about classification. Chapter 4 discusses additional basic techniques for classification that we do not cover, such as logistic regression, linear discriminant analysis, and naive Bayes.</li>
 </ul>
 </section>
 
