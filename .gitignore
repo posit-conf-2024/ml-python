@@ -5,6 +5,7 @@ _site/
 docs/
 _freeze/
 **.jupyter_cache
+.Rhistory
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
