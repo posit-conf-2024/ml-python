@@ -1444,6 +1444,23 @@ lm_plot_multicol_1 = (
 lm_plot_multicol_1
 ```
 
+- The [Regression I: K-nearest neighbors](https://python.datasciencebook.ca/regression1.html)
+  and [Regression II: linear regression](https://python.datasciencebook.ca/regression2.html)
+  chapters of Data Science: A First Introduction (Python Edition) by
+  Tiffany Timbers, Trevor Campbell, Melissa Lee, Joel Ostblom, Lindsey Heagy
+  contains all the content presented here with a detailed narrative.
+- The [`scikit-learn` website](https://scikit-learn.org/stable/) is an excellent
+  reference for more details on, and advanced usage of, the functions and
+  packages in this lesson. Aside from that, it also offers many
+  useful [tutorials](https://scikit-learn.org/stable/tutorial/index.html)
+  to get you started.
+- [*An Introduction to Statistical Learning*](https://www.statlearning.com/) by
+  Gareth James Daniela Witten Trevor Hastie, and Robert Tibshirani provides
+  a great next stop in the process of
+  learning about classification. Chapter 3 discusses lienar regression in more depth.
+  As well as how it comares to K-nearest neighbors.
+
+
 ## References
 
 Thomas Cover and Peter Hart. Nearest neighbor pattern classification. IEEE Transactions on Information Theory, 13(1):21–27, 1967.
