@@ -1,5 +1,5 @@
 ---
-title: "Welcome &<br/>Introduction to Introduction to machine learning in Python"
+title: "Welcome!"
 format:
   revealjs:
     #footer: "posit::conf 2024 - Introduction to machine learning in Python with Scikit-learn"
@@ -10,7 +10,7 @@ format:
 
 ::: columns
 ::: {.column width="50%" .center}
-![](img/tiff.png){width="75%"}
+![](img/intro/tiff.png){width="75%"}
 
 | Tiffany Timbers
 | University of British Columbia
@@ -18,7 +18,7 @@ format:
 
 
 ::: {.column width="50%" .center}
-![](img/dan.jpg){width="75%"}
+![](img/intro/dan.jpg){width="75%"}
 
 | Daniel Chen
 | University of British Columbia
@@ -178,7 +178,7 @@ We will work with these at the end of each lecture component.
 :::
 
 ::: {.column width='80%' .center}
-![](img/cloud_assignment.png)
+![](img/intro/cloud.png)
 :::
 ::::
 
@@ -190,4 +190,4 @@ which should then create a copy of all materials and launch a cloud session for 
 
 If everything is working you should see something very close to the following,
 
-![](img/cloud_session.png){fig-align="center" width="100%"}
+![](img/intro/cloud-notebook.png){fig-align="center" width="100%"}

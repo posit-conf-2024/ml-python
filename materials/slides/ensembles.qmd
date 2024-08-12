@@ -1,6 +1,6 @@
 ---
 title: "Tree-based and ensemble models"
-format: 
+format:
   revealjs:
     slide-number: true
     slide-level: 4
@@ -24,22 +24,22 @@ pd.set_option('display.max_rows', 5)
 - Algorithms that stratifying or segmenting the predictor space
   into a number of simple regions.
 
-- We call these algorithms decision-tree methods 
- because the decisions used to segment the predictor space 
+- We call these algorithms decision-tree methods
+ because the decisions used to segment the predictor space
  can be summarized in a tree.
- 
+
 - Decision trees on their own, are very explainable and intuitive,
-  but not very powerful at predicting. 
-  
-- However, there are extensions of decision trees, 
+  but not very powerful at predicting.
+
+- However, there are extensions of decision trees,
   such as random forest and boosted trees,
-  which are very powerful at predicting. 
+  which are very powerful at predicting.
   We will demonstrate two of these in this session.
 
 ## Decision trees
 
 ::: {.nonincremental}
-- [Decision Trees](https://mlu-explain.github.io/decision-tree/)  
+- [Decision Trees](https://mlu-explain.github.io/decision-tree/)
   by Jared Wilber & Lucía Santamaría
 :::
 
@@ -48,18 +48,18 @@ pd.set_option('display.max_rows', 5)
 - Use recursive binary splitting to grow a classification tree
   (splitting of the predictor space into $J$ distinct, non-overlapping regions).
 
--  For every observation that falls into the region $R_j$ , 
-  we make the same prediction, 
+-  For every observation that falls into the region $R_j$ ,
+  we make the same prediction,
   which is the majority vote for the training observations in $R_j$.
-  
+
 - Where to split the predictor space is done in a top-down and greedy manner,
   and in practice for classification, the best split at any point in the algorithm
   is one that minimizes the Gini index (a measure of node purity).
-  
+
 - Decision trees are useful because they are very interpretable.
 
-- A limitation of decision trees is that theyn tend to overfit, 
-  so in practice we use cross-validation to tune a hyperparameter, 
+- A limitation of decision trees is that theyn tend to overfit,
+  so in practice we use cross-validation to tune a hyperparameter,
   $\alpha$, to find the optimal, pruned tree.
 
 ## Example: the heart data set
@@ -68,12 +68,12 @@ pd.set_option('display.max_rows', 5)
 ::: {.column width="50%"}
 
 ::: {.nonincremental}
-- Let's consider a situation where we'd like to be able to predict 
-  the presence of heart disease (`AHD`) in patients, 
+- Let's consider a situation where we'd like to be able to predict
+  the presence of heart disease (`AHD`) in patients,
   based off 13 measured characteristics.
 
-- The [heart data set](https://www.statlearning.com/s/Heart.csv) 
-  contains a binary outcome for heart disease 
+- The [heart data set](https://www.statlearning.com/s/Heart.csv)
+  contains a binary outcome for heart disease
   for patients who presented with chest pain.
 :::
 :::
@@ -100,14 +100,14 @@ heart.head()
 
 ## Do we have a class imbalance?
 
-It's always important to check this, as it may impact your splitting 
+It's always important to check this, as it may impact your splitting
 and/or modeling decisions.
 
 ```{python}
 heart['AHD'].value_counts(normalize=True)
 ```
 
-This looks pretty good! 
+This looks pretty good!
 We can move forward this time without doing much more about this.
 
 ## Data splitting
@@ -135,8 +135,8 @@ y_test = heart_test['AHD']
 :::: {.columns}
 ::: {.column width="35%"}
 ::: {.nonincremental}
-- This is our first case of seeing categorical predictor variables, 
-can we treat them the same as numerical ones? **No!** 
+- This is our first case of seeing categorical predictor variables,
+can we treat them the same as numerical ones? **No!**
 
 - In `scikit-learn` we must perform **one-hot encoding**
 :::
@@ -171,15 +171,15 @@ passthrough_feats = ['Sex', 'Fbs', 'ExAng']
 categorical_feats = ['ChestPain', 'Thal']
 
 heart_preprocessor = make_column_transformer(
-    (StandardScaler(), numeric_feats), 
-    ("passthrough", passthrough_feats),     
-    (OneHotEncoder(handle_unknown = "ignore"), categorical_feats),     
+    (StandardScaler(), numeric_feats),
+    ("passthrough", passthrough_feats),
+    (OneHotEncoder(handle_unknown = "ignore"), categorical_feats),
 )
 ```
 
-> `handle_unknown = "ignore"` handles the case where 
+> `handle_unknown = "ignore"` handles the case where
 > categories exist in the test data, which were missing in the training set.
-> Specifically, it sets the value for those to 0 for all cases of the category. 
+> Specifically, it sets the value for those to 0 for all cases of the category.
 
 ## Fitting a dummy classifier
 
@@ -234,20 +234,20 @@ results
 
 ## Can we do better?
 
-- We could tune some decision tree parameters 
+- We could tune some decision tree parameters
   (e.g., alpha, maximum tree depth, etc)...
 
 - We could also try a different tree-based method!
 
-- [The Random Forest Algorithm](https://mlu-explain.github.io/random-forest/) 
+- [The Random Forest Algorithm](https://mlu-explain.github.io/random-forest/)
   by Jenny Yeon & Jared Wilber
-  
+
 ## The Random Forest Algorithm
 
 1. Build a number of decision trees on bootstrapped training samples.
 
-2. When building the trees from the bootstrapped samples, 
-  at each stage of splitting, 
+2. When building the trees from the bootstrapped samples,
+  at each stage of splitting,
   the best splitting is computed using a randomly selected subset of the features.
 
 3. Take the majority votes across all the trees for the final prediction.
@@ -259,12 +259,12 @@ results
 ::: {.nonincremental}
 - Does not accept missing values, we need to deal with these somehow...
 
-- We can either drop the observations with missing values, 
+- We can either drop the observations with missing values,
   or we can somehow impute them.
 
-- For the purposes of this demo we will drop them, 
-  but if you are interested in imputation, 
-  see the imputation tutorial in 
+- For the purposes of this demo we will drop them,
+  but if you are interested in imputation,
+  see the imputation tutorial in
   [`scikit-learn`](https://scikit-learn.org/stable/modules/impute.html)
 :::
 :::
@@ -322,9 +322,9 @@ results
 
   - `max_depth`: max depth of each decision tree (higher = more complexity)
 
-  - `max_features`: the number of features you get to look at each split 
+  - `max_features`: the number of features you get to look at each split
   (higher = more complexity)
-  
+
 - We can use `GridSearchCV` to search for the optimal parameters for these,
   as we did for $K$ in $K$-nearest neighbors.
 
@@ -358,7 +358,7 @@ results = pd.concat([results, results_rf_tuned])
 
 ## Random Forest results
 
-How did the Random Forest compare 
+How did the Random Forest compare
 against the other models we tried?
 
 ```{python}
@@ -369,12 +369,12 @@ results
 
 - No randomization.
 
-- The key idea is combining many simple models called weak learners, 
+- The key idea is combining many simple models called weak learners,
   to create a strong learner.
 
 - They combine multiple shallow (depth 1 to 5) decision trees.
 
-- They build trees in a serial manner, 
+- They build trees in a serial manner,
   where each tree tries to correct the mistakes of the previous one.
 
 ## Tuning `GradientBoostingClassifier` with `scikit-learn`
@@ -385,9 +385,9 @@ results
 
   - `max_depth`: max depth of each decision tree (higher = more complexity)
 
-  - `learning_rate`: the shrinkage parameter which controls the rate 
-  at which boosting learns. Values between 0.01 or 0.001 are typical. 
-  
+  - `learning_rate`: the shrinkage parameter which controls the rate
+  at which boosting learns. Values between 0.01 or 0.001 are typical.
+
 - We can use `GridSearchCV` to search for the optimal parameters for these,
   as we did for the parameters in Random Forest.
 
@@ -422,7 +422,7 @@ results = pd.concat([results, results_gb_tuned])
 
 ## `GradientBoostingClassifier` results
 
-How did the `GradientBoostingClassifier` compare 
+How did the `GradientBoostingClassifier` compare
 against the other models we tried?
 
 ```{python}
@@ -431,16 +431,16 @@ results
 
 ## How do we choose the final model?
 
-- Remember, what is your question or application? 
+- Remember, what is your question or application?
 
 - A good rule when models are not very different (considering SEM),
   what is the simplest model that does well?
-  
-- Look at other metrics that are important to you 
-  (not just the metric you used for tuning your model), 
+
+- Look at other metrics that are important to you
+  (not just the metric you used for tuning your model),
   remember precision & recall, for example.
-  
-- Remember - no peaking at the test set until you choose! 
+
+- Remember - no peaking at the test set until you choose!
   And then, you should only look at the test set for one model!
 
 ## Precision and recall on the tuned random forest model
@@ -495,36 +495,36 @@ results_rf_tuned
 
 **Key points:**
 
-- Decision trees are very interpretable (decision rules!), however in ensemble 
-  models (e.g., Random Forest and Boosting) there are many trees - 
+- Decision trees are very interpretable (decision rules!), however in ensemble
+  models (e.g., Random Forest and Boosting) there are many trees -
   individual decision rules are not as meaningful...
 
-- Instead, we can calculate feature importances as 
+- Instead, we can calculate feature importances as
   the total decrease in impurity for all splits involving that feature,
   weighted by the number of samples involved in those splits,
   normalized and averaged over all the trees.
-  
-- These are calculated on the training set, 
+
+- These are calculated on the training set,
   as that is the set the model is trained on.
-  
+
 :::
 
 ::: {.column width="50%"}
 
 **Notes of caution!**
 
-- Feature importances can be unreliable with both highly cardinal, 
+- Feature importances can be unreliable with both highly cardinal,
   and multicollinear features.
-  
+
 - Unlike the linear model coefficients, feature importances do not have a sign!
   They tell us about importance, but not an “up or down”.
 
 - Increasing a feature may cause the prediction to first go up, and then go down.
 
-- Alternatives to feature importance to understanding models exist 
-  (e.g., [SHAP](https://shap.readthedocs.io/en/latest/example_notebooks/overviews/An%20introduction%20to%20explainable%20AI%20with%20Shapley%20values.html) 
+- Alternatives to feature importance to understanding models exist
+  (e.g., [SHAP](https://shap.readthedocs.io/en/latest/example_notebooks/overviews/An%20introduction%20to%20explainable%20AI%20with%20Shapley%20values.html)
   (SHapley Additive exPlanations))
-  
+
 :::
 ::::
 
@@ -682,23 +682,23 @@ print(conf_matrix)
 
 ## Local installation
 
-1. Using Docker: 
+1. Using Docker:
 [Data Science: A First Introduction (Python Edition) Installation Instructions](https://python.datasciencebook.ca/setup.html)
 
-2. Using conda: 
+2. Using conda:
 [UBC MDS Installation Instructions](https://ubc-mds.github.io/resources_pages/installation_instructions/)
 
 ## Additional resources
 
 - The [UBC DSCI 573 (Feature and Model Selection notes)](https://ubc-mds.github.io/DSCI_573_feat-model-select)
-  chapter of Data Science: A First Introduction (Python Edition) by 
+  chapter of Data Science: A First Introduction (Python Edition) by
   Varada Kolhatkar and Joel Ostblom. These notes cover classification and regression metrics,
   advanced variable selection and more on ensembles.
 - The [`scikit-learn` website](https://scikit-learn.org/stable/) is an excellent
   reference for more details on, and advanced usage of, the functions and
   packages in the past two chapters. Aside from that, it also offers many
   useful [tutorials](https://scikit-learn.org/stable/tutorial/index.html)
-  to get you started. 
+  to get you started.
 - [*An Introduction to Statistical Learning*](https://www.statlearning.com/) {cite:p}`james2013introduction` provides
   a great next stop in the process of
   learning about classification. Chapter 4 discusses additional basic techniques
