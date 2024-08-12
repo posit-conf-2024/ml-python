@@ -1,0 +1,194 @@
+---
+title: "Welcome"
+subtitle: Introduction to Introduction to machine learning in Python
+format:
+  revealjs:
+    #footer: "posit::conf 2024 - Introduction to machine learning in Python with Scikit-learn"
+    slide-number: true
+    self-contained: true
+---
+## Introductions
+
+::: columns
+::: {.column width="50%" .center}
+![](img/intro/tiff.png){width="75%"}
+
+| Tiffany Timbers
+| University of British Columbia
+:::
+
+
+::: {.column width="50%" .center}
+![](img/intro/dan.jpg){width="75%"}
+
+| Daniel Chen
+| University of British Columbia
+:::
+:::
+
+
+
+## Introduce yourself
+
+We wont go around the room, but take the next couple of minutes to introduce yourself to your neighbors.
+
+Some suggested topics:
+
+* What is your name
+
+* Where you are coming from
+
+* Why you are interested in learning ML in Python
+
+
+
+## Materials
+
+<br/><br/>
+
+:::: {.larger}
+Website:
+
+::: {style="text-align: center;"}
+[https://posit-conf-2024.github.io/ml-python/](https://posit-conf-2024.github.io/ml-python/)
+:::
+
+<p/>
+
+GitHub:
+
+::: {style="text-align: center;"}
+[https://github.com/posit-conf-2024/ml-python](https://github.com/posit-conf-2024/ml-python)
+:::
+
+::::
+
+
+
+## Schedule {.smaller}
+
+
+| Time          | Activity                                                                                |
+| ------------- | --------------------------------------------------------------------------------------- |
+| 09:00 - 10:30 | Session 1 - Introduction to workshop and intro to machine learning (via Classification I) |
+| 10:30 - 11:00 | *Coffee break*                                                                          |
+| 11:00 - 12:30 | Session 2 - Classification II                                                    |
+| 12:30 - 13:30 | *Lunch break*                                                                           |
+| 13:30 - 15:00 | Session 3 - Regression                                                           |
+| 15:00 - 15:30 | *Coffee break*                                                                          |
+| 15:30 - 17:00 | Session 4 - Tree-based and ensemble methods          |
+
+## WiFi
+
+<br/>
+
+::: larger
+Username:
+
+::: center
+**Posit Conf 2024**
+:::
+
+
+Password:
+
+::: center
+**conf2024**
+:::
+
+:::
+
+<br/>
+
+If you have any difficulty with your connection please let us (myself and or the TAs) know so we can escalate issues if needed.
+
+
+## Code of Conduct
+
+The Code of Conduct can be found at [posit.co/code-of-conduct](https://posit.co/code-of-conduct).
+
+Please review it carefully.
+
+You can report Code of Conduct violations in person, by email, or by phone.
+
+Please see the policy linked above for contact information.
+
+## Other useful info
+
+- There are **gender-neutral bathrooms** located on floors 3, 4, 5, 6, and 7.
+
+- The **meditation and prayer room** is Room 503, it is
+available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.
+
+- The **lactation room** is located in 509, with the same timings as above.
+
+- Participants who do not wish to be photographed have **red lanyards**; please note everyone’s lanyard colors before taking a photo and respect their choices.
+
+
+## Asking for help (Stickies)
+
+::: {.r-hstack}
+
+::: {style="text-align: center;"}
+::: {data-id="box2" style="border: 2px solid; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm working
+:::
+
+::: {style="text-align: center;"}
+::: {data-id="box1" style="background: #CC4341; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm stuck
+:::
+
+::: {style="text-align: center;"}
+::: {data-id="box3" style="background: #A3C586; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm done
+:::
+
+:::
+
+
+## Other communication (Discord)
+
+You should have received an email with an invitation and instructions for joining the conference's discord server.
+
+This workshop has a private channel under Workshops,
+
+::: {.large style="text-align: center"}
+#workshop-ml-python
+:::
+
+This is a great place to ask questions, post resources, memes, or most anything else before, during, and after the workshop.
+
+
+
+# Computational Environment
+
+## RStudio Cloud
+
+Link in your welcome email (from last night!) and/or discord (pinned/first comment)
+
+Once you have joined you're ready to go!
+We will work with these at the end of each lecture component.
+
+:::: {.columns}
+::: {.column width='10%'}
+
+:::
+
+::: {.column width='80%' .center}
+![](img/intro/cloud.png)
+:::
+::::
+
+
+which should then create a copy of all materials and launch a cloud session for you.
+
+
+## Cloud session
+
+If everything is working you should see something very close to the following,
+
+![](img/intro/cloud-notebook.png){fig-align="center" width="100%"}
