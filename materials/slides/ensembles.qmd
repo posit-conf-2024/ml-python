@@ -38,8 +38,10 @@ pd.set_option('display.max_rows', 5)
 
 ## Decision trees
 
+::: {.nonincremental}
 - [Decision Trees](https://mlu-explain.github.io/decision-tree/)  
   by Jared Wilber & Lucía Santamaría
+:::
 
 ## Classification Decision trees
 
@@ -64,6 +66,8 @@ pd.set_option('display.max_rows', 5)
 
 :::: {.columns}
 ::: {.column width="50%"}
+
+::: {.nonincremental}
 - Let's consider a situation where we'd like to be able to predict 
   the presence of heart disease (`AHD`) in patients, 
   based off 13 measured characteristics.
@@ -71,6 +75,7 @@ pd.set_option('display.max_rows', 5)
 - The [heart data set](https://www.statlearning.com/s/Heart.csv) 
   contains a binary outcome for heart disease 
   for patients who presented with chest pain.
+:::
 :::
 
 ::: {.column width="50%"}
@@ -84,10 +89,11 @@ heart.info()
 
 ## Example: the heart data set
 
-- An angiographic test was performed and a label for `AHD` of Yes
-  was labelled to indicate the presence of heart disease,
-  otherwise the label was No.
-  
+An angiographic test was performed and a label for `AHD` of Yes
+was labelled to indicate the presence of heart disease,
+otherwise the label was No.
+
+
 ```{python}
 heart.head()
 ```
@@ -128,10 +134,12 @@ y_test = heart_test['AHD']
 
 :::: {.columns}
 ::: {.column width="35%"}
+::: {.nonincremental}
 - This is our first case of seeing categorical predictor variables, 
 can we treat them the same as numerical ones? **No!** 
 
 - In `scikit-learn` we must perform **one-hot encoding**
+:::
 :::
 
 ::: {.column width="65%"}
@@ -248,6 +256,7 @@ results
 
 :::: {.columns}
 ::: {.column width="35%"}
+::: {.nonincremental}
 - Does not accept missing values, we need to deal with these somehow...
 
 - We can either drop the observations with missing values, 
@@ -257,6 +266,7 @@ results
   but if you are interested in imputation, 
   see the imputation tutorial in 
   [`scikit-learn`](https://scikit-learn.org/stable/modules/impute.html)
+:::
 :::
 
 ::: {.column width="50%"}
@@ -627,7 +637,7 @@ print(conf_matrix)
 ::::
 
 ## Other boosting models:
-
+::: {.nonincremental}
 :::: {.columns}
 ::: {.column width="50%"}
 [XGBoost](https://lightgbm.readthedocs.io/)
@@ -653,18 +663,19 @@ print(conf_matrix)
 - Usually better scores but slower compared to XGBoost and LightGBM
 :::
 ::::
+:::
 
 ## Keep learning!
 
 :::: {.columns}
 ::: {.column width="50%"}
-![](img/frontmatter/ds-a-first-intro-cover-python.jpeg)
+![](img/frontmatter/ds-a-first-intro-cover-python.jpeg){height=50%}
 <https://python.datasciencebook.ca/>
 :::
 
 
 ::: {.column width="50%"}
-![](img/frontmatter/ISLP_cover.png)
+![](img/frontmatter/ISLP_cover.png){height=50%}
 <https://www.statlearning.com/>
 :::
 ::::
