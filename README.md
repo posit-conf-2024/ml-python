@@ -1,4 +1,4 @@
-![](materials/slides/img/frontmatter/ds-a-first-intro-cover.jpg)
+![](materials/slides/img/frontmatter/ds-a-first-intro-graphic.jpg)
 
 Introduction to machine learning in Python with Scikit-learn
 ================
