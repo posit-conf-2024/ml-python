@@ -323,7 +323,7 @@ results
 ```{python}
 from sklearn.model_selection import GridSearchCV
 
-rf_param_grid = {'randomforestclassifier__n_estimators': [200, 400, 600, 800, 1000],
+rf_param_grid = {'randomforestclassifier__n_estimators': [200],
               'randomforestclassifier__max_depth': [1, 3, 5, 7, 9],
               'randomforestclassifier__max_features': [1, 2, 3, 4, 5, 6, 7]}
 
@@ -388,7 +388,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 gradient_boosted_classifier = GradientBoostingClassifier()
 gb_pipeline = make_pipeline(heart_preprocessor, gradient_boosted_classifier)
-gb_param_grid = {'gradientboostingclassifier__n_estimators': [200, 400, 600, 800, 1000],
+gb_param_grid = {'gradientboostingclassifier__n_estimators': [200],
               'gradientboostingclassifier__max_depth': [1, 3, 5, 7, 9],
               'gradientboostingclassifier__learning_rate': [0.001, 0.005, 0.01]}
 gb_tune_grid = GridSearchCV(
@@ -489,9 +489,10 @@ results_rf_tuned
   models (e.g., Random Forest and Boosting) there are many trees - 
   individual decision rules are not as meaningful...
 
-- Instead, we can calculate feature importances. For ensemble tree models,
-  these are computed as the mean and standard deviation 
-  of accumulation of the impurity decrease within each tree.
+- Instead, we can calculate feature importances as 
+  the total decrease in impurity for all splits involving that feature,
+  weighted by the number of samples involved in those splits,
+  normalized and averaged over all the trees.
   
 - These are calculated on the training set, 
   as that is the set the model is trained on.
