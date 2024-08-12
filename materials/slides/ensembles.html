@@ -411,10 +411,12 @@
 
 <section id="decision-trees" class="title-slide slide level2 center">
 <h2>Decision trees</h2>
+<div>
 <ul>
-<li class="fragment"><a href="https://mlu-explain.github.io/decision-tree/">Decision Trees</a><br>
+<li><a href="https://mlu-explain.github.io/decision-tree/">Decision Trees</a><br>
 by Jared Wilber &amp; Lucía Santamaría</li>
 </ul>
+</div>
 </section>
 
 <section id="classification-decision-trees" class="title-slide slide level2 center">
@@ -432,12 +434,14 @@ by Jared Wilber &amp; Lucía Santamaría</li>
 <h2>Example: the heart data set</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<div>
 <ul>
-<li class="fragment"><p>Let’s consider a situation where we’d like to be able to predict the presence of heart disease (<code>AHD</code>) in patients, based off 13 measured characteristics.</p></li>
-<li class="fragment"><p>The <a href="https://www.statlearning.com/s/Heart.csv">heart data set</a> contains a binary outcome for heart disease for patients who presented with chest pain.</p></li>
+<li><p>Let’s consider a situation where we’d like to be able to predict the presence of heart disease (<code>AHD</code>) in patients, based off 13 measured characteristics.</p></li>
+<li><p>The <a href="https://www.statlearning.com/s/Heart.csv">heart data set</a> contains a binary outcome for heart disease for patients who presented with chest pain.</p></li>
 </ul>
+</div>
 </div><div class="column" style="width:50%;">
-<div id="24abe678" class="cell" data-execution_count="2">
+<div id="41655070" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a>heart <span class="op">=</span> pd.read_csv(<span class="st">"data/Heart.csv"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb1-3"><a></a>heart.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -470,10 +474,8 @@ memory usage: 35.5+ KB</code></pre>
 
 <section id="example-the-heart-data-set-1" class="title-slide slide level2 center">
 <h2>Example: the heart data set</h2>
-<ul>
-<li class="fragment">An angiographic test was performed and a label for <code>AHD</code> of Yes was labelled to indicate the presence of heart disease, otherwise the label was No.</li>
-</ul>
-<div id="ec69fa57" class="cell" data-execution_count="3">
+<p>An angiographic test was performed and a label for <code>AHD</code> of Yes was labelled to indicate the presence of heart disease, otherwise the label was No.</p>
+<div id="f30e1f31" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>heart.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -608,7 +610,7 @@ memory usage: 35.5+ KB</code></pre>
 <section id="do-we-have-a-class-imbalance" class="title-slide slide level2 center">
 <h2>Do we have a class imbalance?</h2>
 <p>It’s always important to check this, as it may impact your splitting and/or modeling decisions.</p>
-<div id="7d8e5b9a" class="cell" data-execution_count="4">
+<div id="5f3a2151" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>heart[<span class="st">'AHD'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>AHD
@@ -623,7 +625,7 @@ Name: proportion, dtype: float64</code></pre>
 <section id="data-splitting" class="title-slide slide level2 center">
 <h2>Data splitting</h2>
 <p>Let’s split the data into training and test sets:</p>
-<div id="fcb9975d" class="cell" data-execution_count="5">
+<div id="40c24844" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-2"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb6-3"><a></a></span>
@@ -644,10 +646,12 @@ Name: proportion, dtype: float64</code></pre>
 <h2>Categorical variables</h2>
 <div class="columns">
 <div class="column" style="width:35%;">
+<div>
 <ul>
-<li class="fragment"><p>This is our first case of seeing categorical predictor variables, can we treat them the same as numerical ones? <strong>No!</strong></p></li>
-<li class="fragment"><p>In <code>scikit-learn</code> we must perform <strong>one-hot encoding</strong></p></li>
+<li><p>This is our first case of seeing categorical predictor variables, can we treat them the same as numerical ones? <strong>No!</strong></p></li>
+<li><p>In <code>scikit-learn</code> we must perform <strong>one-hot encoding</strong></p></li>
 </ul>
+</div>
 </div><div class="column" style="width:65%;">
 <p><img data-src="img/ensembles/onehot1-1-1.png"></p>
 <p><em>Source: <a href="https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/" class="uri">https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/</a></em></p>
@@ -658,7 +662,7 @@ Name: proportion, dtype: float64</code></pre>
 <h2>Look at the data again</h2>
 <p>Which columns do we need to standardize?</p>
 <p>Which do we need to one-hot encode?</p>
-<div id="95d26488" class="cell" data-execution_count="6">
+<div id="0be80fcf" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>heart.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
@@ -792,7 +796,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="one-hot-encoding-pre-processing" class="title-slide slide level2 center">
 <h2>One hot encoding &amp; pre-processing</h2>
-<div id="b1e5d602" class="cell" data-execution_count="7">
+<div id="667c69b2" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
 <span id="cb8-2"><a></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_transformer, make_column_selector</span>
 <span id="cb8-3"><a></a></span>
@@ -813,7 +817,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="fitting-a-dummy-classifier" class="title-slide slide level2 center">
 <h2>Fitting a dummy classifier</h2>
-<div id="17c43301" class="cell" data-execution_count="8">
+<div id="38e89c26" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="im">from</span> sklearn.dummy <span class="im">import</span> DummyClassifier</span>
 <span id="cb9-2"><a></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
 <span id="cb9-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_validate</span>
@@ -874,7 +878,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="fitting-a-decision-tree" class="title-slide slide level2 center">
 <h2>Fitting a decision tree</h2>
-<div id="31e9bd00" class="cell" data-execution_count="9">
+<div id="9e6943ce" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
 <span id="cb10-2"><a></a></span>
 <span id="cb10-3"><a></a>decision_tree <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">2026</span>)</span>
@@ -960,21 +964,23 @@ Name: proportion, dtype: float64</code></pre>
 <h2>Random forest in <code>scikit-learn</code> &amp; missing values</h2>
 <div class="columns">
 <div class="column" style="width:35%;">
+<div>
 <ul>
-<li class="fragment"><p>Does not accept missing values, we need to deal with these somehow…</p></li>
-<li class="fragment"><p>We can either drop the observations with missing values, or we can somehow impute them.</p></li>
-<li class="fragment"><p>For the purposes of this demo we will drop them, but if you are interested in imputation, see the imputation tutorial in <a href="https://scikit-learn.org/stable/modules/impute.html"><code>scikit-learn</code></a></p></li>
+<li><p>Does not accept missing values, we need to deal with these somehow…</p></li>
+<li><p>We can either drop the observations with missing values, or we can somehow impute them.</p></li>
+<li><p>For the purposes of this demo we will drop them, but if you are interested in imputation, see the imputation tutorial in <a href="https://scikit-learn.org/stable/modules/impute.html"><code>scikit-learn</code></a></p></li>
 </ul>
+</div>
 </div><div class="column" style="width:50%;">
 <p>How many rows have missing observations:</p>
-<div id="5cc84d58" class="cell" data-execution_count="10">
+<div id="2893688a" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>heart.isna().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>np.int64(6)</code></pre>
 </div>
 </div>
 <p>Drop rows with missing observations:</p>
-<div id="d931fd28" class="cell" data-execution_count="11">
+<div id="f744e360" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>heart_train_drop_na <span class="op">=</span> heart_train.dropna()</span>
 <span id="cb13-2"><a></a></span>
 <span id="cb13-3"><a></a>X_train_drop_na <span class="op">=</span> heart_train_drop_na.drop(</span>
@@ -987,7 +993,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="random-forest-in-scikit-learn" class="title-slide slide level2 center">
 <h2>Random forest in <code>scikit-learn</code></h2>
-<div id="f517b7ae" class="cell" data-execution_count="12">
+<div id="c517acc3" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
 <span id="cb14-2"><a></a></span>
 <span id="cb14-3"><a></a>random_forest <span class="op">=</span> RandomForestClassifier(random_state<span class="op">=</span><span class="dv">2026</span>)</span>
@@ -1071,7 +1077,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="tuning-random-forest-in-scikit-learn" class="title-slide slide level2 center">
 <h2>Tuning random forest in <code>scikit-learn</code></h2>
-<div id="2cd50df5" class="cell" data-execution_count="13">
+<div id="e9216742" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
 <span id="cb15-2"><a></a></span>
 <span id="cb15-3"><a></a>rf_param_grid <span class="op">=</span> {<span class="st">'randomforestclassifier__n_estimators'</span>: [<span class="dv">200</span>],</span>
@@ -1101,7 +1107,7 @@ Name: proportion, dtype: float64</code></pre>
 <section id="random-forest-results" class="title-slide slide level2 center">
 <h2>Random Forest results</h2>
 <p>How did the Random Forest compare against the other models we tried?</p>
-<div id="362951d0" class="cell" data-execution_count="14">
+<div id="1267cd18" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <div>
@@ -1181,7 +1187,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="tuning-gradientboostingclassifier-with-scikit-learn-1" class="title-slide slide level2 center">
 <h2>Tuning <code>GradientBoostingClassifier</code> with <code>scikit-learn</code></h2>
-<div id="91015341" class="cell" data-execution_count="15">
+<div id="5a0dd21d" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> GradientBoostingClassifier</span>
 <span id="cb17-2"><a></a></span>
 <span id="cb17-3"><a></a>gradient_boosted_classifier <span class="op">=</span> GradientBoostingClassifier(random_state<span class="op">=</span><span class="dv">2026</span>)</span>
@@ -1212,7 +1218,7 @@ Name: proportion, dtype: float64</code></pre>
 <section id="gradientboostingclassifier-results" class="title-slide slide level2 center">
 <h2><code>GradientBoostingClassifier</code> results</h2>
 <p>How did the <code>GradientBoostingClassifier</code> compare against the other models we tried?</p>
-<div id="97c6a920" class="cell" data-execution_count="16">
+<div id="cd7b5137" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
@@ -1284,7 +1290,7 @@ Name: proportion, dtype: float64</code></pre>
 
 <section id="precision-and-recall-on-the-tuned-random-forest-model" class="title-slide slide level2 center">
 <h2>Precision and recall on the tuned random forest model</h2>
-<div id="415a86e1" class="cell" data-execution_count="17">
+<div id="5aa6ebcc" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> make_scorer, precision_score, recall_score</span>
 <span id="cb19-2"><a></a></span>
 <span id="cb19-3"><a></a>scoring <span class="op">=</span> {</span>
@@ -1798,7 +1804,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li class="fragment"><p>What do we think? Is this model ready for production in a diagnostic setting?</p></li>
 <li class="fragment"><p>How could we improve it further?</p></li>
 </ul>
-<div id="23a0c7a8" class="cell" data-execution_count="18">
+<div id="531b27d4" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>cv_results <span class="op">=</span> pd.DataFrame(rf_tune_grid.cv_results_)</span>
 <span id="cb20-2"><a></a></span>
 <span id="cb20-3"><a></a>mean_precision <span class="op">=</span> cv_results[<span class="st">'mean_test_precision'</span>].iloc[rf_tune_grid.best_index_]</span>
@@ -1883,7 +1889,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 <section id="feature-importances-in-scikit-learn" class="title-slide slide level2 center">
 <h2>Feature importances in <code>scikit-learn</code></h2>
-<div id="d9581945" class="cell" data-execution_count="19">
+<div id="944e6380" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a><span class="co"># Access the best pipeline</span></span>
 <span id="cb21-2"><a></a>best_pipeline <span class="op">=</span> rf_tune_grid.best_estimator_</span>
 <span id="cb21-3"><a></a></span>
@@ -1915,27 +1921,27 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 <section id="visualizing-the-results" class="title-slide slide level2 center">
 <h2>Visualizing the results</h2>
-<div id="b98953a3" class="cell" data-execution_count="20">
+<div id="e8a7bc05" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display" data-execution_count="20">
 
 <style>
-  #altair-viz-d2288f3aa14b43a9a0d61f920586a94a.vega-embed {
+  #altair-viz-ea2762864b06488f8b7f4e7899b23f4e.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-d2288f3aa14b43a9a0d61f920586a94a.vega-embed details,
-  #altair-viz-d2288f3aa14b43a9a0d61f920586a94a.vega-embed details summary {
+  #altair-viz-ea2762864b06488f8b7f4e7899b23f4e.vega-embed details,
+  #altair-viz-ea2762864b06488f8b7f4e7899b23f4e.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-d2288f3aa14b43a9a0d61f920586a94a"></div>
+<div id="altair-viz-ea2762864b06488f8b7f4e7899b23f4e"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-d2288f3aa14b43a9a0d61f920586a94a") {
-      outputDiv = document.getElementById("altair-viz-d2288f3aa14b43a9a0d61f920586a94a");
+    if (outputDiv.id !== "altair-viz-ea2762864b06488f8b7f4e7899b23f4e") {
+      outputDiv = document.getElementById("altair-viz-ea2762864b06488f8b7f4e7899b23f4e");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -1990,7 +1996,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="evaluating-on-the-test-set" class="title-slide slide level2 center">
 <h2>Evaluating on the test set</h2>
 <p>Predict on the test set:</p>
-<div id="a7cfe8ce" class="cell" data-execution_count="21">
+<div id="7f6e3828" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>heart_test_drop_na <span class="op">=</span> heart_test.dropna()</span>
 <span id="cb22-2"><a></a>X_test_drop_na <span class="op">=</span> heart_test_drop_na.drop(columns<span class="op">=</span>[<span class="st">'AHD'</span>])</span>
 <span id="cb22-3"><a></a>y_test_drop_na <span class="op">=</span> heart_test_drop_na[<span class="st">'AHD'</span>]</span>
@@ -2006,7 +2012,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <p>Examine accuracy, precision and recall:</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="b528bc02" class="cell" data-execution_count="22">
+<div id="c5134ea7" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>rf_tune_grid.score(</span>
 <span id="cb23-2"><a></a>    X_test_drop_na,</span>
 <span id="cb23-3"><a></a>    y_test_drop_na</span>
@@ -2015,7 +2021,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <pre><code>0.7868852459016393</code></pre>
 </div>
 </div>
-<div id="7647df36" class="cell" data-execution_count="23">
+<div id="fd248698" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a>precision_score(</span>
 <span id="cb25-2"><a></a>    y_true<span class="op">=</span>heart_test_drop_na[<span class="st">"AHD"</span>],</span>
 <span id="cb25-3"><a></a>    y_pred<span class="op">=</span>heart_test_drop_na[<span class="st">"predicted"</span>],</span>
@@ -2025,7 +2031,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <pre><code>np.float64(0.8)</code></pre>
 </div>
 </div>
-<div id="b0c15cbb" class="cell" data-execution_count="24">
+<div id="ea5fc279" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>recall_score(</span>
 <span id="cb27-2"><a></a>    y_true<span class="op">=</span>heart_test_drop_na[<span class="st">"AHD"</span>],</span>
 <span id="cb27-3"><a></a>    y_pred<span class="op">=</span>heart_test_drop_na[<span class="st">"predicted"</span>],</span>
@@ -2036,7 +2042,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="b9e909f9" class="cell" data-execution_count="25">
+<div id="635f0ff6" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>conf_matrix <span class="op">=</span> pd.crosstab(</span>
 <span id="cb29-2"><a></a>    heart_test_drop_na[<span class="st">"AHD"</span>],</span>
 <span id="cb29-3"><a></a>    heart_test_drop_na[<span class="st">"predicted"</span>]</span>
@@ -2054,39 +2060,41 @@ Yes         8   20</code></pre>
 
 <section id="other-boosting-models" class="title-slide slide level2 center">
 <h2>Other boosting models:</h2>
+<div>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><a href="https://lightgbm.readthedocs.io/">XGBoost</a></p>
 <ul>
-<li class="fragment">Not part of <code>sklearn</code> but has similar interface.</li>
-<li class="fragment">Supports missing values</li>
-<li class="fragment">GPU training, networked parallel training</li>
-<li class="fragment">Supports sparse data</li>
-<li class="fragment">Typically better scores than random forests</li>
+<li>Not part of <code>sklearn</code> but has similar interface.</li>
+<li>Supports missing values</li>
+<li>GPU training, networked parallel training</li>
+<li>Supports sparse data</li>
+<li>Typically better scores than random forests</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <p><a href="https://lightgbm.readthedocs.io/">LightGBM</a></p>
 <ul>
-<li class="fragment">Not part of sklearn but has similar interface.</li>
-<li class="fragment">Small model size</li>
-<li class="fragment">Faster</li>
-<li class="fragment">Typically better scores than random forests</li>
+<li>Not part of sklearn but has similar interface.</li>
+<li>Small model size</li>
+<li>Faster</li>
+<li>Typically better scores than random forests</li>
 </ul>
 <p><a href="https://catboost.ai/">CatBoost</a></p>
 <ul>
-<li class="fragment">Not part of sklearn but has similar interface.</li>
-<li class="fragment">Usually better scores but slower compared to XGBoost and LightGBM</li>
+<li>Not part of sklearn but has similar interface.</li>
+<li>Usually better scores but slower compared to XGBoost and LightGBM</li>
 </ul>
 </div></div>
+</div>
 </section>
 
 <section id="keep-learning" class="title-slide slide level2 center">
 <h2>Keep learning!</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><img data-src="img/frontmatter/ds-a-first-intro-cover-python.jpeg"> <a href="https://python.datasciencebook.ca/" class="uri">https://python.datasciencebook.ca/</a></p>
+<p><img data-src="img/frontmatter/ds-a-first-intro-cover-python.jpeg" style="height:50.0%"> <a href="https://python.datasciencebook.ca/" class="uri">https://python.datasciencebook.ca/</a></p>
 </div><div class="column" style="width:50%;">
-<p><img data-src="img/frontmatter/ISLP_cover.png"> <a href="https://www.statlearning.com/" class="uri">https://www.statlearning.com/</a></p>
+<p><img data-src="img/frontmatter/ISLP_cover.png" style="height:50.0%"> <a href="https://www.statlearning.com/" class="uri">https://www.statlearning.com/</a></p>
 </div></div>
 </section>
 
