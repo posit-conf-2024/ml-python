@@ -578,7 +578,7 @@
     "href": "materials/slides/classification2.html#cross-validation-in-scikit-learn",
     "title": "Classification II: evaluation & tuning",
     "section": "Cross-validation in scikit-learn",
-    "text": "Cross-validation in scikit-learn\n\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.005147    0.005878    0.860465\n1   0.004880    0.005066    0.837209\n..       ...         ...         ...\n8   0.004286    0.004831    0.904762\n9   0.004294    0.004858    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
+    "text": "Cross-validation in scikit-learn\n\n\n\n\nUse the scikit-learn cross_validate function.\nNeed to specify:\n\na modelling Pipeline as the estimator argument,\nthe number of folds as the cv argument,\nthe training data predictors as the X argument\nthe labels as the y arguments.\n\nNote that the cross_validate function handles stratifying the classes in each train and validate fold automatically.\n\n\n\n\nfrom sklearn.model_selection import cross_validate\n\nknn = KNeighborsClassifier(n_neighbors=3)\ncancer_pipe = make_pipeline(cancer_preprocessor, knn)\nX = cancer_train[[\"Smoothness\", \"Concavity\"]]\ny = cancer_train[\"Class\"]\ncv_10_df = pd.DataFrame(\n    cross_validate(\n        estimator=cancer_pipe,\n        cv=10,\n        X=X,\n        y=y\n    )\n)\n\nprint(cv_10_df)\n\n    fit_time  score_time  test_score\n0   0.005235    0.007894    0.860465\n1   0.005002    0.005670    0.837209\n..       ...         ...         ...\n8   0.003908    0.004600    0.904762\n9   0.003998    0.004533    0.880952\n\n[10 rows x 3 columns]\n\n\n\ncv_10_metrics = cv_10_df.agg([\"mean\", \"sem\"])\ncv_10_metrics['test_score']\n\nmean    0.884939\nsem     0.013360\nName: test_score, dtype: float64",
     "crumbs": [
       "Home",
       "Slides",
@@ -1200,77 +1200,77 @@
   {
     "objectID": "materials/slides/intro.html#introductions",
     "href": "materials/slides/intro.html#introductions",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Introductions",
     "text": "Introductions\n\n\n\nTiffany Timbers\nUniversity of British Columbia\n\n\nDaniel Chen\nUniversity of British Columbia"
   },
   {
     "objectID": "materials/slides/intro.html#introduce-yourself",
     "href": "materials/slides/intro.html#introduce-yourself",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Introduce yourself",
     "text": "Introduce yourself\nWe wont go around the room, but take the next couple of minutes to introduce yourself to your neighbors.\nSome suggested topics:\n\nWhat is your name\nWhere you are coming from\nWhy you are interested in learning ML in Python"
   },
   {
     "objectID": "materials/slides/intro.html#materials",
     "href": "materials/slides/intro.html#materials",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Materials",
     "text": "Materials\n\n\nWebsite:\n\nhttps://posit-conf-2024.github.io/ml-python/\n\n\nGitHub:\n\nhttps://github.com/posit-conf-2024/ml-python"
   },
   {
     "objectID": "materials/slides/intro.html#schedule",
     "href": "materials/slides/intro.html#schedule",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Schedule",
     "text": "Schedule\n\n\n\n\n\n\n\nTime\nActivity\n\n\n\n\n09:00 - 10:30\nSession 1 - Introduction to workshop and intro to machine learning (via Classification I)\n\n\n10:30 - 11:00\nCoffee break\n\n\n11:00 - 12:30\nSession 2 - Classification II\n\n\n12:30 - 13:30\nLunch break\n\n\n13:30 - 15:00\nSession 3 - Regression\n\n\n15:00 - 15:30\nCoffee break\n\n\n15:30 - 17:00\nSession 4 - Tree-based and ensemble methods"
   },
   {
     "objectID": "materials/slides/intro.html#wifi",
     "href": "materials/slides/intro.html#wifi",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "WiFi",
     "text": "WiFi\n\n\nUsername:\n\nPosit Conf 2024\n\nPassword:\n\nconf2024\n\n\n\nIf you have any difficulty with your connection please let us (myself and or the TAs) know so we can escalate issues if needed."
   },
   {
     "objectID": "materials/slides/intro.html#code-of-conduct",
     "href": "materials/slides/intro.html#code-of-conduct",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Code of Conduct",
     "text": "Code of Conduct\nThe Code of Conduct can be found at posit.co/code-of-conduct.\nPlease review it carefully.\nYou can report Code of Conduct violations in person, by email, or by phone.\nPlease see the policy linked above for contact information."
   },
   {
     "objectID": "materials/slides/intro.html#other-useful-info",
     "href": "materials/slides/intro.html#other-useful-info",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Other useful info",
     "text": "Other useful info\n\nThere are gender-neutral bathrooms located on floors 3, 4, 5, 6, and 7.\nThe meditation and prayer room is Room 503, it is available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.\nThe lactation room is located in 509, with the same timings as above.\nParticipants who do not wish to be photographed have red lanyards; please note everyone’s lanyard colors before taking a photo and respect their choices."
   },
   {
     "objectID": "materials/slides/intro.html#asking-for-help-stickies",
     "href": "materials/slides/intro.html#asking-for-help-stickies",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Asking for help (Stickies)",
     "text": "Asking for help (Stickies)\n\n\n\n\n\nI’m working\n\n\n\n\n\nI’m stuck\n\n\n\n\n\nI’m done"
   },
   {
     "objectID": "materials/slides/intro.html#other-communication-discord",
     "href": "materials/slides/intro.html#other-communication-discord",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Other communication (Discord)",
     "text": "Other communication (Discord)\nYou should have received an email with an invitation and instructions for joining the conference’s discord server.\nThis workshop has a private channel under Workshops,\n\n#workshop-ml-python\n\nThis is a great place to ask questions, post resources, memes, or most anything else before, during, and after the workshop."
   },
   {
     "objectID": "materials/slides/intro.html#rstudio-cloud",
     "href": "materials/slides/intro.html#rstudio-cloud",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "RStudio Cloud",
     "text": "RStudio Cloud\nLink in your welcome email (from last night!) and/or discord (pinned/first comment)\nOnce you have joined you’re ready to go! We will work with these at the end of each lecture component.\n\n\n\n\n\n\nwhich should then create a copy of all materials and launch a cloud session for you."
   },
   {
     "objectID": "materials/slides/intro.html#cloud-session",
     "href": "materials/slides/intro.html#cloud-session",
-    "title": "Welcome!",
+    "title": "Welcome",
     "section": "Cloud session",
     "text": "Cloud session\nIf everything is working you should see something very close to the following,"
   },
