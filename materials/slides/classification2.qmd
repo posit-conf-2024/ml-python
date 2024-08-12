@@ -72,6 +72,7 @@ $$\mathrm{accuracy} = \frac{\mathrm{number \; of  \; correct  \; predictions}}{\
 
 ## Is knowing accuracy enough?
 
+::: {.nonincremental}
 - Example accuracy calculation:
 
 $$\mathrm{accuracy} = \frac{\mathrm{number \; of  \; correct  \; predictions}}{\mathrm{total \;  number \;  of  \; predictions}} = \frac{58}{65} = 0.892$$
@@ -81,6 +82,7 @@ makes mistakes in general, but does not tell us anything about the *kinds* of
 mistakes the classifier makes.  
 
 - The **confusion matrix** tells a more complete story.
+:::
 
 ## Example confusion matrix for the breast cancer data:
 
@@ -96,6 +98,7 @@ mistakes the classifier makes.
 
 ## Precision & recall
 
+::: {.nonincremental}
 - *Precision* quantifies how many of the positive predictions the classifier made were actually positive. 
 
 $$\mathrm{precision} = \frac{\mathrm{number \; of  \; correct \; positive \; predictions}}{\mathrm{total \;  number \;  of \; positive  \; predictions}}$$
@@ -104,6 +107,7 @@ $$\mathrm{precision} = \frac{\mathrm{number \; of  \; correct \; positive \; pre
 identified as positive. 
 
 $$\mathrm{recall} = \frac{\mathrm{number \; of  \; correct  \; positive \; predictions}}{\mathrm{total \;  number \;  of  \; positive \; test \; set \; observations}}$$
+:::
 
 ## Precision and recall for the breast cancer data set example
 
@@ -137,6 +141,8 @@ Let's say we want to make a series object containing the integers from 0 to 9.
 And then we want to randomly pick 10 numbers from that list, 
 but we want it to be reproducible.
 
+. . .
+
 ```{python} 
 import numpy as np
 import pandas as pd
@@ -149,10 +155,14 @@ random_numbers1 = nums_0_to_9.sample(n=10).to_list()
 random_numbers1
 ```
 
+. . .
+
 You can see that `random_numbers1` is a list of 10 numbers
 from 0 to 9 that, from all appearances, looks random. If
 we run the `sample` method again,
 we will get a fresh batch of 10 numbers that also look random.
+
+. . .
 
 ```{python}
 random_numbers2 = nums_0_to_9.sample(n=10).to_list()
@@ -164,10 +174,14 @@ random_numbers2
 If we choose a different value for the seed---say, 4235---we
 obtain a different sequence of random numbers:
 
+. . .
+
 ```{python}
 # seed was 1 on the last slide when we generated this list
 random_numbers1
 ```
+
+. . .
 
 ```{python}
 np.random.seed(4235)
@@ -239,9 +253,11 @@ and testing sets.
 
 ## Splitting the breast cancer data set
 
+::: {.nonincremental}
 - Split the data so 75% are in the training set, and 25% in the test set
 - Data are shuffled
 - Split is stratified on the `Class` variable
+:::
 
 ```{python}
 from sklearn.model_selection import train_test_split
@@ -253,9 +269,11 @@ cancer_train, cancer_test = train_test_split(
 
 ## Checking the splits
 
+::: {.nonincremental}
 - We can use `.info()` to look at the splits
 
 - Let's look at the training split (in practice you look at both)
+:::
 
 ```{python}
 cancer_train.info()
@@ -263,11 +281,13 @@ cancer_train.info()
 
 ## Checking the splits
 
+::: {.nonincremental}
 - We can use the `value_counts` method with the `normalize` argument set to `True`
 to find the percentage of malignant and benign classes
 in `cancer_train`.
 
 - We can see our class proportions were roughly preserved when we split the data.
+:::
 
 ```{python}
 cancer_train["Class"].value_counts(normalize=True)
@@ -290,11 +310,13 @@ we can then apply it separately to both the training and test data sets.
 
 ##  Preprocessing with `scikit-learn`
 
+::: {.nonincremental}
 - `scikit-learn` helps us handle this properly as long as we wrap our
 analysis steps in a `Pipeline`.
 
 - Specifically, we construct and prepare
 the preprocessor using `make_column_transformer`:
+:::
 
 ```{python}
 from sklearn.preprocessing import StandardScaler
@@ -309,11 +331,13 @@ cancer_preprocessor = make_column_transformer(
 
 :::: {.columns}
 ::: {.column width="50%"}
+::: {.nonincremental}
 - Now we can create our K-nearest neighbors classifier 
 with only the training set.
 
 - For simplicity, we will just choose $K$ = 3, 
 and use only the concavity and smoothness predictors.
+:::
 :::
 
 ::: {.column width="50%"}
@@ -348,11 +372,14 @@ print(cancer_test[["ID", "Class", "predicted"]])
 
 To evaluate the model, we will look at:
 
+::: {.nonincremental}
   - accuracy
   - precision
   - recall
   - confusion matrix
   - compare to baseline model (majority classifier)
+
+:::
 
 All of these together, 
 will help us develop a fuller picture of how the model is performing, 
@@ -387,6 +414,7 @@ recall_score(
 
 ## Confusion matrix
 
+::: {.nonincremental}
 - We can look at the *confusion matrix* for the classifier
 using the `crosstab` function from `pandas`.
 
@@ -396,6 +424,7 @@ arguments: the actual labels first, then the predicted labels second.
 - Note that `crosstab` orders its columns alphabetically, 
 but the positive label is still `Malignant`,
 even if it is not in the top left corner as in the table shown earlier.
+:::
 
 ```{python}
 pd.crosstab(
@@ -406,6 +435,7 @@ pd.crosstab(
 
 ## Critically analyze performance
 
+::: {.nonincremental}
 - Is 90% accuracy, a precision of 83% and a recall of 91% good enough?
 
 - To get a sense of scale, we often compare our model to a baseline model.
@@ -424,6 +454,7 @@ which is great, but considering our application domain is in cancer diagnosis,
 we still have a ways to go... 
 
 - Analyzing model performance really depends on your application!
+:::
 
 ## Tuning the classifier
 
@@ -474,6 +505,7 @@ An example of 5-fold cross-validation:
 
 :::: {.columns}
 ::: {.column width="40%"}
+::: {.nonincremental}
 - Use the `scikit-learn` `cross_validate` function. 
 
 - Need to specify:
@@ -484,6 +516,7 @@ An example of 5-fold cross-validation:
 
 - Note that the `cross_validate` function handles stratifying the classes in
 each train and validate fold automatically.
+:::
 :::
 
 ::: {.column width="60%"}
@@ -549,7 +582,7 @@ cancer_tune_grid = GridSearchCV(
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Now we use the fit method on the `GridSearchCV` object 
+Now we use the fit method on the `GridSearchCV` object 
 to begin the tuning process.
 :::
 
@@ -609,7 +642,7 @@ accuracy_vs_k
 
 ## Best parameter value
 
-- We can also obtain the number of neighbours with the highest accuracy 
+We can also obtain the number of neighbours with the highest accuracy 
 programmatically by accessing the `best_params_` attribute 
 of the fit `GridSearchCV` object.
 
@@ -625,9 +658,11 @@ Do we use $K$ = 36?
 
 Generally, when selecting a parameters, we are looking for a value where:
 
+::: {.nonincremental}
 - we get roughly optimal accuracy
 - changing the value to a nearby one doesn’t change the accuracy too much
 - the cost of training the model is not prohibitive
+:::
 :::
 
 ::: {.column width="50%"}
@@ -640,8 +675,10 @@ accuracy_vs_k
 
 ## Under/Overfitting
 
+::: {.nonincremental}
 - What happens if we keep increasing the number of neighbors $K$? 
 - The cross-validation accuracy estimate actually starts to decrease!
+:::
 
 ```{python}
 #| echo: false
@@ -776,6 +813,7 @@ panel_plot
 
 :::: {.columns}
 ::: {.column width="50%"}
+::: {.nonincremental}
 - Before we evaluate on the test set, 
 we need to refit the model using the best parameter(s) 
 on the entire training set
@@ -784,6 +822,7 @@ on the entire training set
 
 - To make predictions and assess the estimated accuracy of the best model on the test data, we can use the
 `score` and `predict` methods of the fit `GridSearchCV` object.
+:::
 :::
 
 ::: {.column width="50%"}
@@ -797,7 +836,7 @@ cancer_test["predicted"] = cancer_tune_grid.predict(
 
 ## Evaluating on the test set
 
-- We can then pass those predictions to
+We can then pass those predictions to
 the `precision`, `recall`, and `crosstab` functions to assess the estimated precision and recall, and print a confusion matrix.
 
 :::: {.columns}
@@ -844,16 +883,18 @@ print(conf_matrix)
 ## K-nearest neighbors classification algorithm
 
 **Strengths:** K-nearest neighbors classification
-
+::: {.nonincremental}
 1. is a simple, intuitive algorithm,
 2. requires few assumptions about what the data must look like, and
 3. works for binary (two-class) and multi-class (more than 2 classes) classification problems.
+:::
 
 **Weaknesses:** K-nearest neighbors classification
-
+::: {.nonincremental}
 1. becomes very slow as the training data gets larger,
 2. may not perform well with a large number of predictors, and
 3. may not perform well when classes are imbalanced.
+:::
 
 ## Other classification algorithms
 
