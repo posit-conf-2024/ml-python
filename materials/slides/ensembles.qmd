@@ -6,6 +6,7 @@ format:
     slide-level: 4
     smaller: true
     theme: simple
+    incremental: true
 jupyter: python3
 execute:
   echo: true
@@ -103,23 +104,6 @@ heart['AHD'].value_counts(normalize=True)
 This looks pretty good! 
 We can move forward this time without doing much more about this.
 
-## Categorical variables
-
-:::: {.columns}
-::: {.column width="35%"}
-- This is our first case of seeing categorical predictor variables, 
-can we treat them the same as numerical ones? **No!** 
-
-- In `scikit-learn` we must perform **one-hot encoding**
-:::
-
-::: {.column width="65%"}
-![](https://scales.arabpsychology.com/wp-content/uploads/2024/05/onehot1-1-1.png)
-
-*Source: <https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/>*
-:::
-::::
-
 ## Data splitting
 
 Let's split the data into training and test sets:
@@ -140,6 +124,34 @@ X_test = heart_test.drop(columns=['AHD'])
 y_test = heart_test['AHD']
 ```
 
+## Categorical variables
+
+:::: {.columns}
+::: {.column width="35%"}
+- This is our first case of seeing categorical predictor variables, 
+can we treat them the same as numerical ones? **No!** 
+
+- In `scikit-learn` we must perform **one-hot encoding**
+:::
+
+::: {.column width="65%"}
+![](img/ensembles/onehot1-1-1.png)
+
+*Source: <https://scales.arabpsychology.com/stats/how-can-i-perform-one-hot-encoding-in-r/>*
+:::
+::::
+
+
+## Look at the data again
+
+Which columns do we need to standardize?
+
+Which do we need to one-hot encode?
+
+```{python}
+heart.head()
+```
+
 ## One hot encoding & pre-processing
 
 ```{python}
@@ -157,6 +169,9 @@ heart_preprocessor = make_column_transformer(
 )
 ```
 
+> `handle_unknown = "ignore"` handles the case where 
+> categories exist in the test data, which were missing in the training set.
+> Specifically, it sets the value for those to 0 for all cases of the category. 
 
 ## Fitting a dummy classifier
 
@@ -256,7 +271,9 @@ Drop rows with missing observations:
 ```{python}
 heart_train_drop_na = heart_train.dropna()
 
-X_train_drop_na = heart_train_drop_na.drop(columns=['AHD'])
+X_train_drop_na = heart_train_drop_na.drop(
+    columns=['AHD']
+)
 y_train_drop_na = heart_train_drop_na['AHD']
 ```
 :::
@@ -423,8 +440,8 @@ from sklearn.metrics import make_scorer, precision_score, recall_score
 
 scoring = {
     'accuracy': 'accuracy',
-    'precision': make_scorer(precision_score, pos_label='Yes'),  # Assuming 'Yes' is the positive class
-    'recall': make_scorer(recall_score, pos_label='Yes')         # Assuming 'Yes' is the positive class
+    'precision': make_scorer(precision_score, pos_label='Yes'),
+    'recall': make_scorer(recall_score, pos_label='Yes')
 }
 
 rf_tune_grid = GridSearchCV(
@@ -533,10 +550,8 @@ importances_df = importances_df.sort_values(by='Importance', ascending=False)
 
 ## Visualizing the results
 
-:::: {.columns}
-::: {.column width="50%"}
-
 ```{python}
+#| echo: false
 import altair as alt
 
 bar_chart = alt.Chart(importances_df).mark_bar().encode(
@@ -545,24 +560,15 @@ bar_chart = alt.Chart(importances_df).mark_bar().encode(
     tooltip=['Feature', 'Importance']
 ).properties(
     title='Feature Importances from Random Forest Model',
-    width=350,
+    width=600,
     height=400
 )
-```
-:::
-
-::: {.column width="50%"}
-
-```{python}
 bar_chart
 ```
 
-:::
-::::
-
 ## Evaluating on the test set
 
-1. Predict on the test set:
+Predict on the test set:
 
 ```{python}
 heart_test_drop_na = heart_test.dropna()
@@ -576,10 +582,11 @@ heart_test_drop_na["predicted"] = rf_tune_grid.predict(
 
 ## Evaluating on the test set
 
-2. Examine accuracy, precision and recall:
+Examine accuracy, precision and recall:
 
 :::: {.columns}
 ::: {.column width="50%"}
+
 ```{python}
 rf_tune_grid.score(
     X_test_drop_na,
@@ -602,9 +609,11 @@ recall_score(
     pos_label='Yes'
 )
 ```
+
 :::
 
 ::: {.column width="50%"}
+
 ```{python}
 conf_matrix = pd.crosstab(
     heart_test_drop_na["AHD"],
@@ -612,6 +621,7 @@ conf_matrix = pd.crosstab(
 )
 print(conf_matrix)
 ```
+
 :::
 ::::
 
@@ -637,10 +647,34 @@ print(conf_matrix)
 - Typically better scores than random forests
 
 [CatBoost](https://catboost.ai/)
+
 - Not part of sklearn but has similar interface.
 - Usually better scores but slower compared to XGBoost and LightGBM
 :::
 ::::
+
+## Keep learning!
+
+:::: {.columns}
+::: {.column width="50%"}
+![](img/frontmatter/ds-a-first-intro-cover-python.jpeg)
+<https://python.datasciencebook.ca/>
+:::
+
+
+::: {.column width="50%"}
+![](img/frontmatter/ISLP_cover.png)
+<https://www.statlearning.com/>
+:::
+::::
+
+## Local installation
+
+1. Using Docker: 
+[Data Science: A First Introduction (Python Edition) Installation Instructions](https://python.datasciencebook.ca/setup.html)
+
+2. Using conda: 
+[UBC MDS Installation Instructions](https://ubc-mds.github.io/resources_pages/installation_instructions/)
 
 ## Additional resources
 
