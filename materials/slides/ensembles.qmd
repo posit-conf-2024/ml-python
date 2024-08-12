@@ -433,7 +433,7 @@ results
 
 - Remember, what is your question or application?
 
-- A good rule when models are not very different (considering SEM),
+- A good rule when models are not very different,
   what is the simplest model that does well?
 
 - Look at other metrics that are important to you
